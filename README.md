@@ -1,10 +1,8 @@
-# app
-
-> Living Archive
+# Living Archive
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 $ yarn install
 
@@ -20,3 +18,9 @@ $ yarn run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+## Environment variables
+
+Rename the example `.env-example` file to `.env` and add the necessary secret keys.
+
+- `MAPTILER_KEY`: your [Maptiler Cloud](https://www.maptiler.com/cloud/) key
