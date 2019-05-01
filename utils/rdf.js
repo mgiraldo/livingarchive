@@ -1,6 +1,11 @@
 import axios from 'axios'
 
-import { RDF_PREFIXES, RDF_URL, RDF_PLACEHOLDER } from './constants'
+import {
+  RDF_PREFIXES,
+  RDF_URL,
+  RDF_PLACEHOLDER,
+  RDF_TIMEOUT
+} from './constants'
 
 const cleanString = (str, extra) => {
   str = str.replace(RDF_PLACEHOLDER, '')
@@ -10,7 +15,7 @@ const cleanString = (str, extra) => {
 
 const performRdfQuery = async query => {
   const instance = axios.create({
-    timeout: 5000,
+    timeout: RDF_TIMEOUT,
     headers: {
       'Content-Type': 'application/sparql-query',
       Accept: 'application/sparql-results+json'
@@ -25,13 +30,21 @@ const performRdfQuery = async query => {
 export const getIndividuals = async (limit = 0) => {
   let limitStr = !isNaN(limit) && limit > 0 ? `LIMIT ${limit}` : ''
   let query = `
-  SELECT DISTINCT ?individual ?identifier ?coordinates
+  SELECT ?individual ?identifier ?coordinates ?skeleton ?age ?sex
   WHERE {
-      ?individual a catalhoyuk:Individual .
-      ?individual catalhoyuk:hasIdentifier ?identifier .
-      ?individial catalhoyuk:hasGeometry ?geometry .
-      ?geometry catalhoyuk:hasSerialization ?coordinates .
-  } ${limitStr}`
+    {
+      SELECT * WHERE {
+        ?individual a catalhoyuk:Individual .
+        ?individual :hasIdentifier ?identifier .
+        ?individual :isConstitutedBy ?skeleton .
+        ?individual :hasAge ?age .
+        ?individual :hasSex ?sex .
+      } ${limitStr}
+    }
+      ?skeleton a catalhoyuk:Skeleton .
+      ?skeleton :hasGeometry ?geometry .
+      ?geometry :hasSerialization ?coordinates .
+  }`
 
   const data = await performRdfQuery(query)
 
