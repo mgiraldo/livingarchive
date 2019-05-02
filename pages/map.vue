@@ -85,8 +85,7 @@ export default {
     return {
       vars: { individuals: rdfIndividuals.vars },
       individuals: individuals,
-      tilelayers: TILELAYERS,
-      mapBounds: [0, 0]
+      tilelayers: TILELAYERS
     }
   },
   methods: {
