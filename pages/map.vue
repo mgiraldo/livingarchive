@@ -25,13 +25,32 @@
     </section>
     <section class="map">
       <no-ssr>
-        <l-map ref="myMap">
+        <l-map ref="myMap" :max-zoom="25">
           <l-tile-layer
             v-for="(layer,index) in tilelayers"
             :key="index"
             :url="layer.url"
             :attribution="layer.options.attribution"
           ></l-tile-layer>
+          <l-marker
+            v-for="(individual, index) in individuals"
+            :key="index"
+            :lat-lng="individual.point.coordinates"
+          >
+            <l-icon class-name="icon">
+              <div>💀</div>
+            </l-icon>
+            <l-popup>
+              <dl class="popup">
+                <dt>Identifier</dt>
+                <dd>{{individual.identifier}}</dd>
+                <dt>Sex</dt>
+                <dd>{{individual.sex}}</dd>
+                <dt>Age</dt>
+                <dd>{{individual.age}}</dd>
+              </dl>
+            </l-popup>
+          </l-marker>
         </l-map>
       </no-ssr>
     </section>
@@ -53,18 +72,21 @@ export default {
   },
   asyncData: async function() {
     let rdfIndividuals = await getIndividuals(100)
-    let ids = new Set()
-    let individuals = []
+    let individuals = {}
     rdfIndividuals.results.forEach(element => {
-      if (!ids.has(element.identifier)) {
-        ids.add(element.identifier)
-        individuals.push(element)
+      if (!individuals[element.identifier]) {
+        individuals[element.identifier] = element
+        individuals[element.identifier].point = []
+        individuals[element.identifier].skeleton = []
+      } else {
+        individuals[element.identifier].skeleton.push(element.coordinates)
       }
     })
     return {
       vars: { individuals: rdfIndividuals.vars },
       individuals: individuals,
-      tilelayers: TILELAYERS
+      tilelayers: TILELAYERS,
+      mapBounds: [0, 0]
     }
   },
   methods: {
@@ -105,7 +127,6 @@ export default {
       let points = []
       const icon = L.divIcon({ html: '💀', className: 'icon' })
       data.forEach((individual, index) => {
-        console.log(individual.coordinates)
         let geoJson = this.reprojectGeoJson(
           wellknown.parse(individual.coordinates)
         )
@@ -127,43 +148,18 @@ export default {
       })
       map.fitBounds(points)
     },
-    addPopup(markerEvent) {
-      let individual = this.individuals[markerEvent.target.index]
-      let map = this.$refs.myMap.mapObject
-      let popup = L.popup()
-        .setLatLng(markerEvent.latlng)
-        .setContent(
-          `
-          <dl class="popup">
-          <dt>Identifier</dt>
-          <dd>${individual.identifier}</dd>
-          <dt>Skeleton</dt>
-          <dd>${individual.skeleton}</dd>
-          <dt>Sex</dt>
-          <dd>${individual.sex}</dd>
-          <dt>Age</dt>
-          <dd>${individual.age}</dd>
-          </dl>
-          `
-        )
-        .openOn(map)
-    },
     checkMapObject() {
+      let points = []
+      Object.keys(this.individuals).forEach(identifier => {
+        this.individuals[identifier].point = this.reprojectGeoJson(
+          wellknown.parse(this.individuals[identifier].coordinates)
+        )
+        points.push(this.individuals[identifier].point.coordinates)
+      })
       this.checkMap = setInterval(() => {
         if (this.$refs.myMap) {
+          this.$refs.myMap.fitBounds(points)
           clearInterval(this.checkMap)
-          this.initMap()
-        }
-      }, 100)
-    },
-    initMap() {
-      let map = this.$refs.myMap.mapObject
-      map.setMaxZoom(25)
-      map.setView(L.latLng(50.5, 10.5), 11)
-      this.checkData = setInterval(() => {
-        if (this.individuals.length > 0) {
-          clearInterval(this.checkData)
-          this.plotData(this.individuals)
         }
       }, 100)
     }
@@ -194,7 +190,8 @@ export default {
     margin-bottom: 0.5rem;
   }
 }
-.coordinates {
+.coordinates,
+.skeleton {
   max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
