@@ -121,32 +121,6 @@ export default {
 
       return coordinates
     },
-    plotData(data) {
-      let map = this.$refs.myMap.mapObject
-      let points = []
-      const icon = L.divIcon({ html: '💀', className: 'icon' })
-      data.forEach((individual, index) => {
-        let geoJson = this.reprojectGeoJson(
-          wellknown.parse(individual.coordinates)
-        )
-        console.log(geoJson)
-        if (geoJson.type === 'Point') {
-          let marker = L.marker(geoJson.coordinates, { icon: icon }).addTo(map)
-          points.push(geoJson.coordinates)
-          marker.on('click', this.addPopup)
-          marker.index = index
-        } else if (geoJson.type === 'Polygon') {
-          let layer = L.geoJson(geoJson).addTo(map)
-          let marker = L.marker(layer.getBounds().getCenter(), {
-            icon: icon
-          }).addTo(map)
-          points.push(layer.getBounds().getCenter())
-          marker.on('click', this.addPopup)
-          marker.index = index
-        }
-      })
-      map.fitBounds(points)
-    },
     checkMapObject() {
       let points = []
       Object.keys(this.individuals).forEach(identifier => {
