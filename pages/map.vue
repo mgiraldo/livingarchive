@@ -162,8 +162,8 @@ export default {
     margin-bottom: 0.5rem;
   }
   .discussion {
-    height: 5rem;
-    overflow-y: scroll;
+    max-height: 5rem;
+    overflow-y: auto;
   }
 }
 </style>

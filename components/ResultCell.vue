@@ -40,6 +40,6 @@ export default {
   display: flex;
   margin-bottom: 1rem;
   max-height: 10rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 </style>
