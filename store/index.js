@@ -33,7 +33,7 @@ export const actions = {
   async fetchIndividuals({ commit, state }) {
     // TODO: fix limit magic number
     let rdfIndividuals = await getIndividuals({
-      limit: 100,
+      limit: 0,
       age: state.selectedAge,
       sex: state.selectedSex
     })
