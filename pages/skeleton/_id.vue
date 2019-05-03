@@ -3,7 +3,7 @@
     <section class="list">
       <h1 class="label">Individual: {{identifier}}</h1>
       <ul>
-        <li v-for="(bone, index) in skeleton" :key="index">{{bone.bone}} ({{bone.preserved}})</li>
+        <li v-for="(preserved, bone, index) in skeleton" :key="index">{{bone}} ({{preserved}})</li>
       </ul>
     </section>
     <skeleton-front/>

@@ -84,7 +84,6 @@ export const getSkeleton = async identifier => {
     ?individual ?pred ?obj .
 
     FILTER (
-    	?pred = catalhoyuk:preservedA ||
     	?pred = catalhoyuk:partiallyPreservedA ||
     	?pred = catalhoyuk:fullyPreservedA
     )
@@ -93,10 +92,17 @@ export const getSkeleton = async identifier => {
 
   const data = await performRdfQuery(query)
 
-  const skeleton = data.data.results.bindings.map(item => {
+  let skeleton = {}
+  data.data.results.bindings.forEach(item => {
     const preserved = cleanString(item.pred.value)
     const bone = cleanString(item.obj.value, '-' + identifier.replace('Sk', ''))
-    return { preserved, bone }
+    if (
+      !skeleton[bone] ||
+      (preserved === 'fullyPreservedA' && skeleton[bone] !== preserved)
+    ) {
+      // fullyPreservedA overrides partiallyPreservedA
+      skeleton[bone] = preserved
+    }
   })
 
   return skeleton
