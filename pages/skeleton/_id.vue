@@ -54,5 +54,9 @@ export default {
   overflow-y: scroll;
   position: fixed;
 }
+svg {
+  height: 100vh;
+  width: 100vw;
+}
 </style>
 
