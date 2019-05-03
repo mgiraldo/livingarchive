@@ -37,15 +37,17 @@ export const getIndividuals = async ({ limit = 0, age, sex }) => {
   let sexStr =
     sex && !isNaN(sex) ? `?individual :hasSex "${RDF_SEXES[sex]}" .` : ''
   let query = `
-  SELECT ?individual ?identifier ?coordinates ?skeleton ?age ?sex
+  SELECT ?individual ?identifier ?age ?sex ?discussion ?coordinates ?skeleton
   WHERE {
     {
       SELECT * WHERE {
         ?individual a catalhoyuk:Individual .
         ?individual :hasIdentifier ?identifier .
-        ?individual :isConstitutedBy ?skeleton .
         ?individual :hasAge ?age .
         ?individual :hasSex ?sex .
+        ?individual :isConstitutedBy ?skeleton .
+        ?skeleton :isExcavatedIn ?find .
+        ?find :hasDiscussion ?discussion .
         ${ageStr}
         ${sexStr}
       } ${limitStr}

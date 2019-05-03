@@ -31,7 +31,8 @@ export default {
   }
 }
 .coordinates,
-.skeleton {
+.skeleton,
+.discussion {
   max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;

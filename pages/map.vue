@@ -43,6 +43,8 @@
               <dl class="popup">
                 <dt>Identifier</dt>
                 <dd>{{individual.identifier}}</dd>
+                <dt>Discussion</dt>
+                <dd class="discussion">{{individual.discussion}}</dd>
                 <dt>Sex</dt>
                 <dd>{{individual.sex}}</dd>
                 <dt>Age</dt>
@@ -145,6 +147,10 @@ export default {
   }
   dd {
     margin-bottom: 0.5rem;
+  }
+  .discussion {
+    height: 5rem;
+    overflow-y: scroll;
   }
 }
 </style>
