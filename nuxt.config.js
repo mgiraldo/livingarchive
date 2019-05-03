@@ -39,6 +39,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
+    '@nuxtjs/style-resources',
     'nuxt-leaflet'
   ],
   /*

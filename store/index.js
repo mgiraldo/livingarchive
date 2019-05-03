@@ -1,4 +1,5 @@
 import wellknown from 'wellknown'
+import center from '@turf/center'
 
 import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
 import { getIndividuals } from '~/utils/rdf'
@@ -42,6 +43,7 @@ export const actions = {
       let identifier = element.identifier
       if (!individuals[identifier]) {
         let point = reprojectGeoJson(wellknown.parse(element.coordinates))
+        if (point.type !== 'Point') point = center(point).geometry
         individuals[identifier] = element
         individuals[identifier].skeleton = []
         individuals[identifier].point = JSON.parse(JSON.stringify(point))

@@ -55,7 +55,7 @@ export const getIndividuals = async ({ limit = 0, age, sex }) => {
       ?geometry :hasSerialization ?coordinates .
   }`
 
-  console.log(query)
+  // console.log(query)
 
   const data = await performRdfQuery(query)
 
