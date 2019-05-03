@@ -6,18 +6,16 @@
         <li v-for="(bone, index) in skeleton" :key="index">{{bone.bone}} ({{bone.preserved}})</li>
       </ul>
     </section>
-    <SkeletonFront/>
-    <SkeletonBack/>
+    <skeleton-front/>
   </div>
 </template>
 
 <script>
 import SkeletonFront from '~/assets/skeleton-front.svg'
-import SkeletonBack from '~/assets/skeleton-back.svg'
 import { getSkeleton } from '~/utils/rdf'
 
 export default {
-  components: { SkeletonFront, SkeletonBack },
+  components: { SkeletonFront },
   head() {
     return { title: 'skeleton' }
   },
