@@ -72,6 +72,19 @@ export const getAges = async () => {
   return ages
 }
 
+export const getSexes = async () => {
+  let query = `
+  SELECT DISTINCT ?sex WHERE { 
+    ?subject catalhoyuk:hasSex ?sex
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const sexes = data.data.results.bindings.map(binding => binding.sex.value)
+
+  return sexes
+}
+
 export const getSkeleton = async identifier => {
   let query = `
   SELECT ?pred ?obj WHERE {

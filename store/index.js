@@ -1,12 +1,13 @@
 import wellknown from 'wellknown'
 
-import { getIndividuals, getAges } from '~/utils/rdf'
+import { getIndividuals, getAges, getSexes } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 export const state = () => ({
   vars: [],
   individuals: {},
   points: [],
+  sexes: [],
   ages: []
 })
 
@@ -18,6 +19,9 @@ export const mutations = {
   },
   fetchedAges(state, ages) {
     state.ages = ages
+  },
+  fetchedSexes(state, sexes) {
+    state.sexes = sexes
   }
 }
 
@@ -50,5 +54,10 @@ export const actions = {
     let ages = await getAges()
 
     commit('fetchedAges', ages)
+  },
+  async fetchSexes({ commit }) {
+    let sexes = await getSexes()
+
+    commit('fetchedSexes', sexes)
   }
 }

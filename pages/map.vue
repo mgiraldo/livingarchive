@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <search-controls :ages="ages"/>
+    <search-controls :ages="ages" :sexes="sexes"/>
     <section class="results">
       <h1>Individuals</h1>
       <table>
@@ -69,6 +69,7 @@ export default {
   fetch: async function({ store, params }) {
     await store.dispatch('fetchIndividuals', { limit: 100 }) // TODO: make limit dynamic
     await store.dispatch('fetchAges')
+    await store.dispatch('fetchSexes')
   },
   computed: {
     vars() {
@@ -79,6 +80,9 @@ export default {
     },
     ages() {
       return this.$store.state.ages
+    },
+    sexes() {
+      return this.$store.state.sexes
     }
   },
   mounted() {
@@ -136,12 +140,5 @@ export default {
   dd {
     margin-bottom: 0.5rem;
   }
-}
-.coordinates,
-.skeleton {
-  max-width: 10rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 </style>

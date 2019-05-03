@@ -30,4 +30,11 @@ export default {
     background-color: gray;
   }
 }
+.coordinates,
+.skeleton {
+  max-width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>
