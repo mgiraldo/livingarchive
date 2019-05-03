@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <search-controls :ages="ages" :sexes="sexes"/>
+    <search-controls/>
     <section class="results">
       <h1>Individuals</h1>
       <table>
@@ -68,8 +68,6 @@ export default {
   },
   fetch: async function({ store, params }) {
     await store.dispatch('fetchIndividuals', { limit: 100 }) // TODO: make limit dynamic
-    await store.dispatch('fetchAges')
-    await store.dispatch('fetchSexes')
   },
   computed: {
     vars() {

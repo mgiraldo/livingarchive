@@ -18,13 +18,13 @@
 </template>
 
 <script>
+import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
+
 export default {
-  props: {
-    ages: { type: Array },
-    sexes: { type: Array }
-  },
   data() {
     return {
+      ages: RDF_AGES,
+      sexes: RDF_SEXES,
       selectedAge: '',
       selectedSex: ''
     }

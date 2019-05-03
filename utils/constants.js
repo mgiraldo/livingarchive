@@ -1,5 +1,6 @@
 export const RDF_URL =
   'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
+
 export const RDF_PREFIXES = `PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
 PREFIX catalhoyuk:    <http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#>
@@ -7,7 +8,9 @@ PREFIX : <http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 `
+
 export const RDF_TIMEOUT = 10000
+
 export const RDF_PLACEHOLDER =
   'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#'
 
@@ -36,4 +39,25 @@ export const TILELAYERS = [
       maxZoom: 26
     }
   }
+]
+
+export const RDF_SEXES = [
+  'Age not determinable',
+  'Prenatal (pre-fullterm)',
+  'neonate (birth - 2 months)',
+  'infant (2 months - 3 years)',
+  'child (3-12)',
+  'adolescent(12-20)',
+  'YA (20-35)',
+  'MA (35-50)',
+  'OA (50+)',
+  'Adult (20+)'
+]
+
+export const RDF_AGES = [
+  'female',
+  'female?',
+  'male',
+  'male?',
+  'too young to determine'
 ]
