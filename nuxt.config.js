@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const { basename } = require('path')
 require('dotenv').config()
 
 module.exports = {
@@ -61,7 +62,22 @@ module.exports = {
 
       config.module.rules.push({
         test: /\.svg$/,
-        loader: 'vue-svg-loader'
+        loader: 'vue-svg-loader',
+        options: {
+          svgo: {
+            plugins: [
+              { collapseGroups: false },
+              { removeEmptyContainers: false },
+              {
+                prefixIds: {
+                  prefix: (node, { path }) => basename(path, '.svg'),
+                  delim: '-'
+                }
+              },
+              { cleanupIDs: { remove: false, minify: false } }
+            ]
+          }
+        }
       })
     }
   }

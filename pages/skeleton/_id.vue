@@ -6,7 +6,7 @@
         <li v-for="(preserved, bone, index) in skeleton" :key="index">{{bone}} ({{preserved}})</li>
       </ul>
     </section>
-    <skeleton-front/>
+    <skeleton-front id="skeleton"/>
   </div>
 </template>
 
@@ -25,6 +25,21 @@ export default {
   async asyncData({ params }) {
     let skeleton = await getSkeleton(params.id)
     return { identifier: params.id, skeleton: skeleton }
+  },
+  mounted() {
+    let prefix = '#skeleton-front-'
+    let skeletonElement = document.querySelector('#skeleton')
+    skeletonElement.querySelectorAll('path').forEach(elem => {
+      elem.style.fill = 'white'
+    })
+    for (let boneName in this.skeleton) {
+      let boneElem = document.querySelector(prefix + boneName)
+      if (boneElem) {
+        boneElem.querySelectorAll('path').forEach(elem => {
+          elem.style.fill = '#F3D48C'
+        })
+      }
+    }
   }
 }
 </script>
