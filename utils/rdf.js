@@ -59,15 +59,28 @@ export const getIndividuals = async (limit = 0) => {
   return { vars, results }
 }
 
+export const getAges = async () => {
+  let query = `
+  SELECT DISTINCT ?age WHERE { 
+    ?subject catalhoyuk:hasAge ?age
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const ages = data.data.results.bindings.map(binding => binding.age.value)
+
+  return ages
+}
+
 export const getSkeleton = async identifier => {
   let query = `
-  SELECT ?pred ?obj WHERE { 
+  SELECT ?pred ?obj WHERE {
     {
       SELECT ?individual WHERE {
       ?individual catalhoyuk:hasIdentifier catalhoyuk:${identifier} .
       }
-    }  
-    
+    }
+
     ?individual ?pred ?obj .
 
     FILTER (
@@ -89,16 +102,16 @@ export const getSkeleton = async identifier => {
   return skeleton
 }
 
-export const getGeometry = async () => {
-  let query = `
-  SELECT * WHERE {
-    ?unit a catalhoyuk:Unit	.
-    ?unit catalhoyuk:hasGeometry ?geo	.
-    ?geo catalhoyuk:hasSerialization ?coordinates .
-    ?unit catalhoyuk:hasIdentifier 16230 .
-  }`
+// export const getGeometry = async () => {
+//   let query = `
+//   SELECT * WHERE {
+//     ?unit a catalhoyuk:Unit	.
+//     ?unit catalhoyuk:hasGeometry ?geo	.
+//     ?geo catalhoyuk:hasSerialization ?coordinates .
+//     ?unit catalhoyuk:hasIdentifier 16230 .
+//   }`
 
-  const data = await performRdfQuery(query)
+//   const data = await performRdfQuery(query)
 
-  return data.data
-}
+//   return data.data
+// }

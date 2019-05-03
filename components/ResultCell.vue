@@ -14,9 +14,7 @@ export default {
     vars: { type: Array }
   },
   data() {
-    return {
-      message: 'My Vue Component'
-    }
+    return {}
   },
   methods: {
     hover(target) {
@@ -26,7 +24,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .row {
   &:hover {
     background-color: gray;

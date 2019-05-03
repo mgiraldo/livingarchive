@@ -52,9 +52,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
-    /*
-     ** You can extend webpack config here
-     */
+    styleResources: { scss: './assets/css/variables.scss' },
     extend(config, ctx) {
       const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
 

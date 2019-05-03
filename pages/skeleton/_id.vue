@@ -31,7 +31,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .viewer {
   display: flex;
   height: 100vh;
