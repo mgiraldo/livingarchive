@@ -7,7 +7,10 @@
       <table>
         <thead>
           <tr>
-            <th v-for="(col,index) in vars" :key="index" scope="col">{{col}}</th>
+            <th scope="col">Individual</th>
+            <th scope="col">Age</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Discussion</th>
             <th scope="col">💀</th>
           </tr>
         </thead>
@@ -94,6 +97,11 @@ export default {
     }
   },
   mounted() {
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'fetchedIndividuals') {
+        this.fitMap()
+      }
+    })
     this.checkMapObject()
   },
   asyncData: async function() {
@@ -101,11 +109,16 @@ export default {
   },
   components: { SearchControls, ResultCell },
   methods: {
+    fitMap() {
+      if (this.$refs.myMap && this.$store.state.points.length > 0) {
+        this.$refs.myMap.fitBounds(this.$store.state.points)
+      }
+    },
     checkMapObject() {
       this.checkMap = setInterval(() => {
         if (this.$refs.myMap) {
-          this.$refs.myMap.fitBounds(this.$store.state.points)
           clearInterval(this.checkMap)
+          this.fitMap()
         }
       }, 100)
     }

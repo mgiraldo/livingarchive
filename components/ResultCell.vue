@@ -1,8 +1,11 @@
 <template>
   <tr class="row" :key="individual.identifier" :identifier="individual.identifier">
-    <td :class="col" v-for="(col,index) in vars" :key="index" @click="hover">{{individual[col]}}</td>
+    <td class="individual" @click="hover">{{individual.individual}}</td>
+    <td class="age" @click="hover">{{individual.age}}</td>
+    <td class="sex" @click="hover">{{individual.sex}}</td>
+    <td class="discussion" @click="hover">{{individual.discussion}}</td>
     <td>
-      <nuxt-link :to="`skeleton/${individual.identifier}`">skeleton</nuxt-link>
+      <nuxt-link :to="`skeleton/${individual.identifier}`" target="_blank">skeleton</nuxt-link>
     </td>
   </tr>
 </template>
@@ -29,13 +32,14 @@ export default {
   &:hover {
     background-color: gray;
   }
+  td {
+    vertical-align: top;
+  }
 }
-.coordinates,
-.skeleton,
 .discussion {
-  max-width: 10rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: flex;
+  margin-bottom: 1rem;
+  max-height: 10rem;
+  overflow-y: scroll;
 }
 </style>
