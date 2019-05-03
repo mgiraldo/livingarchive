@@ -1,14 +1,17 @@
 import wellknown from 'wellknown'
 
-import { getIndividuals, getAges, getSexes } from '~/utils/rdf'
+import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
+import { getIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 export const state = () => ({
   vars: [],
   individuals: {},
   points: [],
-  sexes: [],
-  ages: []
+  sexes: JSON.parse(JSON.stringify(RDF_SEXES)),
+  ages: JSON.parse(JSON.stringify(RDF_AGES)),
+  selectedSex: 0,
+  selectedAge: 0
 })
 
 export const mutations = {
@@ -17,17 +20,22 @@ export const mutations = {
     state.individuals = newState.individuals
     state.points = newState.points
   },
-  fetchedAges(state, ages) {
-    state.ages = ages
+  selectedSex(state, sexIndex) {
+    state.selectedSex = sexIndex
   },
-  fetchedSexes(state, sexes) {
-    state.sexes = sexes
+  selectedAge(state, ageIndex) {
+    state.selectedAge = ageIndex
   }
 }
 
 export const actions = {
-  async fetchIndividuals({ commit }, { limit }) {
-    let rdfIndividuals = await getIndividuals(limit)
+  async fetchIndividuals({ commit, state }) {
+    // TODO: fix limit magic number
+    let rdfIndividuals = await getIndividuals({
+      limit: 100,
+      age: state.selectedAge,
+      sex: state.selectedSex
+    })
     let individuals = {}
     let points = []
     rdfIndividuals.results.forEach(element => {
@@ -49,15 +57,5 @@ export const actions = {
       points: points
     }
     commit('fetchedIndividuals', newState)
-  },
-  async fetchAges({ commit }) {
-    let ages = await getAges()
-
-    commit('fetchedAges', ages)
-  },
-  async fetchSexes({ commit }) {
-    let sexes = await getSexes()
-
-    commit('fetchedSexes', sexes)
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <tr class="row" :key="individual.identifier" :identifier="individual.identifier">
-    <td :class="col" v-for="(col,index) in vars" :key="index" v-on:click="hover">{{individual[col]}}</td>
+    <td :class="col" v-for="(col,index) in vars" :key="index" @click="hover">{{individual[col]}}</td>
     <td>
       <nuxt-link :to="`skeleton/${individual.identifier}`">skeleton</nuxt-link>
     </td>

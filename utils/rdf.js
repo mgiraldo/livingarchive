@@ -4,7 +4,9 @@ import {
   RDF_PREFIXES,
   RDF_URL,
   RDF_PLACEHOLDER,
-  RDF_TIMEOUT
+  RDF_TIMEOUT,
+  RDF_SEXES,
+  RDF_AGES
 } from './constants'
 
 const cleanString = (str, extra) => {
@@ -27,8 +29,13 @@ const performRdfQuery = async query => {
   return results
 }
 
-export const getIndividuals = async (limit = 0) => {
+export const getIndividuals = async ({ limit = 0, age, sex }) => {
+  // TODO: sanitize params
   let limitStr = !isNaN(limit) && limit > 0 ? `LIMIT ${limit}` : ''
+  let ageStr =
+    age && !isNaN(age) ? `?individual :hasAge "${RDF_AGES[age]}" .` : ''
+  let sexStr =
+    sex && !isNaN(sex) ? `?individual :hasSex "${RDF_SEXES[sex]}" .` : ''
   let query = `
   SELECT ?individual ?identifier ?coordinates ?skeleton ?age ?sex
   WHERE {
@@ -39,12 +46,16 @@ export const getIndividuals = async (limit = 0) => {
         ?individual :isConstitutedBy ?skeleton .
         ?individual :hasAge ?age .
         ?individual :hasSex ?sex .
+        ${ageStr}
+        ${sexStr}
       } ${limitStr}
     }
       ?skeleton a catalhoyuk:Skeleton .
       ?skeleton :hasGeometry ?geometry .
       ?geometry :hasSerialization ?coordinates .
   }`
+
+  console.log(query)
 
   const data = await performRdfQuery(query)
 

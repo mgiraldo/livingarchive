@@ -3,6 +3,7 @@
     <search-controls/>
     <section class="results">
       <h1>Individuals</h1>
+      <p>Filtered by: Age: {{ages[ageFilter]}} and Sex: {{sexes[sexFilter]}}</p>
       <table>
         <thead>
           <tr>
@@ -67,7 +68,8 @@ export default {
     return { title: 'map' }
   },
   fetch: async function({ store, params }) {
-    await store.dispatch('fetchIndividuals', { limit: 100 }) // TODO: make limit dynamic
+    // TODO: make limit dynamic
+    await store.dispatch('fetchIndividuals')
   },
   computed: {
     vars() {
@@ -81,6 +83,12 @@ export default {
     },
     sexes() {
       return this.$store.state.sexes
+    },
+    ageFilter() {
+      return this.$store.state.selectedAge
+    },
+    sexFilter() {
+      return this.$store.state.selectedSex
     }
   },
   mounted() {
@@ -107,7 +115,7 @@ export default {
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-auto-rows: minmax(3rem, auto);
+  grid-template-rows: 3rem 1fr;
   grid-template-areas:
     'controls controls'
     'results map';

@@ -41,7 +41,8 @@ export const TILELAYERS = [
   }
 ]
 
-export const RDF_SEXES = [
+export const RDF_AGES = [
+  'Any',
   'Age not determinable',
   'Prenatal (pre-fullterm)',
   'neonate (birth - 2 months)',
@@ -54,7 +55,8 @@ export const RDF_SEXES = [
   'Adult (20+)'
 ]
 
-export const RDF_AGES = [
+export const RDF_SEXES = [
+  'Any',
   'female',
   'female?',
   'male',
