@@ -23,12 +23,12 @@
     </section>
     <section class="map">
       <no-ssr>
-        <l-map ref="myMap" :max-zoom="25">
+        <l-map ref="myMap">
           <l-tile-layer
             v-for="(layer,index) in tilelayers"
             :key="index"
             :url="layer.url"
-            :attribution="layer.options.attribution"
+            :options="layer.options"
           ></l-tile-layer>
           <l-marker
             v-for="(individual, index) in individuals"
@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
