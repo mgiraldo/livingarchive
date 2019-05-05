@@ -40,7 +40,10 @@
             :lat-lng="individual.point.coordinates"
           >
             <l-icon class-name="icon">
-              <div>💀</div>
+              <div
+                class="icon"
+                style="background-color:red;border-radius: 50%;width:100%;height:100%"
+              ></div>
             </l-icon>
             <l-popup>
               <dl class="popup">
@@ -152,7 +155,8 @@ export default {
   grid-area: map;
 }
 .icon {
-  font-size: 1.5rem;
+  font-size: 0.5rem;
+  border-radius: 50%;
 }
 .popup {
   dt {

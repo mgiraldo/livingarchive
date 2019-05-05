@@ -73,8 +73,9 @@ export const getIndividuals = async ({ limit = 0, age, sex }) => {
 }
 
 export const getSkeleton = async identifier => {
+  // first get preservation info
   let query = `
-  SELECT ?pred ?obj WHERE {
+  SELECT ?pred ?obj ?bone WHERE {
     {
       SELECT ?individual WHERE {
       ?individual catalhoyuk:hasIdentifier catalhoyuk:${identifier} .
@@ -105,7 +106,25 @@ export const getSkeleton = async identifier => {
     }
   })
 
-  return skeleton
+  // now get the geo shape for the skeleton
+  query = `
+    SELECT DISTINCT ?coordinates
+    WHERE {
+        ?individual a catalhoyuk:Individual .
+        ?individual :hasIdentifier catalhoyuk:${identifier} .
+        ?individual :isConstitutedBy ?skeleton .
+        ?skeleton a catalhoyuk:Skeleton .
+        ?skeleton :hasGeometry ?geometry .
+        ?geometry :hasSerialization ?coordinates .
+    }`
+
+  const geoData = await performRdfQuery(query)
+
+  let geoShape = geoData.data.results.bindings.map(
+    binding => binding.coordinates.value
+  )
+
+  return { skeleton: skeleton, shape: geoShape }
 }
 
 // export const getGeometry = async () => {

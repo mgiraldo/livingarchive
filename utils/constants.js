@@ -63,3 +63,5 @@ export const RDF_SEXES = [
   'male?',
   'too young to determine'
 ]
+
+export const BONE_COLOR = '#f3d48c'
