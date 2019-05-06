@@ -98,6 +98,7 @@ export default {
       map.zoomControl.remove()
       map.attributionControl.remove()
       map.fitBounds(bounds.pad(0.01))
+      map.dragging.disable()
     },
     checkMapObject() {
       this.checkMap = setInterval(() => {
