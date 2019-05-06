@@ -34,6 +34,7 @@
             :url="layer.url"
             :options="layer.options"
           ></l-tile-layer>
+          <l-control-scale position="topright" :imperial="false" :metric="true"></l-control-scale>
           <l-control class-name="legend" position="bottomleft">
             <div class="legend">
               <strong>{{legendType}}</strong>
