@@ -68,12 +68,18 @@
               <dl class="popup">
                 <dt>Identifier</dt>
                 <dd>{{individual.identifier}}</dd>
-                <dt>Discussion</dt>
-                <dd class="discussion">{{individual.discussion}}</dd>
                 <dt>Sex</dt>
-                <dd>{{individual.sex}}</dd>
+                <dd>
+                  {{individual.sex}}
+                  <button @click="andSex">AND</button>
+                  <button @click="orSex">OR</button>
+                </dd>
                 <dt>Age</dt>
-                <dd>{{individual.age}}</dd>
+                <dd>
+                  {{individual.age}}
+                  <button @click="andAge">AND</button>
+                  <button @click="orAge">OR</button>
+                </dd>
               </dl>
             </l-popup>
           </l-marker>
@@ -98,6 +104,9 @@ export default {
   fetch: async function({ store, params }) {
     // TODO: make limit dynamic
     await store.dispatch('fetchIndividuals')
+  },
+  asyncData: async function() {
+    return { tilelayers: TILELAYERS }
   },
   components: { SearchControls, ResultCell, MapMarker },
   computed: {
@@ -142,10 +151,25 @@ export default {
     })
     this.checkMapObject()
   },
-  asyncData: async function() {
-    return { tilelayers: TILELAYERS }
-  },
   methods: {
+    andSex(event) {
+      this.andProp('sex', event.target.value)
+    },
+    orSex(event) {
+      this.orProp('sex', event.target.value)
+    },
+    andAge(event) {
+      this.andProp('age', event.target.value)
+    },
+    orAge(event) {
+      this.orProp('age', event.target.value)
+    },
+    orProp(prop, value) {
+      console.log('or', prop, value)
+    },
+    andProp(prop, value) {
+      console.log('and', prop, value)
+    },
     toggleLegend() {
       this.$store.commit('toggledLegend')
     },
