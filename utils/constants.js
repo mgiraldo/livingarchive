@@ -1,5 +1,5 @@
 export const RDF_URL =
-  'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
+  'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
 
 export const RDF_PREFIXES = `PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
@@ -64,4 +64,6 @@ export const RDF_SEXES = {
   'too young to determine': '#aaa'
 }
 
-export const BONE_COLOR = '#f3d48c'
+export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 1.000)'
+export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 1.000)'
+export const BONE_STROKE_COLOR = '#967348'

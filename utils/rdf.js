@@ -19,7 +19,6 @@ const performRdfQuery = async query => {
   const instance = axios.create({
     timeout: RDF_TIMEOUT,
     headers: {
-      'Content-Type': 'application/sparql-query',
       Accept: 'application/sparql-results+json'
     }
   })
@@ -130,17 +129,3 @@ export const getSkeleton = async identifier => {
 
   return { skeleton: skeleton, shape: geoShape }
 }
-
-// export const getGeometry = async () => {
-//   let query = `
-//   SELECT * WHERE {
-//     ?unit a catalhoyuk:Unit	.
-//     ?unit catalhoyuk:hasGeometry ?geo	.
-//     ?geo catalhoyuk:hasSerialization ?coordinates .
-//     ?unit catalhoyuk:hasIdentifier 16230 .
-//   }`
-
-//   const data = await performRdfQuery(query)
-
-//   return data.data
-// }

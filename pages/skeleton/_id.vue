@@ -23,7 +23,12 @@ import wellknown from 'wellknown'
 import SkeletonFront from '~/assets/skeleton-front.svg'
 import { getSkeleton } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
-import { TILELAYERS, BONE_COLOR } from '~/utils/constants'
+import {
+  TILELAYERS,
+  BONE_FILL_COLOR,
+  BONE_FILL_PARTIAL_COLOR,
+  BONE_STROKE_COLOR
+} from '~/utils/constants'
 
 export default {
   components: { SkeletonFront },
@@ -52,7 +57,11 @@ export default {
       let boneElem = document.querySelector(prefix + boneName)
       if (boneElem) {
         boneElem.querySelectorAll('path').forEach(elem => {
-          elem.style.fill = BONE_COLOR
+          if (this.skeleton[boneName] === 'fullyPreservedA') {
+            elem.style.fill = BONE_FILL_COLOR
+          } else {
+            elem.style.fill = BONE_FILL_PARTIAL_COLOR
+          }
         })
       }
     }
@@ -71,7 +80,12 @@ export default {
               return L.circle(latlng, { radius: 0.001 })
             },
             style: function(feature) {
-              return { stroke: false, color: BONE_COLOR, fillOpacity: 0.75 }
+              return {
+                color: BONE_STROKE_COLOR,
+                weight: 0.5,
+                fillColor: BONE_FILL_COLOR,
+                fillOpacity: 0.75
+              }
             }
           }).addTo(map)
           if (!bounds) {
@@ -83,7 +97,7 @@ export default {
       })
       map.zoomControl.remove()
       map.attributionControl.remove()
-      map.fitBounds(bounds)
+      map.fitBounds(bounds.pad(0.01))
     },
     checkMapObject() {
       this.checkMap = setInterval(() => {

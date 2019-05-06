@@ -43,16 +43,16 @@
                   {{name}}
                 </li>
               </ul>
-              <span
+              <button
                 class="legend-toggle"
                 @click="toggleLegend"
                 v-if="legendType === 'sex'"
-              >color by age</span>
-              <span
+              >color by age</button>
+              <button
                 class="legend-toggle"
                 @click="toggleLegend"
                 v-if="legendType === 'age'"
-              >color by sex</span>
+              >color by sex</button>
             </div>
           </l-control>
           <l-marker
