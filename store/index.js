@@ -9,10 +9,11 @@ export const state = () => ({
   vars: [],
   individuals: {},
   points: [],
-  sexes: JSON.parse(JSON.stringify(RDF_SEXES)),
-  ages: JSON.parse(JSON.stringify(RDF_AGES)),
+  sexes: RDF_SEXES,
+  ages: RDF_AGES,
   selectedSex: 0,
-  selectedAge: 0
+  selectedAge: 0,
+  legendType: 'sex'
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
     state.vars = newState.vars
     state.individuals = newState.individuals
     state.points = newState.points
+  },
+  toggledLegend(state) {
+    state.legendType = state.legendType === 'age' ? 'sex' : 'age'
   },
   selectedSex(state, sexIndex) {
     state.selectedSex = sexIndex
@@ -33,7 +37,7 @@ export const actions = {
   async fetchIndividuals({ commit, state }) {
     // TODO: fix limit magic number
     let rdfIndividuals = await getIndividuals({
-      limit: 0,
+      limit: 100,
       age: state.selectedAge,
       sex: state.selectedSex
     })

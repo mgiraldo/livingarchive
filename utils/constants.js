@@ -41,27 +41,27 @@ export const TILELAYERS = [
   }
 ]
 
-export const RDF_AGES = [
-  'Any',
-  'Age not determinable',
-  'Prenatal (pre-fullterm)',
-  'neonate (birth - 2 months)',
-  'infant (2 months - 3 years)',
-  'child (3-12)',
-  'adolescent(12-20)',
-  'YA (20-35)',
-  'MA (35-50)',
-  'OA (50+)',
-  'Adult (20+)'
-]
+export const RDF_AGES = {
+  Any: '',
+  'Age not determinable': '#ccc',
+  'Prenatal (pre-fullterm)': '#a6cee3',
+  'neonate (birth - 2 months)': '#6AB0E4',
+  'infant (2 months - 3 years)': '#2D88E4',
+  'child (3-12)': '#0052C6',
+  'adolescent(12-20)': '#002D87',
+  'YA (20-35)': '#b2df8a',
+  'MA (35-50)': '#77DA3E',
+  'OA (50+)': '#2A870A',
+  'Adult (20+)': '#E6FFDE'
+}
 
-export const RDF_SEXES = [
-  'Any',
-  'female',
-  'female?',
-  'male',
-  'male?',
-  'too young to determine'
-]
+export const RDF_SEXES = {
+  Any: '',
+  female: '#fc8d62',
+  'female?': '#FDC5AE',
+  male: '#8da0cb',
+  'male?': '#B0C8FF',
+  'too young to determine': '#aaa'
+}
 
 export const BONE_COLOR = '#f3d48c'

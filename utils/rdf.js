@@ -33,9 +33,13 @@ export const getIndividuals = async ({ limit = 0, age, sex }) => {
   // TODO: sanitize params
   let limitStr = !isNaN(limit) && limit > 0 ? `LIMIT ${limit}` : ''
   let ageStr =
-    age && !isNaN(age) ? `?individual :hasAge "${RDF_AGES[age]}" .` : ''
+    age && !isNaN(age)
+      ? `?individual :hasAge "${Object.keys(RDF_AGES)[age]}" .`
+      : ''
   let sexStr =
-    sex && !isNaN(sex) ? `?individual :hasSex "${RDF_SEXES[sex]}" .` : ''
+    sex && !isNaN(sex)
+      ? `?individual :hasSex "${Object.keys(RDF_SEXES)[sex]}" .`
+      : ''
   let query = `
   SELECT ?individual ?identifier ?age ?sex ?discussion ?coordinates ?skeleton
   WHERE {

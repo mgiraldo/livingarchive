@@ -3,7 +3,7 @@
     <search-controls/>
     <section class="results">
       <h1>Individuals</h1>
-      <p>Filtered by: Age: {{ages[ageFilter]}} and Sex: {{sexes[sexFilter]}}</p>
+      <p>Filtered by: Age: {{ageFilter}} and Sex: {{sexFilter}}</p>
       <table>
         <thead>
           <tr>
@@ -34,16 +34,34 @@
             :url="layer.url"
             :options="layer.options"
           ></l-tile-layer>
+          <l-control class-name="legend" position="bottomleft">
+            <div class="legend">
+              <strong>{{legendType}}</strong>
+              <ul>
+                <li v-for="(color,name,index) in legend" :key="index">
+                  <span class="dot" :style="`background-color:${color}`"></span>
+                  {{name}}
+                </li>
+              </ul>
+              <span
+                class="legend-toggle"
+                @click="toggleLegend"
+                v-if="legendType === 'sex'"
+              >color by age</span>
+              <span
+                class="legend-toggle"
+                @click="toggleLegend"
+                v-if="legendType === 'age'"
+              >color by sex</span>
+            </div>
+          </l-control>
           <l-marker
             v-for="(individual, index) in individuals"
             :key="index"
             :lat-lng="individual.point.coordinates"
           >
             <l-icon class-name="icon">
-              <div
-                class="icon"
-                style="background-color:red;border-radius: 50%;width:100%;height:100%"
-              ></div>
+              <map-marker :type="legendType" :individual="individual"/>
             </l-icon>
             <l-popup>
               <dl class="popup">
@@ -70,6 +88,7 @@ import { TILELAYERS } from '~/utils/constants'
 
 import SearchControls from '~/components/SearchControls'
 import ResultCell from '~/components/ResultCell'
+import MapMarker from '~/components/MapMarker'
 
 export default {
   head() {
@@ -79,6 +98,7 @@ export default {
     // TODO: make limit dynamic
     await store.dispatch('fetchIndividuals')
   },
+  components: { SearchControls, ResultCell, MapMarker },
   computed: {
     vars() {
       return this.$store.state.vars.individuals
@@ -93,10 +113,24 @@ export default {
       return this.$store.state.sexes
     },
     ageFilter() {
-      return this.$store.state.selectedAge
+      return Object.keys(this.$store.state.ages)[this.$store.state.selectedAge]
     },
     sexFilter() {
-      return this.$store.state.selectedSex
+      return Object.keys(this.$store.state.sexes)[this.$store.state.selectedSex]
+    },
+    legendType() {
+      return this.$store.state.legendType
+    },
+    legend() {
+      if (this.$store.state.legendType === 'age') {
+        let ages = JSON.parse(JSON.stringify(this.$store.state.ages))
+        delete ages.Any
+        return ages
+      } else {
+        let sexes = JSON.parse(JSON.stringify(this.$store.state.sexes))
+        delete sexes.Any
+        return sexes
+      }
     }
   },
   mounted() {
@@ -110,8 +144,10 @@ export default {
   asyncData: async function() {
     return { tilelayers: TILELAYERS }
   },
-  components: { SearchControls, ResultCell },
   methods: {
+    toggleLegend() {
+      this.$store.commit('toggledLegend')
+    },
     fitMap() {
       if (this.$refs.myMap && this.$store.state.points.length > 0) {
         this.$refs.myMap.fitBounds(this.$store.state.points)
@@ -129,7 +165,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -155,8 +191,34 @@ export default {
   grid-area: map;
 }
 .icon {
-  font-size: 0.5rem;
   border-radius: 50%;
+}
+.legend {
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 0.5rem;
+  list-style-type: none;
+  padding: 0.25rem;
+
+  ul {
+    margin: 0.5rem 0;
+    padding: 0;
+  }
+
+  li {
+    display: flex;
+    margin-bottom: 0.5rem;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  .dot {
+    border-radius: 50%;
+    height: 1rem;
+    margin-right: 0.25rem;
+    width: 1rem;
+  }
 }
 .popup {
   dt {

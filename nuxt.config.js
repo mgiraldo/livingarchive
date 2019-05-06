@@ -26,7 +26,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: ['@/assets/css/map.scss'],
+  css: [],
 
   /*
    ** Plugins to load before mounting the App
@@ -54,6 +54,7 @@ module.exports = {
    ** Build configuration
    */
   build: {
+    splitChunks: { layouts: true },
     styleResources: { scss: './assets/css/variables.scss' },
     extend(config, ctx) {
       const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))

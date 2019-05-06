@@ -3,13 +3,13 @@
     <label for="ageSelect">
       Age:
       <select id="ageSelect" v-model="selectedAge">
-        <option v-for="(age,index) in ages" :key="index" :value="index">{{ age }}</option>
+        <option v-for="(color,age,index) in ages" :key="index" :value="index">{{ age }}</option>
       </select>
     </label>
     <label for="sexSelect">
       Sex:
       <select id="sexSelect" v-model="selectedSex">
-        <option v-for="(sex,index) in sexes" :key="index" :value="index">{{ sex }}</option>
+        <option v-for="(color,sex,index) in sexes" :key="index" :value="index">{{ sex }}</option>
       </select>
     </label>
   </form>
