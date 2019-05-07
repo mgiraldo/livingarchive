@@ -40,8 +40,7 @@
               <strong>{{legendType}}</strong>
               <ul>
                 <li v-for="(color,name,index) in legend" :key="index">
-                  <span class="dot" :style="`background-color:${color}`"></span>
-                  {{name}}
+                  <filter-color-item :name="name" :color="color"/>
                 </li>
               </ul>
               <button
@@ -96,6 +95,7 @@ import { TILELAYERS } from '~/utils/constants'
 import SearchControls from '~/components/SearchControls'
 import ResultCell from '~/components/ResultCell'
 import MapMarker from '~/components/MapMarker'
+import FilterColorItem from '~/components/FilterColorItem'
 
 export default {
   head() {
@@ -105,10 +105,16 @@ export default {
     // TODO: make limit dynamic
     await store.dispatch('fetchIndividuals')
   },
-  asyncData: async function() {
+  async asyncData() {
     return { tilelayers: TILELAYERS }
   },
-  components: { SearchControls, ResultCell, MapMarker },
+  data() {
+    return {
+      ageFilter: [...this.$store.state.checkedAges],
+      sexFilter: [...this.$store.state.checkedSexes]
+    }
+  },
+  components: { SearchControls, ResultCell, MapMarker, FilterColorItem },
   computed: {
     vars() {
       return this.$store.state.vars.individuals
@@ -122,24 +128,14 @@ export default {
     sexes() {
       return this.$store.state.sexes
     },
-    ageFilter() {
-      return Object.keys(this.$store.state.ages)[this.$store.state.selectedAge]
-    },
-    sexFilter() {
-      return Object.keys(this.$store.state.sexes)[this.$store.state.selectedSex]
-    },
     legendType() {
       return this.$store.state.legendType
     },
     legend() {
       if (this.$store.state.legendType === 'age') {
-        let ages = JSON.parse(JSON.stringify(this.$store.state.ages))
-        delete ages.Any
-        return ages
+        return this.$store.state.ages
       } else {
-        let sexes = JSON.parse(JSON.stringify(this.$store.state.sexes))
-        delete sexes.Any
-        return sexes
+        return this.$store.state.sexes
       }
     }
   },
@@ -148,10 +144,17 @@ export default {
       if (mutation.type === 'fetchedIndividuals') {
         this.fitMap()
       }
+      if (mutation.type === 'checkedFilter') {
+        this.updateFilters()
+      }
     })
     this.checkMapObject()
   },
   methods: {
+    updateFilters() {
+      this.ageFilter = [...this.$store.state.checkedAges]
+      this.sexFilter = [...this.$store.state.checkedSexes]
+    },
     andSex(event) {
       this.andProp('sex', event.target.value)
     },
@@ -225,12 +228,12 @@ export default {
   padding: 0.25rem;
 
   ul {
+    list-style-type: none;
     margin: 0.5rem 0;
     padding: 0;
   }
 
   li {
-    display: flex;
     margin-bottom: 0.5rem;
   }
 

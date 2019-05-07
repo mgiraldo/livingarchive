@@ -11,8 +11,8 @@ export const state = () => ({
   points: [],
   sexes: RDF_SEXES,
   ages: RDF_AGES,
-  selectedSex: 0,
-  selectedAge: 0,
+  checkedAges: new Set(Object.keys(RDF_AGES).map((key, index) => index)),
+  checkedSexes: new Set(Object.keys(RDF_SEXES).map((key, index) => index)),
   legendType: 'sex'
 })
 
@@ -25,11 +25,13 @@ export const mutations = {
   toggledLegend(state) {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'
   },
-  selectedSex(state, sexIndex) {
-    state.selectedSex = sexIndex
-  },
-  selectedAge(state, ageIndex) {
-    state.selectedAge = ageIndex
+  checkedFilter(state, { type, index, value }) {
+    let filter = type === 'age' ? 'Ages' : 'Sexes'
+    if (value === false) {
+      state['checked' + filter].delete(index)
+    } else {
+      state['checked' + filter].add(index)
+    }
   }
 }
 
@@ -38,8 +40,7 @@ export const actions = {
     // TODO: fix limit magic number
     let rdfIndividuals = await getIndividuals({
       limit: 100,
-      age: state.selectedAge,
-      sex: state.selectedSex
+      filters: { ages: state.checkedAges, sexes: state.checkedSexes }
     })
     let individuals = {}
     let points = []

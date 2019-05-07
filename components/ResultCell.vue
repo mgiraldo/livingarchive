@@ -1,9 +1,9 @@
 <template>
   <tr class="row" :key="individual.identifier" :identifier="individual.identifier">
-    <td class="individual" @click="hover">{{individual.individual}}</td>
-    <td class="age" @click="hover">{{individual.age}}</td>
-    <td class="sex" @click="hover">{{individual.sex}}</td>
-    <td class="discussion" @click="hover">{{individual.discussion}}</td>
+    <td class="individual" @click="hoverClick">{{individual.individual}}</td>
+    <td class="age" @click="hoverClick">{{individual.age}}</td>
+    <td class="sex" @click="hoverClick">{{individual.sex}}</td>
+    <td class="discussion" @click="hoverClick">{{individual.discussion}}</td>
     <td>
       <nuxt-link :to="`skeleton/${individual.identifier}`" target="_blank">skeleton</nuxt-link>
     </td>
@@ -20,8 +20,8 @@ export default {
     return {}
   },
   methods: {
-    hover(target) {
-      console.log(this.individual)
+    hoverClick(target) {
+      // console.log(this.individual)
     }
   }
 }

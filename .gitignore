@@ -84,6 +84,5 @@ dist
 sw.*
 
 #Misc stuff
-.editorconfig
 .sideview
 .DS_Store

@@ -28,17 +28,22 @@ const performRdfQuery = async query => {
   return results
 }
 
-export const getIndividuals = async ({ limit = 0, age, sex }) => {
+export const getIndividuals = async ({ limit = 0, filters }) => {
   // TODO: sanitize params
   let limitStr = !isNaN(limit) && limit > 0 ? `LIMIT ${limit}` : ''
-  let ageStr =
-    age && !isNaN(age)
-      ? `?individual :hasAge "${Object.keys(RDF_AGES)[age]}" .`
-      : ''
-  let sexStr =
-    sex && !isNaN(sex)
-      ? `?individual :hasSex "${Object.keys(RDF_SEXES)[sex]}" .`
-      : ''
+  let ages = filters.ages ? Array.from(filters.ages) : []
+  let sexes = filters.sexes ? Array.from(filters.sexes) : []
+
+  let ageStr = ages
+    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES)[age]}"` : ''))
+    .join(', ')
+  ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
+
+  let sexStr = sexes
+    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES)[sex]}"` : ''))
+    .join(', ')
+  sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
+
   let query = `
   SELECT ?individual ?identifier ?age ?sex ?discussion ?coordinates ?skeleton
   WHERE {
