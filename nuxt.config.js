@@ -50,12 +50,13 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
   },
 
+  styleResources: { scss: './assets/css/variables.scss' },
+
   /*
    ** Build configuration
    */
   build: {
     splitChunks: { layouts: true },
-    styleResources: { scss: './assets/css/variables.scss' },
     extend(config) {
       const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
 
