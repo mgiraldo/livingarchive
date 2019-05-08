@@ -28,32 +28,18 @@ export const mutations = {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'
   },
   onlyProp(state, { prop, value }) {
-    switch (prop) {
-      case 'sex':
-        state.checkedSexes = new Set(
-          Object.keys(RDF_SEXES)
-            .map((key, index) => {
-              if (key === value) return index
-            })
-            .filter(index => index !== undefined)
-        )
-        state.checkedAges = new Set(
-          Object.keys(RDF_AGES).map((key, index) => index)
-        )
-        break
-      case 'age':
-        state.checkedAges = new Set(
-          Object.keys(RDF_AGES)
-            .map((key, index) => {
-              if (key === value) return index
-            })
-            .filter(index => index !== undefined)
-        )
-        state.checkedSexes = new Set(
-          Object.keys(RDF_SEXES).map((key, index) => index)
-        )
-        break
-    }
+    let [thisProp, thatProp, thisState, thatState] =
+      prop === 'sex'
+        ? [RDF_SEXES, RDF_AGES, 'checkedSexes', 'checkedAges']
+        : [RDF_AGES, RDF_SEXES, 'checkedAges', 'checkedSexes']
+    state[thisState] = new Set(
+      Object.keys(thisProp)
+        .map((key, index) => {
+          if (key === value) return index
+        })
+        .filter(index => index !== undefined)
+    )
+    state[thatState] = new Set(Object.keys(thatProp).map((key, index) => index))
   },
   checkedFilter(state, { type, index, value }) {
     let filter = type === 'age' ? 'Ages' : 'Sexes'
