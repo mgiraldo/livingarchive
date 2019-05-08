@@ -2,17 +2,17 @@
   <div class="container">
     <search-controls />
     <section class="results">
-      <h1>Individuals</h1>
+      <h1>{{ individualCount }} individuals</h1>
       <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
       <p>
         <nuxt-link :to="{ params: { state: 'a:1,2,3|s:2,3' } }"
-          >page a</nuxt-link
+          >map a</nuxt-link
         >
         <nuxt-link :to="{ params: { state: 'a:1,2,3,4|s:2,3,4,5' } }"
-          >page b</nuxt-link
+          >map b</nuxt-link
         >
         <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4,5' } }"
-          >page c</nuxt-link
+          >map c</nuxt-link
         >
       </p>
       <table>
@@ -129,6 +129,9 @@ export default {
     }
   },
   computed: {
+    individualCount() {
+      return this.$store.state.individualCount
+    },
     vars() {
       return this.$store.state.vars.individuals
     },

@@ -2,12 +2,13 @@ import wellknown from 'wellknown'
 import center from '@turf/center'
 
 import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
-import { getIndividuals } from '~/utils/rdf'
+import { getIndividuals, countIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 export const state = () => ({
   vars: [],
   individuals: {},
+  individualCount: 0,
   points: [],
   sexes: RDF_SEXES,
   ages: RDF_AGES,
@@ -21,6 +22,7 @@ export const mutations = {
     state.vars = newState.vars
     state.individuals = newState.individuals
     state.points = newState.points
+    state.individualCount = newState.individualCount
   },
   toggledLegend(state) {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'
@@ -37,10 +39,11 @@ export const mutations = {
 
 export const actions = {
   async fetchIndividuals({ commit, state }) {
+    const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
     // TODO: fix limit magic number
     let rdfIndividuals = await getIndividuals({
       limit: 100,
-      filters: { ages: state.checkedAges, sexes: state.checkedSexes }
+      filters: filters
     })
     let individuals = {}
     let points = []
@@ -58,9 +61,12 @@ export const actions = {
       }
     })
 
+    let count = await countIndividuals(filters)
+
     let newState = {
       vars: { individuals: rdfIndividuals.vars },
       individuals: individuals,
+      individualCount: count,
       points: points
     }
     commit('fetchedIndividuals', newState)

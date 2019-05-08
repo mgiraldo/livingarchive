@@ -22,10 +22,49 @@ const performRdfQuery = async query => {
       Accept: 'application/sparql-results+json'
     }
   })
+
+  console.log(query)
+
   const results = await instance.get(
     RDF_URL + '?query=' + encodeURIComponent(RDF_PREFIXES + query)
   )
   return results
+}
+
+export const countIndividuals = async filters => {
+  // TODO: sanitize params
+  let ages = filters.ages ? Array.from(filters.ages) : []
+  let sexes = filters.sexes ? Array.from(filters.sexes) : []
+
+  let ageStr = ages
+    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES)[age]}"` : ''))
+    .join(', ')
+  ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
+
+  let sexStr = sexes
+    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES)[sex]}"` : ''))
+    .join(', ')
+  sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
+
+  let query = `
+  SELECT (COUNT (DISTINCT ?individual) as ?count)
+  WHERE {
+        ?individual a catalhoyuk:Individual .
+        ?individual :hasIdentifier ?identifier .
+        ?individual :hasAge ?age .
+        ?individual :hasSex ?sex .
+        ?individual :isConstitutedBy ?skeleton .
+        ?skeleton :isExcavatedIn ?find .
+        ?find :hasDiscussion ?discussion .
+        ${ageStr}
+        ${sexStr}
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const count = Number(data.data.results.bindings[0].count.value)
+
+  return count
 }
 
 export const getIndividuals = async ({ limit = 0, filters }) => {
@@ -64,8 +103,6 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
       ?skeleton :hasGeometry ?geometry .
       ?geometry :hasSerialization ?coordinates .
   }`
-
-  // console.log(query)
 
   const data = await performRdfQuery(query)
 
