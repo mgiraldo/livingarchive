@@ -12,28 +12,20 @@
       <skeleton-front id="skeleton" />
     </section>
     <section class="map-container">
-      <no-ssr>
-        <l-map ref="myMap"></l-map>
-      </no-ssr>
+      <bones-find-view :shape="shape" />
     </section>
   </div>
 </template>
 
 <script>
-import wellknown from 'wellknown'
-
 import SkeletonFront from '~/assets/skeleton-front.svg'
+import BonesFindView from '~/components/BonesFindView'
+
 import { getSkeleton } from '~/utils/rdf'
-import { reprojectGeoJson } from '~/utils/geo'
-import {
-  TILELAYERS,
-  BONE_FILL_COLOR,
-  BONE_FILL_PARTIAL_COLOR,
-  BONE_STROKE_COLOR
-} from '~/utils/constants'
+import { BONE_FILL_COLOR, BONE_FILL_PARTIAL_COLOR } from '~/utils/constants'
 
 export default {
-  components: { SkeletonFront },
+  components: { SkeletonFront, BonesFindView },
   head() {
     return { title: 'skeleton' }
   },
@@ -45,8 +37,7 @@ export default {
     return {
       identifier: params.id,
       skeleton: skeleton,
-      shape: shape,
-      tilelayers: TILELAYERS
+      shape: shape
     }
   },
   mounted() {
@@ -66,49 +57,6 @@ export default {
           }
         })
       }
-    }
-    this.checkMapObject()
-  },
-  methods: {
-    plotBones() {
-      let map = this.$refs.myMap.mapObject
-      let bounds
-      this.shape.forEach(wkt => {
-        const parsed = wellknown.parse(wkt)
-        if (parsed.type !== 'Point') {
-          const json = reprojectGeoJson(parsed)
-          const geo = L.geoJSON(json, {
-            pointToLayer: function(geoJsonPoint, latlng) {
-              return L.circle(latlng, { radius: 0.001 })
-            },
-            style: function() {
-              return {
-                color: BONE_STROKE_COLOR,
-                weight: 0.5,
-                fillColor: BONE_FILL_COLOR,
-                fillOpacity: 0.75
-              }
-            }
-          }).addTo(map)
-          if (!bounds) {
-            bounds = L.latLngBounds(geo.getBounds())
-          } else {
-            bounds.extend(geo.getBounds())
-          }
-        }
-      })
-      map.zoomControl.remove()
-      map.attributionControl.remove()
-      map.fitBounds(bounds.pad(0.01))
-      map.dragging.disable()
-    },
-    checkMapObject() {
-      this.checkMap = setInterval(() => {
-        if (this.$refs.myMap) {
-          clearInterval(this.checkMap)
-          this.plotBones()
-        }
-      }, 100)
     }
   }
 }
@@ -138,9 +86,5 @@ export default {
 .map-container {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
-}
-.leaflet-container {
-  background: #fafafa;
-  border-radius: 50%;
 }
 </style>

@@ -19,6 +19,7 @@
     "@types/leaflet": "^1.4.4",
     "babel-eslint": "^10.0.1",
     "cross-env": "^5.2.0",
+    "d3": "^5.9.2",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "express": "^4.16.4",
@@ -30,6 +31,7 @@
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
     "vue-clickaway": "^2.2.2",
+    "vue-d3": "^0.1.0",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.30.0",
     "wellknown": "^0.5.0"

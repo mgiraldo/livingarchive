@@ -87,6 +87,10 @@
                 <dl class="popup">
                   <dt>Identifier</dt>
                   <dd>{{ individual.identifier }}</dd>
+                  <!-- <dt>Skeleton</dt>
+                  <dd class="bones">
+                    <bones-find-view :shape="individual.coordinates" />
+                  </dd> -->
                   <dt>Sex</dt>
                   <dd>
                     {{ individual.sex }}
@@ -126,13 +130,20 @@ import SearchControls from '~/components/SearchControls'
 import ResultCell from '~/components/ResultCell'
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
+import BonesFindView from '~/components/BonesFindView'
 
 export default {
   head() {
     return { title: 'map' }
   },
   key: '_map',
-  components: { SearchControls, ResultCell, MapMarker, FilterColorItem },
+  components: {
+    SearchControls,
+    ResultCell,
+    MapMarker,
+    FilterColorItem,
+    BonesFindView
+  },
   data() {
     return {
       tilelayers: TILELAYERS,
