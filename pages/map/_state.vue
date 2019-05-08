@@ -4,6 +4,17 @@
     <section class="results">
       <h1>Individuals</h1>
       <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
+      <p>
+        <nuxt-link :to="{ params: { state: 'a:1,2,3|s:2,3' } }"
+          >page a</nuxt-link
+        >
+        <nuxt-link :to="{ params: { state: 'a:1,2,3,4|s:2,3,4,5' } }"
+          >page b</nuxt-link
+        >
+        <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4,5' } }"
+          >page c</nuxt-link
+        >
+      </p>
       <table>
         <thead>
           <tr>
@@ -108,9 +119,11 @@ export default {
   head() {
     return { title: 'map' }
   },
+  key: '_map',
   components: { SearchControls, ResultCell, MapMarker, FilterColorItem },
   data() {
     return {
+      tilelayers: TILELAYERS,
       ageFilter: [...this.$store.state.checkedAges],
       sexFilter: [...this.$store.state.checkedSexes]
     }
@@ -139,14 +152,18 @@ export default {
       }
     }
   },
-  async asyncData() {
-    return { tilelayers: TILELAYERS }
-  },
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log('route change', to, from, next)
+  // },
   fetch: async function({ store }) {
     // TODO: make limit dynamic
     await store.dispatch('fetchIndividuals')
   },
+  created() {
+    console.log('created')
+  },
   mounted() {
+    console.log('mounted')
     this.$store.subscribe(mutation => {
       if (mutation.type === 'fetchedIndividuals') {
         this.fitMap()

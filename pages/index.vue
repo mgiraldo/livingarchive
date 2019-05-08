@@ -3,7 +3,7 @@
     <div>
       <h1 class="title">app in {{ name }}</h1>
       <h2 class="subtitle">Living Archive</h2>
-      <router-link to="/map">Map</router-link>
+      <nuxt-link to="/map">Map</nuxt-link>
     </div>
   </section>
 </template>
