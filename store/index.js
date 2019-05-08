@@ -5,6 +5,13 @@ import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
 import { getIndividuals, countIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
+const isFiltered = state => {
+  return (
+    Array.from(state.checkedAges).length !== Object.keys(RDF_AGES).length ||
+    Array.from(state.checkedSexes).length !== Object.keys(RDF_SEXES).length
+  )
+}
+
 export const state = () => ({
   vars: [],
   individuals: {},
@@ -14,7 +21,8 @@ export const state = () => ({
   ages: RDF_AGES,
   checkedAges: new Set(Object.keys(RDF_AGES).map((key, index) => index)),
   checkedSexes: new Set(Object.keys(RDF_SEXES).map((key, index) => index)),
-  legendType: 'sex'
+  legendType: 'sex',
+  filtered: false
 })
 
 export const mutations = {
@@ -23,6 +31,7 @@ export const mutations = {
     state.individuals = newState.individuals
     state.points = newState.points
     state.individualCount = newState.individualCount
+    state.filtered = isFiltered(state)
   },
   toggledLegend(state) {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'
@@ -39,7 +48,8 @@ export const mutations = {
         })
         .filter(index => index !== undefined)
     )
-    state[thatState] = new Set(Object.keys(thatProp).map((key, index) => index))
+    // state[thatState] = new Set(Object.keys(thatProp).map((key, index) => index))
+    state.filtered = isFiltered(state)
   },
   checkedFilter(state, { type, index, value }) {
     let filter = type === 'age' ? 'Ages' : 'Sexes'
@@ -48,6 +58,16 @@ export const mutations = {
     } else {
       state['checked' + filter].add(index)
     }
+    state.filtered = isFiltered(state)
+  },
+  clearFilters(state) {
+    state.checkedAges = new Set(
+      Object.keys(RDF_AGES).map((key, index) => index)
+    )
+    state.checkedSexes = new Set(
+      Object.keys(RDF_SEXES).map((key, index) => index)
+    )
+    state.filtered = false
   }
 }
 

@@ -40,6 +40,14 @@
         </li>
       </ul>
     </dialog>
+    <button
+      v-if="filtered"
+      class="filter-button"
+      type="button"
+      @click="clearFilters"
+    >
+      Clear filters
+    </button>
   </form>
 </template>
 
@@ -61,14 +69,23 @@ export default {
       sexes: this.$store.state.sexes
     }
   },
+  computed: {
+    filtered() {
+      return this.$store.state.filtered
+    }
+  },
   mounted() {
     this.$store.subscribe(mutation => {
-      if (mutation.type === 'checkedFilter') {
+      if (mutation.type === 'checkedFilter' || mutation.type === 'onlyProp') {
         this.updateFilters()
       }
     })
   },
   methods: {
+    clearFilters() {
+      this.$store.commit('clearFilters')
+      this.$store.dispatch('fetchIndividuals')
+    },
     updateFilters() {
       this.ages = this.$store.state.ages
       this.sexes = this.$store.state.sexes
