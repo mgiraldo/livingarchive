@@ -1,33 +1,45 @@
 <template>
   <form class="controls">
     <fieldset>
-      <legend @click="toggleAge">Age</legend>
-      <dialog v-if="ageVisible" class="dialog" v-on-clickaway="dismiss" open>
-        <label v-for="(color,age,index) in ages" :key="index" :for="`ch_${index}`">
-          <input
-            :id="`ch_${index}`"
-            type="checkbox"
-            :value="index"
-            :checked="inStore('Ages',index)"
-            @change="toggled('age',index,$event.target.checked)"
-          >
-          <filter-color-item :name="age" :color="color"/>
-        </label>
+      <legend>
+        <button type="button" @click="toggleAge">Age</button>
+      </legend>
+      <dialog v-if="ageVisible" v-on-clickaway="dismiss" class="dialog" open>
+        <ul>
+          <li v-for="(color, age, index) in ages" :key="index">
+            <label :for="`ch_${index}`">
+              <input
+                :id="`ch_${index}`"
+                type="checkbox"
+                :value="index"
+                :checked="inStore('Ages', index)"
+                @change="toggled('age', index, $event.target.checked)"
+              />
+              <filter-color-item :name="age" :color="color" />
+            </label>
+          </li>
+        </ul>
       </dialog>
     </fieldset>
     <fieldset>
-      <legend @click="toggleSex">Sex</legend>
-      <dialog v-if="sexVisible" class="dialog" v-on-clickaway="dismiss" open>
-        <label v-for="(color,sex,index) in sexes" :key="index" :for="`ch_${index}`">
-          <input
-            :id="`ch_${index}`"
-            type="checkbox"
-            :value="index"
-            :checked="inStore('Sexes',index)"
-            @change="toggled('sex',index,$event.target.checked)"
-          >
-          <filter-color-item :name="sex" :color="color"/>
-        </label>
+      <legend>
+        <button type="button" @click="toggleSex">Sex</button>
+      </legend>
+      <dialog v-if="sexVisible" v-on-clickaway="dismiss" class="dialog" open>
+        <ul>
+          <li v-for="(color, sex, index) in sexes" :key="index">
+            <label :for="`ch_${index}`">
+              <input
+                :id="`ch_${index}`"
+                type="checkbox"
+                :value="index"
+                :checked="inStore('Sexes', index)"
+                @change="toggled('sex', index, $event.target.checked)"
+              />
+              <filter-color-item :name="sex" :color="color" />
+            </label>
+          </li>
+        </ul>
       </dialog>
     </fieldset>
   </form>
@@ -39,12 +51,20 @@ import { directive as onClickaway } from 'vue-clickaway'
 import FilterColorItem from '~/components/FilterColorItem'
 
 export default {
-  data() {
-    return { ageVisible: false, sexVisible: false }
-  },
   components: { FilterColorItem },
   directives: {
     onClickaway: onClickaway
+  },
+  data() {
+    return { ageVisible: false, sexVisible: false }
+  },
+  computed: {
+    ages() {
+      return this.$store.state.ages
+    },
+    sexes() {
+      return this.$store.state.sexes
+    }
   },
   methods: {
     toggleAge() {
@@ -55,7 +75,7 @@ export default {
       this.ageVisible = false
       this.sexVisible = !this.sexVisible
     },
-    dismiss(e) {
+    dismiss() {
       this.sexVisible = false
       this.ageVisible = false
     },
@@ -65,14 +85,6 @@ export default {
     },
     inStore(filter, index) {
       return this.$store.state['checked' + filter].has(index)
-    }
-  },
-  computed: {
-    ages() {
-      return this.$store.state.ages
-    },
-    sexes() {
-      return this.$store.state.sexes
     }
   }
 }
@@ -89,6 +101,11 @@ fieldset {
 .dialog {
   display: flex;
   flex-direction: column;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 label {
   display: flex;

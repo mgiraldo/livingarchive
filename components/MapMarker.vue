@@ -5,8 +5,8 @@
 <script>
 export default {
   props: {
-    type: { type: String },
-    individual: { type: Object }
+    type: { type: String, required: true },
+    individual: { type: Object, required: true }
   },
   computed: {
     markerColor() {

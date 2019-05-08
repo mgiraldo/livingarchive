@@ -1,13 +1,8 @@
 <template>
   <section>
     <div>
-      <h1 class="title">app in {{name}}</h1>
+      <h1 class="title">app in {{ name }}</h1>
       <h2 class="subtitle">Living Archive</h2>
-      {{$store.state.counter}}
-      <button
-        class="button--green"
-        @click="$store.commit('increment')"
-      >Count</button>
       <router-link to="/map">Map</router-link>
     </div>
   </section>
@@ -15,7 +10,7 @@
 
 <script>
 export default {
-  async asyncData({ req, res }) {
+  async asyncData({ req }) {
     return {
       name: req ? 'server' : 'client'
     }

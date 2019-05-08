@@ -1,13 +1,15 @@
 <template>
   <div class="viewer">
     <section class="list">
-      <h1 class="label">Individual: {{identifier}}</h1>
+      <h1 class="label">Individual: {{ identifier }}</h1>
       <ul>
-        <li v-for="(preserved, bone, index) in skeleton" :key="index">{{bone}} ({{preserved}})</li>
+        <li v-for="(preserved, bone, index) in skeleton" :key="index">
+          {{ bone }} ({{ preserved }})
+        </li>
       </ul>
     </section>
     <section class="skeleton-container">
-      <skeleton-front id="skeleton"/>
+      <skeleton-front id="skeleton" />
     </section>
     <section class="map-container">
       <no-ssr>
@@ -36,7 +38,7 @@ export default {
     return { title: 'skeleton' }
   },
   validate({ params }) {
-    return /^[a-zA-Z\d\.]+$/.test(params.id)
+    return /^[a-zA-Z\d.]+$/.test(params.id)
   },
   async asyncData({ params }) {
     let { skeleton, shape } = await getSkeleton(params.id)
@@ -79,7 +81,7 @@ export default {
             pointToLayer: function(geoJsonPoint, latlng) {
               return L.circle(latlng, { radius: 0.001 })
             },
-            style: function(feature) {
+            style: function() {
               return {
                 color: BONE_STROKE_COLOR,
                 weight: 0.5,
@@ -142,4 +144,3 @@ export default {
   border-radius: 50%;
 }
 </style>
-

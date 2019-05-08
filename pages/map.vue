@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <search-controls/>
+    <search-controls />
     <section class="results">
       <h1>Individuals</h1>
-      <p>Filtered by: Age: {{ageFilter}} and Sex: {{sexFilter}}</p>
+      <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
       <table>
         <thead>
           <tr>
@@ -16,9 +16,9 @@
         </thead>
         <tbody>
           <tr
-            v-for="(individual) in individuals"
-            :key="individual.identifier"
             is="result-cell"
+            v-for="individual in individuals"
+            :key="individual.identifier"
             :individual="individual"
             :vars="vars"
           ></tr>
@@ -29,30 +29,38 @@
       <no-ssr>
         <l-map ref="myMap">
           <l-tile-layer
-            v-for="(layer,index) in tilelayers"
+            v-for="(layer, index) in tilelayers"
             :key="index"
             :url="layer.url"
             :options="layer.options"
           ></l-tile-layer>
-          <l-control-scale position="topright" :imperial="false" :metric="true"></l-control-scale>
+          <l-control-scale
+            position="topright"
+            :imperial="false"
+            :metric="true"
+          ></l-control-scale>
           <l-control class-name="legend" position="bottomleft">
             <div class="legend">
-              <strong>{{legendType}}</strong>
+              <strong>{{ legendType }}</strong>
               <ul>
-                <li v-for="(color,name,index) in legend" :key="index">
-                  <filter-color-item :name="name" :color="color"/>
+                <li v-for="(color, name, index) in legend" :key="index">
+                  <filter-color-item :name="name" :color="color" />
                 </li>
               </ul>
               <button
-                class="legend-toggle"
-                @click="toggleLegend"
                 v-if="legendType === 'sex'"
-              >color by age</button>
-              <button
                 class="legend-toggle"
                 @click="toggleLegend"
+              >
+                color by age
+              </button>
+              <button
                 v-if="legendType === 'age'"
-              >color by sex</button>
+                class="legend-toggle"
+                @click="toggleLegend"
+              >
+                color by sex
+              </button>
             </div>
           </l-control>
           <l-marker
@@ -61,21 +69,21 @@
             :lat-lng="individual.point.coordinates"
           >
             <l-icon class-name="icon">
-              <map-marker :type="legendType" :individual="individual"/>
+              <map-marker :type="legendType" :individual="individual" />
             </l-icon>
             <l-popup>
               <dl class="popup">
                 <dt>Identifier</dt>
-                <dd>{{individual.identifier}}</dd>
+                <dd>{{ individual.identifier }}</dd>
                 <dt>Sex</dt>
                 <dd>
-                  {{individual.sex}}
+                  {{ individual.sex }}
                   <button @click="andSex">AND</button>
                   <button @click="orSex">OR</button>
                 </dd>
                 <dt>Age</dt>
                 <dd>
-                  {{individual.age}}
+                  {{ individual.age }}
                   <button @click="andAge">AND</button>
                   <button @click="orAge">OR</button>
                 </dd>
@@ -89,7 +97,6 @@
 </template>
 
 <script>
-import { getIndividuals, getGeometry } from '~/utils/rdf'
 import { TILELAYERS } from '~/utils/constants'
 
 import SearchControls from '~/components/SearchControls'
@@ -101,20 +108,13 @@ export default {
   head() {
     return { title: 'map' }
   },
-  fetch: async function({ store, params }) {
-    // TODO: make limit dynamic
-    await store.dispatch('fetchIndividuals')
-  },
-  async asyncData() {
-    return { tilelayers: TILELAYERS }
-  },
+  components: { SearchControls, ResultCell, MapMarker, FilterColorItem },
   data() {
     return {
       ageFilter: [...this.$store.state.checkedAges],
       sexFilter: [...this.$store.state.checkedSexes]
     }
   },
-  components: { SearchControls, ResultCell, MapMarker, FilterColorItem },
   computed: {
     vars() {
       return this.$store.state.vars.individuals
@@ -139,8 +139,15 @@ export default {
       }
     }
   },
+  async asyncData() {
+    return { tilelayers: TILELAYERS }
+  },
+  fetch: async function({ store }) {
+    // TODO: make limit dynamic
+    await store.dispatch('fetchIndividuals')
+  },
   mounted() {
-    this.$store.subscribe((mutation, state) => {
+    this.$store.subscribe(mutation => {
       if (mutation.type === 'fetchedIndividuals') {
         this.fitMap()
       }

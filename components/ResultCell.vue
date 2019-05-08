@@ -1,11 +1,17 @@
 <template>
-  <tr class="row" :key="individual.identifier" :identifier="individual.identifier">
-    <td class="individual" @click="hoverClick">{{individual.individual}}</td>
-    <td class="age" @click="hoverClick">{{individual.age}}</td>
-    <td class="sex" @click="hoverClick">{{individual.sex}}</td>
-    <td class="discussion" @click="hoverClick">{{individual.discussion}}</td>
+  <tr
+    :key="individual.identifier"
+    class="row"
+    :identifier="individual.identifier"
+  >
+    <td class="individual" @click="hoverClick">{{ individual.individual }}</td>
+    <td class="age" @click="hoverClick">{{ individual.age }}</td>
+    <td class="sex" @click="hoverClick">{{ individual.sex }}</td>
+    <td class="discussion" @click="hoverClick">{{ individual.discussion }}</td>
     <td>
-      <nuxt-link :to="`skeleton/${individual.identifier}`" target="_blank">skeleton</nuxt-link>
+      <nuxt-link :to="`skeleton/${individual.identifier}`" target="_blank"
+        >skeleton</nuxt-link
+      >
     </td>
   </tr>
 </template>
@@ -13,14 +19,14 @@
 <script>
 export default {
   props: {
-    individual: { type: Object },
-    vars: { type: Array }
+    individual: { type: Object, required: true },
+    vars: { type: Array, required: true }
   },
   data() {
     return {}
   },
   methods: {
-    hoverClick(target) {
+    hoverClick() {
       // console.log(this.individual)
     }
   }
