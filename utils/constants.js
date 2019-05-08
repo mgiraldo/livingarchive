@@ -50,10 +50,10 @@ export const RDF_AGES = {
   'infant (2 months - 3 years)': '#2D88E4',
   'child (3-12)': '#0052C6',
   'adolescent(12-20)': '#002D87',
+  'Adult (20+)': '#E6FFDE',
   'YA (20-35)': '#b2df8a',
   'MA (35-50)': '#77DA3E',
-  'OA (50+)': '#2A870A',
-  'Adult (20+)': '#E6FFDE'
+  'OA (50+)': '#2A870A'
 }
 
 export const RDF_SEXES = {
