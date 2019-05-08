@@ -89,14 +89,24 @@
                 <dt>Sex</dt>
                 <dd>
                   {{ individual.sex }}
-                  <button @click="andSex">AND</button>
-                  <button @click="orSex">OR</button>
+                  <button
+                    type="button"
+                    :value="individual.sex"
+                    @click="onlySex"
+                  >
+                    ONLY
+                  </button>
                 </dd>
                 <dt>Age</dt>
                 <dd>
                   {{ individual.age }}
-                  <button @click="andAge">AND</button>
-                  <button @click="orAge">OR</button>
+                  <button
+                    type="button"
+                    :value="individual.age"
+                    @click="onlyAge"
+                  >
+                    ONLY
+                  </button>
                 </dd>
               </dl>
             </l-popup>
@@ -171,7 +181,7 @@ export default {
       if (mutation.type === 'fetchedIndividuals') {
         this.fitMap()
       }
-      if (mutation.type === 'checkedFilter') {
+      if (mutation.type === 'checkedFilter' || mutation.type === 'onlyProp') {
         this.updateFilters()
       }
     })
@@ -182,23 +192,15 @@ export default {
       this.ageFilter = [...this.$store.state.checkedAges]
       this.sexFilter = [...this.$store.state.checkedSexes]
     },
-    andSex(event) {
-      this.andProp('sex', event.target.value)
+    onlySex(event) {
+      this.onlyProp('sex', event.target.value)
     },
-    orSex(event) {
-      this.orProp('sex', event.target.value)
+    onlyAge(event) {
+      this.onlyProp('age', event.target.value)
     },
-    andAge(event) {
-      this.andProp('age', event.target.value)
-    },
-    orAge(event) {
-      this.orProp('age', event.target.value)
-    },
-    orProp(prop, value) {
-      console.log('or', prop, value)
-    },
-    andProp(prop, value) {
-      console.log('and', prop, value)
+    onlyProp(prop, value) {
+      this.$store.commit('onlyProp', { prop, value })
+      this.$store.dispatch('fetchIndividuals')
     },
     toggleLegend() {
       this.$store.commit('toggledLegend')

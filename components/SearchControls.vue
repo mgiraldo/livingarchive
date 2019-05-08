@@ -56,17 +56,25 @@ export default {
     onClickaway: onClickaway
   },
   data() {
-    return { ageVisible: false, sexVisible: false }
-  },
-  computed: {
-    ages() {
-      return this.$store.state.ages
-    },
-    sexes() {
-      return this.$store.state.sexes
+    return {
+      ageVisible: false,
+      sexVisible: false,
+      ages: this.$store.state.ages,
+      sexes: this.$store.state.sexes
     }
   },
+  mounted() {
+    this.$store.subscribe(mutation => {
+      if (mutation.type === 'checkedFilter') {
+        this.updateFilters()
+      }
+    })
+  },
   methods: {
+    updateFilters() {
+      this.ages = this.$store.state.ages
+      this.sexes = this.$store.state.sexes
+    },
     toggleAge() {
       this.sexVisible = false
       this.ageVisible = !this.ageVisible
