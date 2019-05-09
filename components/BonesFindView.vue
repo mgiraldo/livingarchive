@@ -77,7 +77,6 @@ export default {
         .style('fill', this.$d3.color(BONE_FILL_COLOR))
         .style('stroke-width', '0.001')
         .style('stroke', this.$d3.color(BONE_STROKE_COLOR))
-      console.log(BONE_FILL_COLOR, this.$d3.color(BONE_STROKE_COLOR))
     },
     plotBones() {
       let map = this.$refs.myMap.mapObject
