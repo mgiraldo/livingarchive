@@ -66,4 +66,4 @@ export const RDF_SEXES = {
 
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.75)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.75)'
-export const BONE_STROKE_COLOR = '#967348'
+export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 0.8)'
