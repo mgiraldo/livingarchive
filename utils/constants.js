@@ -64,6 +64,6 @@ export const RDF_SEXES = {
   'too young to determine': '#aaa'
 }
 
-export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 1.000)'
-export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 1.000)'
+export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.75)'
+export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.75)'
 export const BONE_STROKE_COLOR = '#967348'

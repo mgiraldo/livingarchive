@@ -87,10 +87,10 @@
                 <dl class="popup">
                   <dt>Identifier</dt>
                   <dd>{{ individual.identifier }}</dd>
-                  <!-- <dt>Skeleton</dt>
+                  <dt>Skeleton</dt>
                   <dd class="bones">
-                    <bones-find-view :shape="individual.coordinates" />
-                  </dd> -->
+                    <bones-find-view :shape="[individual.coordinates]" />
+                  </dd>
                   <dt>Sex</dt>
                   <dd>
                     {{ individual.sex }}
@@ -297,6 +297,11 @@ export default {
   }
   dd {
     margin-bottom: 0.5rem;
+  }
+  .bones {
+    // TODO: fix width/height
+    height: 123px;
+    width: 123px;
   }
   .discussion {
     max-height: 5rem;

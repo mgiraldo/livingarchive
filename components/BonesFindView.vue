@@ -1,14 +1,16 @@
 <template>
-  <div class="map-wrapper">
-    <no-ssr>
-      <!-- <div id="map"></div> -->
+  <div ref="bones" class="bones"></div>
+  <!-- <div class="map-wrapper"> -->
+  <!-- <no-ssr>
       <l-map ref="myMap"></l-map>
-    </no-ssr>
-  </div>
+    </no-ssr> -->
+  <!-- </div> -->
 </template>
 
 <script>
 import wellknown from 'wellknown'
+import bbox from '@turf/bbox'
+import * as d3 from 'd3-geo'
 
 import { reprojectGeoJson } from '~/utils/geo'
 
@@ -26,73 +28,56 @@ export default {
     return {}
   },
   mounted() {
-    // this.plotBonesD3()
-    this.checkMapObject()
+    this.plotBonesD3()
+    // this.checkMapObject()
   },
   methods: {
     plotBonesD3() {
-      let d3 = this.$d3
-      let width = '100%'
-      let height = '100%'
-      let map = this.$d3
-        .select('#map')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
+      // console.log('plotting', this.shape)
+      let features = []
       this.shape.forEach(wkt => {
         const parsed = wellknown.parse(wkt)
         if (parsed.type !== 'Point') {
-          const json = reprojectGeoJson(parsed)
-          let center = d3.geo.centroid(json)
-          let sc = 150
-          let off = [width / 2, height / 2]
-          let projection = d3.geo
-            .mercator()
-            .scale(sc)
-            .center(center)
-            .translate(off)
-
-          // create the path
-          let path = d3.geo.path().projection(projection)
-
-          // using the path determine the bounds of the current map and use
-          // these to determine better values for the scale and translation
-          let bounds = path.bounds(json)
-          let hscale = (scale * width) / (bounds[1][0] - bounds[0][0])
-          let vscale = (scale * height) / (bounds[1][1] - bounds[0][1])
-          let scale = hscale < vscale ? hscale : vscale
-          let offset = [
-            width - (bounds[0][0] + bounds[1][0]) / 2,
-            height - (bounds[0][1] + bounds[1][1]) / 2
-          ]
-
-          // new projection
-          projection = d3.geo
-            .mercator()
-            .center(center)
-            .scale(scale)
-            .translate(offset)
-          path = path.projection(projection)
-
-          // add a rectangle to see the bound of the svg
-          map
-            .append('rect')
-            .attr('width', width)
-            .attr('height', height)
-            .style('stroke', 'black')
-            .style('fill', 'none')
-
-          map
-            .selectAll('path')
-            .data(json.features)
-            .enter()
-            .append('path')
-            .attr('d', path)
-            .style('fill', 'red')
-            .style('stroke-width', '1')
-            .style('stroke', 'black')
+          features.push(parsed)
         }
       })
+      if (features.length === 0) return
+      // find bounds
+      let bounds = features.map(f => bbox(f))
+      // console.log('bounds', bounds)
+      let minX = Math.min(...bounds.map(bound => bound[0]))
+      let minY = Math.min(...bounds.map(bound => bound[1]))
+      let maxX = Math.max(...bounds.map(bound => bound[2]))
+      let maxY = Math.max(...bounds.map(bound => bound[3]))
+      let svgWidth = maxX - minX
+      let svgHeight = maxY - minY
+      console.log(minX, minY, maxX, maxY, svgWidth, svgHeight)
+
+      // create svg
+      let width = '100%'
+      let height = '100%'
+      let svg = this.$d3
+        .select(this.$refs.bones)
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('viewBox', `${minX} ${minY} ${svgWidth} ${svgHeight}`)
+        .attr('preserveAspectRatio', 'xMidYMid')
+        .append('g')
+
+      // create the path
+      let path = d3.geoPath()
+
+      svg
+        .selectAll('path')
+        .data(features)
+        .enter()
+        .append('path')
+        .attr('d', path)
+        .style('fill', this.$d3.color(BONE_FILL_COLOR))
+        .style('stroke-width', '0.001')
+        .style('stroke', this.$d3.color(BONE_STROKE_COLOR))
+      console.log(BONE_FILL_COLOR, this.$d3.color(BONE_STROKE_COLOR))
     },
     plotBones() {
       let map = this.$refs.myMap.mapObject
@@ -139,6 +124,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bones {
+  background: #fafafa;
+  border-radius: 50%;
+  height: 100%;
+  padding: 15%;
+  width: 100%;
+}
 .map-wrapper {
   height: 100%;
   width: 100%;
