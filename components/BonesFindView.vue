@@ -51,7 +51,8 @@ export default {
       let maxY = Math.max(...bounds.map(bound => bound[3]))
       let svgWidth = maxX - minX
       let svgHeight = maxY - minY
-      console.log(minX, minY, maxX, maxY, svgWidth, svgHeight)
+
+      // console.log(minX, minY, maxX, maxY, svgWidth, svgHeight)
 
       // create svg
       let width = '100%'

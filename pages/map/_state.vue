@@ -83,13 +83,19 @@
               <l-icon class-name="icon">
                 <map-marker :type="legendType" :individual="individual" />
               </l-icon>
-              <l-popup>
+              <l-popup max-width="15rem">
                 <dl class="popup">
                   <dt>Identifier</dt>
-                  <dd>{{ individual.identifier }}</dd>
+                  <dd>
+                    <nuxt-link
+                      :to="`/skeleton/${individual.identifier}`"
+                      target="_blank"
+                      >{{ individual.identifier }}</nuxt-link
+                    >
+                  </dd>
                   <dt>Skeleton</dt>
                   <dd class="bones">
-                    <bones-find-view :shape="[individual.coordinates]" />
+                    <bones-find-view :shape="individual.skeleton" />
                   </dd>
                   <dt>Sex</dt>
                   <dd>
@@ -299,9 +305,8 @@ export default {
     margin-bottom: 0.5rem;
   }
   .bones {
-    // TODO: fix width/height
-    height: 123px;
-    width: 123px;
+    height: 15rem;
+    width: 15rem;
   }
   .discussion {
     max-height: 5rem;
