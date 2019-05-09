@@ -126,9 +126,9 @@ export default {
 <style lang="scss" scoped>
 .bones {
   background: #fafafa;
-  border-radius: 50%;
+  border-radius: 20%;
   height: 100%;
-  padding: 15%;
+  padding: 10%;
   width: 100%;
 }
 .map-wrapper {
@@ -137,6 +137,6 @@ export default {
 }
 .leaflet-container {
   background: #fafafa;
-  border-radius: 50%;
+  border-radius: 20%;
 }
 </style>
