@@ -43,6 +43,9 @@ module.exports = {
     '@nuxtjs/style-resources',
     'nuxt-leaflet'
   ],
+  env: {
+    MAPTILER_KEY: process.env.MAPTILER_KEY
+  },
   /*
    ** Axios module configuration
    */
