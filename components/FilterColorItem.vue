@@ -1,7 +1,7 @@
 <template>
   <span class="color-item-container">
     <span class="dot" :style="`background-color:${color}`"></span>
-    {{ name }}
+    <span class="text">{{ name }}</span>
   </span>
 </template>
 
@@ -16,12 +16,15 @@ export default {
 
 <style lang="scss" scoped>
 .color-item-container {
+  align-items: center;
   display: flex;
 }
 .dot {
   border-radius: 50%;
-  height: 1rem;
-  margin-right: 0.25rem;
-  width: 1rem;
+  margin-right: 0.5em;
+  min-height: 1em;
+  min-width: 1em;
+}
+.text {
 }
 </style>

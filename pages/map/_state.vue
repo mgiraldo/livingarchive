@@ -1,131 +1,129 @@
 <template>
   <div class="container">
     <search-controls class="controls" />
-    <div class="results-and-map">
-      <section class="results">
-        <h1>{{ individualCount }} individuals</h1>
-        <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
-        <p>
-          <nuxt-link :to="{ params: { state: 'a:1,2,3|s:2,3' } }"
-            >map a</nuxt-link
+    <section class="results">
+      <h1>{{ individualCount }} individuals</h1>
+      <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
+      <p>
+        <nuxt-link :to="{ params: { state: 'a:1,2,3|s:2,3' } }"
+          >map a</nuxt-link
+        >
+        <nuxt-link :to="{ params: { state: 'a:1,2,3,4|s:2,3,4,5' } }"
+          >map b</nuxt-link
+        >
+        <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4,5' } }"
+          >map c</nuxt-link
+        >
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Individual</th>
+            <th scope="col">Age</th>
+            <th scope="col">Sex</th>
+            <th scope="col">Discussion</th>
+            <th scope="col">💀</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            is="result-cell"
+            v-for="individual in individuals"
+            :key="individual.identifier"
+            :individual="individual"
+            :vars="vars"
+          ></tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="map">
+      <no-ssr>
+        <l-map ref="myMap">
+          <l-tile-layer
+            v-for="(layer, index) in tilelayers"
+            :key="index"
+            :url="layer.url"
+            :options="layer.options"
+          ></l-tile-layer>
+          <l-control-scale
+            position="topright"
+            :imperial="false"
+            :metric="true"
+          ></l-control-scale>
+          <l-control class-name="legend" position="bottomleft">
+            <div class="legend">
+              <strong>{{ legendType }}</strong>
+              <ul>
+                <li v-for="(color, name, index) in legend" :key="index">
+                  <filter-color-item :name="name" :color="color" />
+                </li>
+              </ul>
+              <button
+                v-if="legendType === 'sex'"
+                class="legend-toggle"
+                @click="toggleLegend"
+              >
+                color by age
+              </button>
+              <button
+                v-if="legendType === 'age'"
+                class="legend-toggle"
+                @click="toggleLegend"
+              >
+                color by sex
+              </button>
+            </div>
+          </l-control>
+          <l-marker
+            v-for="(individual, index) in individuals"
+            :key="index"
+            :lat-lng="individual.point.coordinates"
           >
-          <nuxt-link :to="{ params: { state: 'a:1,2,3,4|s:2,3,4,5' } }"
-            >map b</nuxt-link
-          >
-          <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4,5' } }"
-            >map c</nuxt-link
-          >
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Individual</th>
-              <th scope="col">Age</th>
-              <th scope="col">Sex</th>
-              <th scope="col">Discussion</th>
-              <th scope="col">💀</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              is="result-cell"
-              v-for="individual in individuals"
-              :key="individual.identifier"
-              :individual="individual"
-              :vars="vars"
-            ></tr>
-          </tbody>
-        </table>
-      </section>
-      <section class="map">
-        <no-ssr>
-          <l-map ref="myMap">
-            <l-tile-layer
-              v-for="(layer, index) in tilelayers"
-              :key="index"
-              :url="layer.url"
-              :options="layer.options"
-            ></l-tile-layer>
-            <l-control-scale
-              position="topright"
-              :imperial="false"
-              :metric="true"
-            ></l-control-scale>
-            <l-control class-name="legend" position="bottomleft">
-              <div class="legend">
-                <strong>{{ legendType }}</strong>
-                <ul>
-                  <li v-for="(color, name, index) in legend" :key="index">
-                    <filter-color-item :name="name" :color="color" />
-                  </li>
-                </ul>
-                <button
-                  v-if="legendType === 'sex'"
-                  class="legend-toggle"
-                  @click="toggleLegend"
-                >
-                  color by age
-                </button>
-                <button
-                  v-if="legendType === 'age'"
-                  class="legend-toggle"
-                  @click="toggleLegend"
-                >
-                  color by sex
-                </button>
-              </div>
-            </l-control>
-            <l-marker
-              v-for="(individual, index) in individuals"
-              :key="index"
-              :lat-lng="individual.point.coordinates"
-            >
-              <l-icon class-name="icon">
-                <map-marker :type="legendType" :individual="individual" />
-              </l-icon>
-              <l-popup max-width="15rem">
-                <dl class="popup">
-                  <dt>Identifier</dt>
-                  <dd>
-                    <nuxt-link
-                      :to="`/skeleton/${individual.identifier}`"
-                      target="_blank"
-                      >{{ individual.identifier }}</nuxt-link
-                    >
-                  </dd>
-                  <dt>Skeleton</dt>
-                  <dd class="bones">
-                    <bones-find-view :shape="individual.skeleton" />
-                  </dd>
-                  <dt>Sex</dt>
-                  <dd>
-                    {{ individual.sex }}
-                    <button
-                      type="button"
-                      :value="individual.sex"
-                      @click="onlySex"
-                    >
-                      ONLY
-                    </button>
-                  </dd>
-                  <dt>Age</dt>
-                  <dd>
-                    {{ individual.age }}
-                    <button
-                      type="button"
-                      :value="individual.age"
-                      @click="onlyAge"
-                    >
-                      ONLY
-                    </button>
-                  </dd>
-                </dl>
-              </l-popup>
-            </l-marker>
-          </l-map>
-        </no-ssr>
-      </section>
-    </div>
+            <l-icon class-name="icon">
+              <map-marker :type="legendType" :individual="individual" />
+            </l-icon>
+            <l-popup max-width="15rem">
+              <dl class="popup">
+                <dt>Identifier</dt>
+                <dd>
+                  <nuxt-link
+                    :to="`/skeleton/${individual.identifier}`"
+                    target="_blank"
+                    >{{ individual.identifier }}</nuxt-link
+                  >
+                </dd>
+                <dt>Skeleton</dt>
+                <dd class="bones">
+                  <bones-find-view :shape="individual.skeleton" />
+                </dd>
+                <dt>Sex</dt>
+                <dd>
+                  {{ individual.sex }}
+                  <button
+                    type="button"
+                    :value="individual.sex"
+                    @click="onlySex"
+                  >
+                    ONLY
+                  </button>
+                </dd>
+                <dt>Age</dt>
+                <dd>
+                  {{ individual.age }}
+                  <button
+                    type="button"
+                    :value="individual.age"
+                    @click="onlyAge"
+                  >
+                    ONLY
+                  </button>
+                </dd>
+              </dl>
+            </l-popup>
+          </l-marker>
+        </l-map>
+      </no-ssr>
+    </section>
   </div>
 </template>
 
@@ -244,16 +242,10 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: flex;
-  flex-direction: column;
   height: 100vh;
 }
 .controls {
-  height: 3rem;
-}
-.results-and-map {
-  display: flex;
-  flex-direction: row;
-  height: calc(100vh - 3rem);
+  width: 10rem;
 }
 .results {
   flex-basis: 50%;
