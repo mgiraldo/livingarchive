@@ -42,14 +42,19 @@
         </li>
       </ul>
     </section>
+    <section class="section">
+      <h1>Skeleton</h1>
+      <skeleton-front id="skeleton-control" class="skeleton" />
+    </section>
   </form>
 </template>
 
 <script>
 import FilterColorItem from '~/components/FilterColorItem'
+import SkeletonFront from '~/assets/skeleton-front.svg'
 
 export default {
-  components: { FilterColorItem },
+  components: { FilterColorItem, SkeletonFront },
   data() {
     return {
       ages: this.$store.state.ages,
