@@ -26,5 +26,6 @@ export default {
   min-width: 1em;
 }
 .text {
+  text-transform: uppercase;
 }
 </style>

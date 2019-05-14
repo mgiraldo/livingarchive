@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 436 842">
+<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 347 802">
   <g id="Page-1" fill="none" fill-rule="evenodd">
-    <g id="skeleton-front">
-      <g id="background" fill="#FFF" fill-rule="nonzero">
-        <rect id="rect3" width="435.687" height="841.89"/>
-      </g>
-      <g id="layer3" transform="translate(59 20)">
+    <g id="skeleton-front" transform="translate(-1)">
+      <g id="layer3">
         <g id="LeftFoot" fill-rule="nonzero" transform="translate(145 737)">
           <g id="LeftTarsals">
             <g id="LeftTalus">

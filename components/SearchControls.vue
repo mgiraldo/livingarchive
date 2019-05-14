@@ -100,9 +100,10 @@ export default {
 }
 .section {
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: normal;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 }
 ul {

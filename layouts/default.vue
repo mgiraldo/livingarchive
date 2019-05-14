@@ -2,16 +2,19 @@
   <nuxt />
 </template>
 
-<style>
+<style lang="scss">
 html {
-  color: #283747;
+  background-color: $global-background-color;
+  box-sizing: border-box;
+  color: $global-text-color;
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-size: 16px;
   font-weight: 300;
+  scrollbar-color: darken($global-text-color, 10%)
+    lighten($global-background-color, 10%);
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  box-sizing: border-box;
 }
 
 *,
@@ -19,5 +22,9 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
+}
+
+a {
+  color: $global-link-color;
 }
 </style>
