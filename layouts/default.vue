@@ -16,7 +16,18 @@ html {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
-
+::-webkit-scrollbar-track {
+  background-color: lighten($global-background-color, 10%);
+}
+::-webkit-scrollbar {
+  background-color: lighten($global-background-color, 10%);
+  border-radius: 0.5rem;
+  width: 0.5rem;
+}
+::-webkit-scrollbar-thumb {
+  background-color: darken($global-text-color, 10%);
+  border-radius: 0.5rem;
+}
 *,
 *:before,
 *:after {
