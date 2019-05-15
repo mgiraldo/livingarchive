@@ -1,7 +1,7 @@
-// export const RDF_URL =
-//   'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
 export const RDF_URL =
-  'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
+  'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
+// export const RDF_URL =
+//   'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
 
 export const RDF_PREFIXES = `PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
@@ -67,3 +67,5 @@ export const RDF_SEXES = {
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'
 export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
+
+export const FILTER_PARAMS_TO_NAMES = { a: 'age', s: 'sex' }

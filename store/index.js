@@ -6,6 +6,15 @@ import { getIndividuals, countIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 const isFiltered = state => {
+  console.log(
+    'filtered',
+    state.checkedAges,
+    state.checkedSexes,
+    Array.from(state.checkedAges).length,
+    Object.keys(RDF_AGES).length,
+    Array.from(state.checkedSexes).length,
+    Object.keys(RDF_SEXES).length
+  )
   return (
     Array.from(state.checkedAges).length !== Object.keys(RDF_AGES).length ||
     Array.from(state.checkedSexes).length !== Object.keys(RDF_SEXES).length
@@ -31,7 +40,7 @@ export const mutations = {
     state.individuals = newState.individuals
     state.points = newState.points
     state.individualCount = newState.individualCount
-    state.filtered = isFiltered(state)
+    state.filtered = isFiltered(newState)
   },
   toggledLegend(state) {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'
@@ -68,6 +77,27 @@ export const mutations = {
       Object.keys(RDF_SEXES).map((key, index) => index)
     )
     state.filtered = false
+  },
+  setFilters(state, { params }) {
+    // console.log('new filters', params)
+    // TODO: a possible refactor of this process
+    let [agesArray] = params
+      .filter(filter => filter.hasOwnProperty('age'))
+      .map(item => item.age)
+    let [sexArray] = params
+      .filter(filter => filter.hasOwnProperty('sex'))
+      .map(item => item.sex)
+    let checkedAges
+    let checkedSexes
+    if (agesArray) checkedAges = new Set(agesArray)
+    if (sexArray) checkedSexes = new Set(sexArray)
+    if (checkedAges && state.checkedAges !== checkedAges) {
+      state.checkedAges = checkedAges
+    }
+    if (checkedSexes && state.checkedSexes !== checkedSexes) {
+      state.checkedSexes = checkedSexes
+    }
+    state.filtered = isFiltered(state)
   }
 }
 
@@ -99,9 +129,12 @@ export const actions = {
 
     let newState = {
       vars: { individuals: rdfIndividuals.vars },
+      checkedAges: new Set(state.checkedAges),
+      checkedSexes: new Set(state.checkedSexes),
       individuals: individuals,
       individualCount: count,
-      points: points
+      points: points,
+      filtered: isFiltered(state)
     }
     commit('fetchedIndividuals', newState)
   }

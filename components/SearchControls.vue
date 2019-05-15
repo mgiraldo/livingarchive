@@ -1,7 +1,7 @@
 <template>
   <form class="controls">
     <button
-      v-if="filtered"
+      v-if="filtered()"
       class="filter-button"
       type="button"
       @click="clearFilters"
@@ -12,9 +12,9 @@
       <h1>Age</h1>
       <ul>
         <li v-for="(color, age, index) in ages" :key="index">
-          <label :for="`ch_${index}`">
+          <label :for="`age_${index}`">
             <input
-              :id="`ch_${index}`"
+              :id="`age_${index}`"
               type="checkbox"
               :value="index"
               :checked="inStore('Ages', index)"
@@ -29,9 +29,9 @@
       <h1>Sex</h1>
       <ul>
         <li v-for="(color, sex, index) in sexes" :key="index">
-          <label :for="`ch_${index}`">
+          <label :for="`sex_${index}`">
             <input
-              :id="`ch_${index}`"
+              :id="`sex_${index}`"
               type="checkbox"
               :value="index"
               :checked="inStore('Sexes', index)"
@@ -61,11 +61,7 @@ export default {
       sexes: this.$store.state.sexes
     }
   },
-  computed: {
-    filtered() {
-      return this.$store.state.filtered
-    }
-  },
+  computed: {},
   mounted() {
     this.$store.subscribe(mutation => {
       if (mutation.type === 'checkedFilter' || mutation.type === 'onlyProp') {
@@ -74,9 +70,12 @@ export default {
     })
   },
   methods: {
+    filtered() {
+      return this.$store.state.filtered
+    },
     clearFilters() {
       this.$store.commit('clearFilters')
-      this.$store.dispatch('fetchIndividuals')
+      this.updateRouter()
     },
     updateFilters() {
       this.ages = this.$store.state.ages
@@ -84,7 +83,21 @@ export default {
     },
     toggled(type, index, value) {
       this.$store.commit('checkedFilter', { type, index, value })
-      this.$store.dispatch('fetchIndividuals')
+      this.updateRouter()
+    },
+    updateRouter() {
+      let ages = [
+        'a',
+        [...this.$store.state.checkedAges].sort().join(',')
+      ].join(':')
+      let sexes = [
+        's',
+        [...this.$store.state.checkedSexes].sort().join(',')
+      ].join(':')
+      this.$router.push({
+        name: 'map-state',
+        params: { state: [ages, sexes].join('|') }
+      })
     },
     inStore(filter, index) {
       return this.$store.state['checked' + filter].has(index)

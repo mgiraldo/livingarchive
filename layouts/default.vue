@@ -27,6 +27,10 @@ html {
 ::-webkit-scrollbar-thumb {
   background-color: darken($global-text-color, 10%);
   border-radius: 0.5rem;
+
+  &:hover {
+    background-color: darken($global-text-color, 30%);
+  }
 }
 *,
 *:before,

@@ -36,7 +36,7 @@ export default {
 <style lang="scss" scoped>
 .row {
   &:hover {
-    background-color: gray;
+    background-color: lighten($color: $global-background-color, $amount: 10%);
   }
   td {
     vertical-align: top;

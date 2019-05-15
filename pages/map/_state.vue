@@ -6,13 +6,13 @@
         <h1>{{ individualCount }} individuals</h1>
         <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
         <p>
-          <nuxt-link :to="{ params: { state: 'a:1,2,3|s:2,3' } }"
+          <nuxt-link :to="{ params: { state: 'a:1,2,3,6|s:2,3' } }"
             >map a</nuxt-link
           >
-          <nuxt-link :to="{ params: { state: 'a:1,2,3,4|s:2,3,4,5' } }"
+          <nuxt-link :to="{ params: { state: 'a:1,2,3,4,7,8,9|s:2,3,4' } }"
             >map b</nuxt-link
           >
-          <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4,5' } }"
+          <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4' } }"
             >map c</nuxt-link
           >
         </p>
@@ -80,6 +80,7 @@
               v-for="(individual, index) in individuals"
               :key="index"
               :lat-lng="individual.point.coordinates"
+              :rise-on-hover="true"
             >
               <l-icon class-name="icon">
                 <map-marker :type="legendType" :individual="individual" />
@@ -132,6 +133,8 @@
 
 <script>
 import { TILELAYERS } from '~/utils/constants'
+
+import { parseParams } from '~/utils/params'
 
 import SearchControls from '~/components/SearchControls'
 import ResultCell from '~/components/ResultCell'
@@ -188,11 +191,17 @@ export default {
       }
     }
   },
-  // beforeRouteUpdate(to, from, next) {
-  //   console.log('route change', to, from, next)
-  // },
-  fetch: async function({ store }) {
-    // TODO: make limit dynamic
+  beforeRouteUpdate(to, from, next) {
+    // console.log('route change', to, from, next)
+    next()
+  },
+  fetch: async function({ store, params, req }) {
+    // console.log('fetch')
+    if (params.state) {
+      // console.log('ssr map.fetch', params)
+      let parsedParams = parseParams(params)
+      store.commit('setFilters', { params: parsedParams })
+    }
     await store.dispatch('fetchIndividuals')
   },
   created() {},
@@ -201,7 +210,12 @@ export default {
       if (mutation.type === 'fetchedIndividuals') {
         this.fitMap()
       }
-      if (mutation.type === 'checkedFilter' || mutation.type === 'onlyProp') {
+      if (
+        mutation.type === 'setFilters' ||
+        mutation.type === 'clearFilters' ||
+        mutation.type === 'checkedFilter' ||
+        mutation.type === 'onlyProp'
+      ) {
         this.updateFilters()
       }
     })
@@ -323,6 +337,7 @@ export default {
 }
 .icon {
   border-radius: 50%;
+  box-shadow: 0 0 0.1rem $global-background-color;
 }
 .legend {
   background-color: transparentize($global-background-color, 0.25);
