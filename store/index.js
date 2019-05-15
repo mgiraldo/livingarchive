@@ -6,15 +6,15 @@ import { getIndividuals, countIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 const isFiltered = state => {
-  console.log(
-    'filtered',
-    state.checkedAges,
-    state.checkedSexes,
-    Array.from(state.checkedAges).length,
-    Object.keys(RDF_AGES).length,
-    Array.from(state.checkedSexes).length,
-    Object.keys(RDF_SEXES).length
-  )
+  // console.log(
+  //   'filtered',
+  //   state.checkedAges,
+  //   state.checkedSexes,
+  //   Array.from(state.checkedAges).length,
+  //   Object.keys(RDF_AGES).length,
+  //   Array.from(state.checkedSexes).length,
+  //   Object.keys(RDF_SEXES).length
+  // )
   return (
     Array.from(state.checkedAges).length !== Object.keys(RDF_AGES).length ||
     Array.from(state.checkedSexes).length !== Object.keys(RDF_SEXES).length
