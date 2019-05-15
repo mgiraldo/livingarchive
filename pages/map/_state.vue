@@ -313,6 +313,10 @@ export default {
   &:after {
     content: '⋮';
   }
+
+  &:hover {
+    background-color: lighten($global-background-color, 5%);
+  }
 }
 .map {
   flex-basis: 50%;
