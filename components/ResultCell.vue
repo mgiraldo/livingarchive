@@ -9,7 +9,7 @@
     <td class="sex" @click="hoverClick">{{ individual.sex }}</td>
     <td class="discussion" @click="hoverClick">{{ individual.discussion }}</td>
     <td>
-      <nuxt-link :to="`skeleton/${individual.identifier}`" target="_blank"
+      <nuxt-link :to="`/skeleton/${individual.identifier}`" target="_blank"
         >skeleton</nuxt-link
       >
     </td>
