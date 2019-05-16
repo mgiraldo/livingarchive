@@ -154,6 +154,7 @@ ul {
   padding: 0;
 }
 label {
+  cursor: pointer;
   display: flex;
   margin-bottom: 0.5rem;
 }

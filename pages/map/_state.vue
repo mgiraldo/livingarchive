@@ -171,6 +171,7 @@ export default {
 }
 .splitview {
   display: flex;
+  flex: 1;
 }
 .results {
   flex-basis: 50%;

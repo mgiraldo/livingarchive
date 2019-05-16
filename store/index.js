@@ -16,8 +16,8 @@ const isFiltered = state => {
   //   Object.keys(RDF_SEXES).length
   // )
   return (
-    Array.from(state.checkedAges).length !== Object.keys(RDF_AGES).length ||
-    Array.from(state.checkedSexes).length !== Object.keys(RDF_SEXES).length
+    Array.from(state.checkedAges).length !== 0 ||
+    Array.from(state.checkedSexes).length !== 0
   )
 }
 
@@ -28,8 +28,8 @@ export const state = () => ({
   points: [],
   sexes: RDF_SEXES,
   ages: RDF_AGES,
-  checkedAges: new Set(Object.keys(RDF_AGES).map((key, index) => index)),
-  checkedSexes: new Set(Object.keys(RDF_SEXES).map((key, index) => index)),
+  checkedAges: new Set(),
+  checkedSexes: new Set(),
   legendType: 'sex',
   filtered: false
 })
@@ -70,12 +70,8 @@ export const mutations = {
     state.filtered = isFiltered(state)
   },
   clearFilters(state) {
-    state.checkedAges = new Set(
-      Object.keys(RDF_AGES).map((key, index) => index)
-    )
-    state.checkedSexes = new Set(
-      Object.keys(RDF_SEXES).map((key, index) => index)
-    )
+    state.checkedAges = new Set()
+    state.checkedSexes = new Set()
     state.filtered = false
   },
   setFilters(state, { params }) {
