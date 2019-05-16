@@ -128,13 +128,11 @@ export default {
     resizeMove(e) {
       if (this.resizing) {
         let left = this.$refs.resultsPane
-        let right = this.$refs.mapPane.$refs.pane
         let newX = e.clientX
         let pct = ((newX - this.splitPaneX) / this.splitPaneWidth) * 100
         pct = pct > 0 ? pct : 0
         left.style.flexBasis = pct + '%'
-        right.style.flexBasis = 100 - pct + '%'
-        this.$refs.mapPane.$refs.map.mapObject.invalidateSize()
+        this.$refs.mapPane.resizePane(100 - pct + '%')
       }
       e.preventDefault()
       e.stopPropagation()

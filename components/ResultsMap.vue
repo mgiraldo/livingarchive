@@ -128,6 +128,10 @@ export default {
     this.checkMapObject()
   },
   methods: {
+    resizePane(pct) {
+      this.$refs.pane.style.flexBasis = pct
+      this.$refs.map.mapObject.invalidateSize()
+    },
     onlySex(event) {
       this.onlyProp('sex', event.target.value)
     },
