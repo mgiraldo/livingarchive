@@ -120,10 +120,7 @@ export default {
       this.resizing = true
       this.splitPaneWidth = this.pane.offsetWidth
       this.splitPaneX = this.pane.offsetLeft
-      this.pane.style['-moz-user-select'] = 'none'
-      this.pane.style['-webkit-user-select'] = 'none'
-      this.pane.style['-ms-user-select'] = 'none'
-      this.pane.style.userSelect = 'none'
+      this.disableSelect()
     },
     resizeMove(e) {
       if (this.resizing) {
@@ -139,14 +136,23 @@ export default {
     },
     resizeUp() {
       this.resizing = false
-      this.pane.style['-moz-user-select'] = ''
-      this.pane.style['-webkit-user-select'] = ''
-      this.pane.style['-ms-user-select'] = ''
-      this.pane.style.userSelect = ''
+      this.enableSelect()
     },
     updateFilters() {
       this.ageFilter = [...this.$store.state.checkedAges]
       this.sexFilter = [...this.$store.state.checkedSexes]
+    },
+    disableSelect() {
+      this.pane.style['-moz-user-select'] = 'none'
+      this.pane.style['-webkit-user-select'] = 'none'
+      this.pane.style['-ms-user-select'] = 'none'
+      this.pane.style.userSelect = 'none'
+    },
+    enableSelect() {
+      this.pane.style['-moz-user-select'] = ''
+      this.pane.style['-webkit-user-select'] = ''
+      this.pane.style['-ms-user-select'] = ''
+      this.pane.style.userSelect = ''
     }
   }
 }
