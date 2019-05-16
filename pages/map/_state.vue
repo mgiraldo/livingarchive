@@ -55,8 +55,12 @@
             <l-control class-name="legend" position="bottomleft">
               <div class="legend">
                 <strong>{{ legendType }}</strong>
-                <ul>
-                  <li v-for="(color, name, index) in legend" :key="index">
+                <ul class="legend-list">
+                  <li
+                    v-for="(color, name, index) in legend"
+                    :key="index"
+                    class="legend-list-item"
+                  >
                     <filter-color-item :name="name" :color="color" />
                   </li>
                 </ul>
@@ -85,8 +89,8 @@
               <l-icon class-name="icon">
                 <map-marker :type="legendType" :individual="individual" />
               </l-icon>
-              <l-popup max-width="15rem">
-                <dl class="popup">
+              <l-popup max-width="15rem" class="popup">
+                <dl>
                   <dt>Identifier</dt>
                   <dd>
                     <nuxt-link
@@ -335,10 +339,6 @@ export default {
 .map {
   flex-basis: 50%;
 }
-.icon {
-  border-radius: 50%;
-  box-shadow: 0 0 0.1rem $global-background-color;
-}
 .legend {
   background-color: transparentize($global-background-color, 0.25);
   border-radius: 0.5rem;
@@ -352,11 +352,11 @@ export default {
     padding: 0;
   }
 
-  li {
+  .legend-list-item {
     margin-bottom: 0.5rem;
   }
 
-  li:last-child {
+  .legend-list-item:last-child {
     margin-bottom: 0;
   }
 
@@ -382,5 +382,23 @@ export default {
     max-height: 5rem;
     overflow-y: auto;
   }
+}
+</style>
+<style lang="scss">
+/* overriding/customising leaflet css is unscoped */
+.icon {
+  border-radius: 50%;
+  box-shadow: 0 0 0.1rem $global-background-color;
+}
+.leaflet-popup-content-wrapper {
+  background-color: $global-background-color;
+  color: $global-text-color;
+
+  a {
+    color: $global-link-color;
+  }
+}
+.leaflet-popup-tip {
+  background-color: $global-background-color;
 }
 </style>

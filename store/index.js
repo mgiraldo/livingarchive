@@ -103,6 +103,9 @@ export const mutations = {
 
 export const actions = {
   async fetchIndividuals({ commit, state }) {
+    if (process.browser) {
+      window.$nuxt.$root.$loading.start()
+    }
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
     // TODO: fix limit magic number
     let rdfIndividuals = await getIndividuals({
@@ -135,6 +138,9 @@ export const actions = {
       individualCount: count,
       points: points,
       filtered: isFiltered(state)
+    }
+    if (process.browser) {
+      window.$nuxt.$root.$loading.finish()
     }
     commit('fetchedIndividuals', newState)
   }

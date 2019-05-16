@@ -1,13 +1,15 @@
 <template>
   <form class="controls">
-    <button
-      v-if="filtered()"
-      class="filter-button"
-      type="button"
-      @click="clearFilters"
-    >
-      Clear filters
-    </button>
+    <transition name="button-slide-fade">
+      <button
+        v-show="filtered()"
+        class="filter-button"
+        type="button"
+        @click="clearFilters"
+      >
+        Clear filters
+      </button>
+    </transition>
     <section class="section">
       <h1>Age</h1>
       <ul>
@@ -110,6 +112,33 @@ export default {
 .controls {
   font-size: 0.8rem;
   padding: 0.5rem;
+}
+.filter-button {
+  border: none;
+  background-color: lighten($color: $global-background-color, $amount: 20%);
+  color: $global-text-color;
+  border-radius: 0.25rem;
+  border-width: 0.1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $global-text-color;
+    color: lighten($color: $global-background-color, $amount: 20%);
+  }
+}
+.button-slide-fade-enter-active,
+.button-slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.button-slide-fade-enter,
+.button-slide-fade-leave-to {
+  transform: translateY(-2rem);
+  opacity: 0;
 }
 .section {
   h1 {

@@ -1,18 +1,11 @@
 <template>
   <div ref="bones" class="bones"></div>
-  <!-- <div class="map-wrapper"> -->
-  <!-- <no-ssr>
-      <l-map ref="myMap"></l-map>
-    </no-ssr> -->
-  <!-- </div> -->
 </template>
 
 <script>
 import wellknown from 'wellknown'
 import bbox from '@turf/bbox'
 import * as d3 from 'd3-geo'
-
-import { reprojectGeoJson } from '~/utils/geo'
 
 import {
   BONE_FILL_COLOR,
@@ -29,7 +22,6 @@ export default {
   },
   mounted() {
     this.plotBonesD3()
-    // this.checkMapObject()
   },
   methods: {
     plotBonesD3() {
@@ -78,46 +70,6 @@ export default {
         .style('fill', this.$d3.color(BONE_FILL_COLOR))
         .style('stroke-width', '0.001')
         .style('stroke', this.$d3.color(BONE_STROKE_COLOR))
-    },
-    plotBones() {
-      let map = this.$refs.myMap.mapObject
-      let bounds
-      this.shape.forEach(wkt => {
-        const parsed = wellknown.parse(wkt)
-        if (parsed.type !== 'Point') {
-          const json = reprojectGeoJson(parsed)
-          const geo = L.geoJSON(json, {
-            pointToLayer: function(geoJsonPoint, latlng) {
-              return L.circle(latlng, { radius: 0.001 })
-            },
-            style: function() {
-              return {
-                color: BONE_STROKE_COLOR,
-                weight: 0.5,
-                fillColor: BONE_FILL_COLOR,
-                fillOpacity: 0.75
-              }
-            }
-          }).addTo(map)
-          if (!bounds) {
-            bounds = L.latLngBounds(geo.getBounds())
-          } else {
-            bounds.extend(geo.getBounds())
-          }
-        }
-      })
-      map.zoomControl.remove()
-      map.attributionControl.remove()
-      map.fitBounds(bounds.pad(0.01))
-      map.dragging.disable()
-    },
-    checkMapObject() {
-      this.checkMap = setInterval(() => {
-        if (this.$refs.myMap) {
-          clearInterval(this.checkMap)
-          this.plotBones()
-        }
-      }, 100)
     }
   }
 }
@@ -125,18 +77,10 @@ export default {
 
 <style lang="scss" scoped>
 .bones {
-  background: #fafafa;
-  border-radius: 20%;
+  background: lighten($color: $global-background-color, $amount: 10%);
+  border-radius: 5%;
   height: 100%;
   padding: 10%;
   width: 100%;
-}
-.map-wrapper {
-  height: 100%;
-  width: 100%;
-}
-.leaflet-container {
-  background: #fafafa;
-  border-radius: 20%;
 }
 </style>
