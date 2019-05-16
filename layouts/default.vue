@@ -9,7 +9,7 @@ html {
   color: $global-text-color;
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   scrollbar-color: darken($global-text-color, 10%)
     lighten($global-background-color, 10%);
