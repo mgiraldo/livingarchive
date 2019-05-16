@@ -33,6 +33,7 @@
               :key="individual.identifier"
               :individual="individual"
               :vars="vars"
+              :cell-click="cellClick"
             ></tr>
           </tbody>
         </table>
@@ -108,6 +109,9 @@ export default {
     })
   },
   methods: {
+    cellClick(who) {
+      this.$refs.mapPane.selectMarker(who)
+    },
     checkResizer() {
       this.checkPane = setInterval(() => {
         if (this.$refs.splitPane) {

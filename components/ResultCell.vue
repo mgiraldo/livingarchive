@@ -4,10 +4,14 @@
     class="row"
     :identifier="individual.identifier"
   >
-    <td class="individual" @click="hoverClick">{{ individual.individual }}</td>
-    <td class="age" @click="hoverClick">{{ individual.age }}</td>
-    <td class="sex" @click="hoverClick">{{ individual.sex }}</td>
-    <td class="discussion" @click="hoverClick">{{ individual.discussion }}</td>
+    <td class="individual" @click="cellClick(individual)">
+      {{ individual.individual }}
+    </td>
+    <td class="age" @click="cellClick(individual)">{{ individual.age }}</td>
+    <td class="sex" @click="cellClick(individual)">{{ individual.sex }}</td>
+    <td class="discussion" @click="cellClick(individual)">
+      {{ individual.discussion }}
+    </td>
     <td>
       <nuxt-link :to="`/skeleton/${individual.identifier}`" target="_blank"
         >skeleton</nuxt-link
@@ -20,16 +24,13 @@
 export default {
   props: {
     individual: { type: Object, required: true },
-    vars: { type: Array, required: true }
+    vars: { type: Array, required: true },
+    cellClick: { type: Function, required: true }
   },
   data() {
     return {}
   },
-  methods: {
-    hoverClick() {
-      // console.log(this.individual)
-    }
-  }
+  methods: {}
 }
 </script>
 

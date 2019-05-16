@@ -44,8 +44,9 @@
         <l-marker
           v-for="(individual, index) in individuals"
           :key="index"
+          :ref="individual.identifier"
+          :data-identifier="individual.identifier"
           :lat-lng="individual.point.coordinates"
-          :rise-on-hover="true"
         >
           <l-icon class-name="icon">
             <map-marker :type="legendType" :individual="individual" />
@@ -128,6 +129,9 @@ export default {
     this.checkMapObject()
   },
   methods: {
+    selectMarker(who) {
+      this.$refs[who.identifier][0].mapObject.openPopup()
+    },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct
       this.$refs.map.mapObject.invalidateSize()
