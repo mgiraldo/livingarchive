@@ -110,6 +110,7 @@ export default {
 
 <style lang="scss" scoped>
 .controls {
+  background-color: lighten($color: $global-background-color, $amount: 5%);
   font-size: 0.8rem;
   padding: 0.5rem;
 }
