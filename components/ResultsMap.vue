@@ -16,7 +16,7 @@
         <l-control class-name="legend" position="bottomleft">
           <div class="legend">
             <strong>{{ legendType }}</strong>
-            <ul class="legend-list">
+            <transition-group name="legend-list" class="legend-list" tag="ul">
               <li
                 v-for="(color, name, index) in legend"
                 :key="index"
@@ -24,7 +24,7 @@
               >
                 <filter-color-item :name="name" :color="color" />
               </li>
-            </ul>
+            </transition-group>
             <button
               v-if="legendType === 'sex'"
               class="legend-toggle"
@@ -185,10 +185,20 @@ export default {
 
   .legend-list-item {
     margin-bottom: 0.5rem;
+    transition: all 0.5s;
   }
 
   .legend-list-item:last-child {
     margin-bottom: 0;
+  }
+
+  .legend-list-enter,
+  .legend-list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .legend-list-leave-active {
+    position: absolute;
   }
 
   .dot {
