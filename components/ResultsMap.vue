@@ -90,6 +90,8 @@
 <script>
 import { TILELAYERS } from '~/utils/constants'
 
+import { updateRouter } from '~/utils/router'
+
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
 import BonesFindView from '~/components/BonesFindView'
@@ -144,6 +146,7 @@ export default {
     },
     onlyProp(prop, value) {
       this.$store.commit('onlyProp', { prop, value })
+      updateRouter({ router: this.$router, store: this.$store })
       this.$store.dispatch('fetchIndividuals')
     },
     toggleLegend() {

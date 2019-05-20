@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { updateRouter } from '~/utils/router'
+
 import FilterColorItem from '~/components/FilterColorItem'
 import SkeletonFront from '~/assets/skeleton-front.svg'
 
@@ -77,7 +79,7 @@ export default {
     },
     clearFilters() {
       this.$store.commit('clearFilters')
-      this.updateRouter()
+      updateRouter({ router: this.$router, store: this.$store })
     },
     updateFilters() {
       this.ages = this.$store.state.ages
@@ -85,21 +87,7 @@ export default {
     },
     toggled(type, index, value) {
       this.$store.commit('checkedFilter', { type, index, value })
-      this.updateRouter()
-    },
-    updateRouter() {
-      let ages = [
-        'a',
-        [...this.$store.state.checkedAges].sort().join(',')
-      ].join(':')
-      let sexes = [
-        's',
-        [...this.$store.state.checkedSexes].sort().join(',')
-      ].join(':')
-      this.$router.push({
-        name: 'map-state',
-        params: { state: [ages, sexes].join('|') }
-      })
+      updateRouter({ router: this.$router, store: this.$store })
     },
     inStore(filter, index) {
       return this.$store.state['checked' + filter].has(index)
