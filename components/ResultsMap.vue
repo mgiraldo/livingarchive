@@ -19,7 +19,7 @@
             <transition-group name="legend-list" class="legend-list" tag="ul">
               <li
                 v-for="(color, name, index) in legend"
-                :key="index"
+                :key="index + name"
                 class="legend-list-item"
               >
                 <filter-color-item :name="name" :color="color" />
@@ -89,7 +89,6 @@
 
 <script>
 import { TILELAYERS } from '~/utils/constants'
-
 import { updateRouter } from '~/utils/router'
 
 import MapMarker from '~/components/MapMarker'
