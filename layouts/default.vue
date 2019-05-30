@@ -41,5 +41,9 @@ html {
 
 a {
   color: $global-link-color;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 </style>
