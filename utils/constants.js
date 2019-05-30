@@ -57,11 +57,11 @@ export const RDF_AGES = {
 }
 
 export const RDF_SEXES = {
+  'too young to determine': '#aaa',
   female: '#fc8d62',
   'female?': '#FDC5AE',
   male: '#8da0cb',
-  'male?': '#B0C8FF',
-  'too young to determine': '#aaa'
+  'male?': '#B0C8FF'
 }
 
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
