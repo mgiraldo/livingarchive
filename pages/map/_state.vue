@@ -5,17 +5,6 @@
       <section ref="resultsPane" class="results">
         <h1>{{ individualCount }} individuals</h1>
         <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
-        <p>
-          <nuxt-link :to="{ params: { state: 'a:1,2,3,6|s:2,3' } }"
-            >map a</nuxt-link
-          >
-          <nuxt-link :to="{ params: { state: 'a:1,2,3,4,7,8,9|s:2,3,4' } }"
-            >map b</nuxt-link
-          >
-          <nuxt-link :to="{ params: { state: 'a|s:1,2,3,4' } }"
-            >map c</nuxt-link
-          >
-        </p>
         <table>
           <thead>
             <tr>
