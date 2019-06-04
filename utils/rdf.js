@@ -171,3 +171,49 @@ export const getSkeleton = async identifier => {
 
   return { skeleton: skeleton, shape: geoShape }
 }
+
+export const getBubbles = async (type = 'Unit') => {
+  // TODO: sanitize params
+
+  let query = `
+  SELECT DISTINCT ?subject ?supertype
+  WHERE {
+      {
+          ?subject a owl:Class .
+  OPTIONAL { ?subject sesame:directSubClassOf
+  ?supertype } .
+          OPTIONAL { ?subject rdfs:label ?label }.
+      }
+            FILTER (
+            (
+              ?supertype = catalhoyuk:${type} ||
+              ?subject = catalhoyuk:${type}
+            ) &&
+            ?subject != owl:Class &&
+            ?subject != rdf:List &&
+            ?subject != rdf:Property &&
+            ?subject != rdfs:Class &&
+            ?subject != rdfs:Datatype &&
+            ?subject != rdfs:ContainerMembershipProperty &&
+            ?subject != owl:DatatypeProperty &&
+            ?subject != owl:NamedIndividual &&
+            ?subject != owl:Ontology &&
+            ?subject != ?supertype)
+  } ORDER BY ?subject`
+
+  const data = await performRdfQuery(query)
+
+  const results = data.data.results.bindings.map(item => {
+    return {
+      supertype: item.supertype.value.replace(
+        'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#',
+        ''
+      ),
+      subject: item.subject.value.replace(
+        'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#',
+        ''
+      )
+    }
+  })
+  return results
+}
