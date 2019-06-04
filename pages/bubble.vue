@@ -1,6 +1,6 @@
 <template>
   <div>
-    <bubble-component selected="catalhoyuk#Unit" />
+    <bubble-component start="catalhoyuk#Unit" />
   </div>
 </template>
 

@@ -54,12 +54,13 @@
 import { parseGraph, findSubTree } from '~/utils/graph'
 
 export default {
-  props: { selected: { type: String, required: true } },
+  props: { start: { type: String, required: true } },
   data: function() {
     return {
       graph: null,
       rawGraph: null,
       csv: null,
+      selected: this.start,
       settings: {
         width: 960,
         height: 960
@@ -73,7 +74,7 @@ export default {
 
       if (this.csv) {
         const subtree = findSubTree(this.rawGraph, this.selected)
-        console.log(this.selected, subtree)
+        // console.log(this.selected, subtree)
 
         const nodes = this.$d3
           .stratify()
@@ -246,7 +247,7 @@ circle {
 
 .line-enter-active,
 .line-leave-active {
-  transition: all 2s;
+  transition: all 1s;
   stroke-dashoffset: 0;
 }
 .line-enter, .line-leave-to /* .list-leave-active for <2.1.8 */ {
