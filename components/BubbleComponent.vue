@@ -62,8 +62,8 @@ export default {
       csv: null,
       selected: this.start,
       settings: {
-        width: 960,
-        height: 960
+        width: 900,
+        height: 900
       }
     }
   },
