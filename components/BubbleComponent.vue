@@ -12,8 +12,8 @@
       <transition-group tag="g" name="line">
         <!-- Links are represented as paths -->
         <path
-          v-for="(link, index) in links"
-          :key="index + link.id"
+          v-for="link in links"
+          :key="link.id"
           class="link"
           :d="link.d"
           :style="link.style"
@@ -24,7 +24,7 @@
       <transition-group tag="g" name="list">
         <g
           v-for="(node, index) in nodes"
-          :key="index + node.id"
+          :key="node.id"
           class="node"
           :style="node.style"
           :class="[node.className, { highlight: node.highlight }]"
@@ -70,7 +70,6 @@ export default {
   computed: {
     root: function() {
       // compute new root based on selected node
-      let that = this
 
       if (this.csv) {
         const subtree = findSubTree(this.rawGraph, this.selected)
@@ -98,13 +97,12 @@ export default {
     },
 
     nodes: function() {
-      let that = this
       if (this.root) {
         return this.root.descendants().map(function(d) {
           // console.log('d', d)
           return {
             id: d.id,
-            r: 50,
+            r: 25,
             className:
               'node' + (d.children ? ' node--internal' : ' node--leaf'),
             text: d.id.substring(d.id.lastIndexOf('.') + 1),
@@ -199,8 +197,8 @@ svg {
 }
 
 .node text {
-  font: 10px sans-serif;
   cursor: pointer;
+  font-size: 1.5rem;
 }
 
 .node--internal circle {
@@ -208,14 +206,13 @@ svg {
 }
 
 .node--internal text {
-  text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff;
 }
 
 .link {
   fill: none;
   stroke: #555;
-  stroke-opacity: 0.4;
-  stroke-width: 1.5px;
+  stroke-opacity: 0.5;
+  stroke-width: 0.5rem;
   stroke-dasharray: 1000;
 }
 
