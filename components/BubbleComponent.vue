@@ -177,6 +177,7 @@ export default {
 <style lang="scss" scoped>
 .bubbles {
   height: 100vh;
+  overflow: hidden;
   width: 100vw;
 }
 
