@@ -1,4 +1,5 @@
 import axios from 'axios'
+import https from 'https'
 
 import {
   RDF_PREFIXES,
@@ -17,6 +18,11 @@ const cleanString = (str, extra) => {
 
 const performRdfQuery = async query => {
   const instance = axios.create({
+    // this ignores self-signed https
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
+    }),
+    // end ignore self-signed https
     timeout: RDF_TIMEOUT,
     headers: {
       Accept: 'application/sparql-results+json'
