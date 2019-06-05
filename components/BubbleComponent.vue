@@ -25,7 +25,6 @@
         <g
           v-for="(node, index) in nodes"
           :key="node.id"
-          class="node"
           :style="node.style"
           :class="[node.className, { highlight: node.highlight }]"
           @click="select(index, node)"
@@ -100,13 +99,12 @@ export default {
     nodes: function() {
       if (this.root) {
         return this.root.descendants().map(function(d) {
-          // console.log('d', d)
           return {
             id: d.id,
             r: 25,
             className:
               'node' + (d.children ? ' node--internal' : ' node--leaf'),
-            text: d.id.substring(d.id.lastIndexOf('.') + 1),
+            text: d.id.replace('catalhoyuk#', '').replace('rdf-schema#', ''),
             style: {
               transform: 'translate(' + d.y + 'px,' + d.x + 'px)'
             },
@@ -181,25 +179,40 @@ export default {
   height: 100vh;
   width: 100vw;
 }
+
 .chart {
   height: 100%;
   width: 100%;
 }
+
 svg {
   background-color: $global-text-color;
 }
+
 .node {
   opacity: 1;
-}
 
-.node circle {
-  fill: #999;
-  cursor: pointer;
-}
+  circle {
+    fill: #999;
+    cursor: pointer;
+  }
 
-.node text {
-  cursor: pointer;
-  font-size: 1.5rem;
+  text {
+    cursor: pointer;
+    font-size: 1.5rem;
+  }
+
+  &:hover {
+    pointer-events: all;
+
+    circle {
+      stroke: black;
+    }
+  }
+
+  &.highlight {
+    fill: red;
+  }
 }
 
 .node--internal circle {
@@ -217,18 +230,6 @@ svg {
   stroke-dasharray: 1000;
 }
 
-.node:hover {
-  pointer-events: all;
-
-  circle {
-    stroke: black;
-  }
-}
-
-.node.highlight {
-  fill: red;
-}
-
 circle {
   fill: '#bfbfbf';
   &.selected {
@@ -240,6 +241,7 @@ circle {
 .list-leave-active {
   transition: all 1s;
 }
+
 .list-enter, .list-leave-to /* .list-leave-active for <2.1.8 */ {
   opacity: 0;
   transform: translateY(30px);
