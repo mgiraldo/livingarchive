@@ -110,7 +110,7 @@ export default {
             },
             textpos: {
               x: d.children ? -8 : 8,
-              y: 3
+              y: -20
             },
             textStyle: {
               textAnchor: d.children ? 'end' : 'start'
@@ -200,6 +200,8 @@ svg {
   text {
     cursor: pointer;
     font-size: 1.5rem;
+    text-shadow: 0 0.1rem 0 $global-text-color, 0 -0.1rem 0 $global-text-color,
+      0.1rem 0 0 $global-text-color, -0.1rem 0 0 $global-text-color;
   }
 
   &:hover {
