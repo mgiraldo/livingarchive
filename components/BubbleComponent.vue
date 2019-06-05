@@ -109,11 +109,11 @@ export default {
               transform: 'translate(' + d.y + 'px,' + d.x + 'px)'
             },
             textpos: {
-              x: d.children ? -8 : 8,
+              x: !d.children ? -8 : 8,
               y: -20
             },
             textStyle: {
-              textAnchor: d.children ? 'end' : 'start'
+              textAnchor: !d.children ? 'end' : 'start'
             }
           }
         })
@@ -181,6 +181,7 @@ export default {
 }
 
 .chart {
+  border-radius: 5%;
   height: 100%;
   width: 100%;
 }

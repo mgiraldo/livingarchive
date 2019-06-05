@@ -1,5 +1,6 @@
 import axios from 'axios'
 import https from 'https'
+import wellknown from 'wellknown'
 
 import {
   RDF_PREFIXES,
@@ -174,8 +175,15 @@ export const getSkeleton = async identifier => {
   let geoShape = geoData.data.results.bindings.map(
     binding => binding.coordinates.value
   )
+  let shapeIsPoint = false
+  if (Array.isArray(geoShape) && geoShape.length === 1) {
+    const parsed = wellknown.parse(geoShape[0])
+    if (parsed.type === 'Point') {
+      shapeIsPoint = true
+    }
+  }
 
-  return { skeleton: skeleton, shape: geoShape }
+  return { skeleton: skeleton, shape: geoShape, shapeIsPoint: shapeIsPoint }
 }
 
 export const getBubbles = async (type = 'Unit') => {

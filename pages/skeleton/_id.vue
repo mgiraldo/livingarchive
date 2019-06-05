@@ -11,8 +11,9 @@
     <section class="skeleton-container">
       <skeleton-front id="skeleton" />
     </section>
-    <section class="map-container">
-      <bones-find-view :shape="shape" />
+    <section class="bones-find-container">
+      <bones-find-view v-if="!shapeIsPoint" :shape="shape" />
+      <div v-if="shapeIsPoint">Shape is a point and cannot be displayed</div>
     </section>
   </div>
 </template>
@@ -33,11 +34,12 @@ export default {
     return /^[a-zA-Z\d.]+$/.test(params.id)
   },
   async asyncData({ params }) {
-    let { skeleton, shape } = await getSkeleton(params.id)
+    let { skeleton, shape, shapeIsPoint } = await getSkeleton(params.id)
     return {
       identifier: params.id,
       skeleton: skeleton,
-      shape: shape
+      shape: shape,
+      shapeIsPoint: shapeIsPoint
     }
   },
   mounted() {
@@ -83,7 +85,7 @@ export default {
   height: 100%;
   width: 100%;
 }
-.map-container {
+.bones-find-container {
   grid-column: 3 / 4;
   grid-row: 2 / 3;
 }
