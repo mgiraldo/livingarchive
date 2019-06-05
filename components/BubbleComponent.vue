@@ -33,6 +33,8 @@
           <circle
             :r="node.r"
             :class="node.id == selected ? 'selected' : ''"
+            :cx="node.circlepos.cx"
+            :cy="node.circlepos.cy"
           ></circle>
 
           <!-- Finally, text labels -->
@@ -99,6 +101,9 @@ export default {
     nodes: function() {
       if (this.root) {
         return this.root.descendants().map(function(d) {
+          // position is inverted because ¯\_(ツ)_/¯
+          let x = d.y
+          let y = d.x
           return {
             id: d.id,
             r: 25,
@@ -106,11 +111,12 @@ export default {
               'node' + (d.children ? ' node--internal' : ' node--leaf'),
             text: d.id.replace('catalhoyuk#', '').replace('rdf-schema#', ''),
             style: {
-              transform: 'translate(' + d.y + 'px,' + d.x + 'px)'
+              transform: 'translate(' + 0 + 'px,' + 0 + 'px)'
             },
+            circlepos: { cx: x, cy: y },
             textpos: {
-              x: !d.children ? -8 : 8,
-              y: -20
+              x: x + (!d.children ? -8 : 8),
+              y: y + -20
             },
             textStyle: {
               textAnchor: !d.children ? 'end' : 'start'
@@ -192,6 +198,7 @@ svg {
 
 .node {
   opacity: 1;
+  transition: all 0.5s;
 
   circle {
     fill: #999;
@@ -242,7 +249,7 @@ circle {
 
 .list-enter-active,
 .list-leave-active {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
 .list-enter, .list-leave-to /* .list-leave-active for <2.1.8 */ {
@@ -252,7 +259,7 @@ circle {
 
 .line-enter-active,
 .line-leave-active {
-  transition: all 1s;
+  transition: all 0.5s;
   stroke-dashoffset: 0;
 }
 .line-enter, .line-leave-to /* .list-leave-active for <2.1.8 */ {
