@@ -1,7 +1,7 @@
-// export const RDF_URL =
-//   'https://lac.catalhoyuk.com/rdf4j-server/repositories/catalhoyuk'
 export const RDF_URL =
-  'https://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
+  'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
+// export const RDF_URL =
+//   'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
 
 export const RDF_PREFIXES = `PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
