@@ -181,7 +181,6 @@ export default {
 }
 
 .chart {
-  border-radius: 5%;
   height: 100%;
   width: 100%;
 }
