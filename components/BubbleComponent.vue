@@ -162,7 +162,7 @@ export default {
     }
   },
   mounted: async function() {
-    this.csv = await this.$axios.$get('/graph.csv')
+    this.csv = await this.$axios.$get(process.env.BASE_URL + '/graph.csv')
     this.rawGraph = parseGraph(this.csv)
   },
   methods: {

@@ -44,7 +44,8 @@ module.exports = {
     'nuxt-leaflet'
   ],
   env: {
-    MAPTILER_KEY: process.env.MAPTILER_KEY
+    MAPTILER_KEY: process.env.MAPTILER_KEY,
+    BASE_URL: process.env.baseURL || 'http://localhost:3000'
   },
   /*
    ** Axios module configuration
