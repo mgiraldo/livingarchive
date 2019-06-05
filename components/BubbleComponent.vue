@@ -25,14 +25,13 @@
         <g
           v-for="(node, index) in nodes"
           :key="node.id"
-          :style="node.style"
           :class="[node.className, { highlight: node.highlight }]"
           @click="select(index, node)"
         >
           <!-- Circles for each node -->
           <circle
             :r="node.r"
-            :class="node.id == selected ? 'selected' : ''"
+            :class="node.id === selected ? 'selected' : ''"
             :cx="node.circlepos.cx"
             :cy="node.circlepos.cy"
           ></circle>
@@ -100,7 +99,7 @@ export default {
 
     nodes: function() {
       if (this.root) {
-        return this.root.descendants().map(function(d) {
+        return this.root.descendants().map(d => {
           // position is inverted because ¯\_(ツ)_/¯
           let x = d.y
           let y = d.x
@@ -110,16 +109,18 @@ export default {
             className:
               'node' + (d.children ? ' node--internal' : ' node--leaf'),
             text: d.id.replace('catalhoyuk#', '').replace('rdf-schema#', ''),
-            style: {
-              transform: 'translate(' + 0 + 'px,' + 0 + 'px)'
-            },
             circlepos: { cx: x, cy: y },
             textpos: {
               x: x + (!d.children ? -8 : 8),
               y: y + -20
             },
             textStyle: {
-              textAnchor: !d.children ? 'end' : 'start'
+              textAnchor:
+                d.children && d.id === this.selected
+                  ? 'middle'
+                  : !d.children
+                  ? 'end'
+                  : 'start'
             }
           }
         })
@@ -198,7 +199,7 @@ svg {
 
 .node {
   opacity: 1;
-  transition: all 0.5s;
+  transition: all 0.25s;
 
   circle {
     fill: #999;
@@ -249,7 +250,7 @@ circle {
 
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.5s;
+  transition: all 0.25s;
 }
 
 .list-enter, .list-leave-to /* .list-leave-active for <2.1.8 */ {
@@ -259,7 +260,7 @@ circle {
 
 .line-enter-active,
 .line-leave-active {
-  transition: all 0.5s;
+  transition: all 0.25s;
   stroke-dashoffset: 0;
 }
 .line-enter, .line-leave-to /* .list-leave-active for <2.1.8 */ {
