@@ -23,4 +23,5 @@ For detailed explanation on how things work, checkout [Nuxt.js docs](https://nux
 
 Rename the example `.env-example` file to `.env` and add the necessary secret keys.
 
-- `MAPTILER_KEY`: your [Maptiler Cloud](https://www.maptiler.com/cloud/) key
+- `MAPTILER_KEY`: your [Maptiler Cloud](https://www.maptiler.com/cloud/) key.
+- `BASE_URL`: base URL to the application root (defaults to `http://localhost:3000`).
