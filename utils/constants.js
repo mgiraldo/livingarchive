@@ -44,28 +44,66 @@ export const TILELAYERS = [
 ]
 
 export const RDF_AGES = {
-  'Age not determinable': '#ccc',
-  'Prenatal (pre-fullterm)': '#a6cee3',
-  'neonate (birth - 2 months)': '#6AB0E4',
-  'infant (2 months - 3 years)': '#2D88E4',
-  'child (3-12)': '#0052C6',
-  'adolescent(12-20)': '#002D87',
-  'Adult (20+)': '#E6FFDE',
-  'YA (20-35)': '#b2df8a',
-  'MA (35-50)': '#77DA3E',
-  'OA (50+)': '#2A870A'
+  name: 'Ages',
+  values: {
+    'Age not determinable': '#ccc',
+    'Prenatal (pre-fullterm)': '#a6cee3',
+    'neonate (birth - 2 months)': '#6AB0E4',
+    'infant (2 months - 3 years)': '#2D88E4',
+    'child (3-12)': '#0052C6',
+    'adolescent(12-20)': '#002D87',
+    'Adult (20+)': '#E6FFDE',
+    'YA (20-35)': '#b2df8a',
+    'MA (35-50)': '#77DA3E',
+    'OA (50+)': '#2A870A'
+  }
 }
 
 export const RDF_SEXES = {
-  'too young to determine': '#aaa',
-  female: '#fc8d62',
-  'female?': '#FDC5AE',
-  male: '#8da0cb',
-  'male?': '#B0C8FF'
+  name: 'Sexes',
+  values: {
+    'too young to determine': '#aaa',
+    female: '#fc8d62',
+    'female?': '#FDC5AE',
+    male: '#8da0cb',
+    'male?': '#B0C8FF'
+  }
+}
+
+export const RDF_PHASES = {
+  name: 'Phases',
+  values: { Sp: '#aaa', B: '#aaa' }
+}
+
+export const RDF_LEVELS = {
+  name: 'Levels',
+  values: {
+    '0': '#aaa',
+    I: '#aaa',
+    II: '#aaa',
+    III: '#aaa',
+    IV: '#aaa',
+    V: '#aaa',
+    VI: '#aaa',
+    VIA: '#aaa',
+    VIB: '#aaa',
+    VII: '#aaa',
+    VIII: '#aaa',
+    IX: '#aaa',
+    X: '#aaa',
+    XI: '#aaa',
+    XII: '#aaa',
+    'Pre XII': '#aaa'
+  }
 }
 
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'
 export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
 
-export const FILTER_PARAMS_TO_NAMES = { a: 'age', s: 'sex' }
+export const FILTER_PARAMS_TO_NAMES = {
+  a: 'age',
+  s: 'sex',
+  p: 'phase',
+  l: 'level'
+}

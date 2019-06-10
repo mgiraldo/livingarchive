@@ -44,12 +44,12 @@ export const countIndividuals = async filters => {
   let sexes = filters.sexes ? Array.from(filters.sexes) : []
 
   let ageStr = ages
-    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES)[age]}"` : ''))
+    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES.values)[age]}"` : ''))
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
-    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES)[sex]}"` : ''))
+    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES.values)[sex]}"` : ''))
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
 
@@ -81,12 +81,12 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
   let sexes = filters.sexes ? Array.from(filters.sexes) : []
 
   let ageStr = ages
-    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES)[age]}"` : ''))
+    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES.values)[age]}"` : ''))
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
-    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES)[sex]}"` : ''))
+    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES.values)[sex]}"` : ''))
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
 

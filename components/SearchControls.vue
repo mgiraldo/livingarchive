@@ -10,40 +10,10 @@
         Clear filters
       </button>
     </transition>
-    <section class="section">
-      <h1>Age</h1>
-      <ul>
-        <li v-for="(color, age, index) in ages" :key="index">
-          <label :for="`age_${index}`">
-            <input
-              :id="`age_${index}`"
-              type="checkbox"
-              :value="index"
-              :checked="inStore('Ages', index)"
-              @change="toggled('age', index, $event.target.checked)"
-            />
-            <filter-color-item :name="age" :color="color" />
-          </label>
-        </li>
-      </ul>
-    </section>
-    <section class="section">
-      <h1>Sex</h1>
-      <ul>
-        <li v-for="(color, sex, index) in sexes" :key="index">
-          <label :for="`sex_${index}`">
-            <input
-              :id="`sex_${index}`"
-              type="checkbox"
-              :value="index"
-              :checked="inStore('Sexes', index)"
-              @change="toggled('sex', index, $event.target.checked)"
-            />
-            <filter-color-item :name="sex" :color="color" />
-          </label>
-        </li>
-      </ul>
-    </section>
+    <search-filter :facet="sexes" />
+    <search-filter :facet="ages" />
+    <search-filter :facet="levels" />
+    <search-filter :facet="phases" />
     <section class="section">
       <h1>Skeleton</h1>
       <skeleton-front id="skeleton-control" class="skeleton" />
@@ -53,26 +23,22 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
+import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
 
-import FilterColorItem from '~/components/FilterColorItem'
+import SearchFilter from '~/components/SearchFilter'
 import SkeletonFront from '~/assets/skeleton-front.svg'
 
 export default {
-  components: { FilterColorItem, SkeletonFront },
+  components: { SkeletonFront, SearchFilter },
   data() {
     return {
-      ages: this.$store.state.ages,
-      sexes: this.$store.state.sexes
+      ages: RDF_AGES,
+      sexes: RDF_SEXES,
+      levels: RDF_LEVELS,
+      phases: RDF_PHASES
     }
   },
   computed: {},
-  mounted() {
-    this.$store.subscribe(mutation => {
-      if (mutation.type === 'checkedFilter' || mutation.type === 'onlyProp') {
-        this.updateFilters()
-      }
-    })
-  },
   methods: {
     filtered() {
       return this.$store.state.filtered
@@ -80,17 +46,6 @@ export default {
     clearFilters() {
       this.$store.commit('clearFilters')
       updateRouter({ router: this.$router, store: this.$store })
-    },
-    updateFilters() {
-      this.ages = this.$store.state.ages
-      this.sexes = this.$store.state.sexes
-    },
-    toggled(type, index, value) {
-      this.$store.commit('checkedFilter', { type, index, value })
-      updateRouter({ router: this.$router, store: this.$store })
-    },
-    inStore(filter, index) {
-      return this.$store.state['checked' + filter].has(index)
     }
   }
 }
@@ -136,18 +91,5 @@ export default {
     margin-bottom: 0.5rem;
     text-transform: uppercase;
   }
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-label {
-  cursor: pointer;
-  display: flex;
-  margin-bottom: 0.5rem;
-}
-input {
-  margin-right: 0.5rem;
 }
 </style>

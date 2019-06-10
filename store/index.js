@@ -1,7 +1,7 @@
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
+import { RDF_AGES, RDF_SEXES, RDF_PHASES, RDF_LEVELS } from '~/utils/constants'
 import { getIndividuals, countIndividuals } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
@@ -26,10 +26,14 @@ export const state = () => ({
   individuals: {},
   individualCount: 0,
   points: [],
-  sexes: RDF_SEXES,
-  ages: RDF_AGES,
+  sexes: RDF_SEXES.values,
+  ages: RDF_AGES.values,
+  levels: RDF_LEVELS.values,
+  phases: RDF_PHASES.values,
   checkedAges: new Set(),
   checkedSexes: new Set(),
+  checkedLevels: new Set(),
+  checkedPhases: new Set(),
   legendType: 'sex',
   filtered: false
 })
@@ -48,8 +52,8 @@ export const mutations = {
   onlyProp(state, { prop, value }) {
     let [thisProp, thatProp, thisState, thatState] =
       prop === 'sex'
-        ? [RDF_SEXES, RDF_AGES, 'checkedSexes', 'checkedAges']
-        : [RDF_AGES, RDF_SEXES, 'checkedAges', 'checkedSexes']
+        ? [RDF_SEXES.values, RDF_AGES.values, 'checkedSexes', 'checkedAges']
+        : [RDF_AGES.values, RDF_SEXES.values, 'checkedAges', 'checkedSexes']
     state[thisState] = new Set(
       Object.keys(thisProp)
         .map((key, index) => {
@@ -60,8 +64,8 @@ export const mutations = {
     // state[thatState] = new Set(Object.keys(thatProp).map((key, index) => index))
     state.filtered = isFiltered(state)
   },
-  checkedFilter(state, { type, index, value }) {
-    let filter = type === 'age' ? 'Ages' : 'Sexes'
+  checkedFilter(state, { filter, index, value }) {
+    console.log(filter, index, value)
     if (value === false) {
       state['checked' + filter].delete(index)
     } else {
@@ -72,11 +76,13 @@ export const mutations = {
   clearFilters(state) {
     state.checkedAges = new Set()
     state.checkedSexes = new Set()
+    state.checkedLevels = new Set()
+    state.checkedPhases = new Set()
     state.filtered = false
   },
   setFilters(state, { params }) {
     // console.log('new filters', params)
-    // TODO: a possible refactor of this process
+    // TODO: refactor to support N filters
     let [agesArray] = params
       .filter(filter => filter.hasOwnProperty('age'))
       .map(item => item.age)
