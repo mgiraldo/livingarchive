@@ -14,10 +14,7 @@
     <search-filter :facet="ages" />
     <search-filter :facet="levels" />
     <search-filter :facet="phases" />
-    <section class="section">
-      <h1>Skeleton</h1>
-      <skeleton-front id="skeleton-control" class="skeleton" />
-    </section>
+    <search-filter :facet="{ name: 'Skeleton' }" type="skeleton" />
   </form>
 </template>
 
@@ -83,13 +80,5 @@ export default {
 .button-slide-fade-leave-to {
   transform: translateY(-2rem);
   opacity: 0;
-}
-.section {
-  h1 {
-    font-size: 1.25rem;
-    font-weight: normal;
-    margin-bottom: 0.5rem;
-    text-transform: uppercase;
-  }
 }
 </style>

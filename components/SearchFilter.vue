@@ -5,7 +5,7 @@
       {{ facet.name }}
     </h1>
     <transition name="fade">
-      <ul v-show="open">
+      <ul v-if="type !== 'skeleton'" v-show="open">
         <li v-for="(color, name, index) in facet.values" :key="index">
           <label :for="`${name}_${index}`">
             <input
@@ -19,6 +19,12 @@
           </label>
         </li>
       </ul>
+      <skeleton-front
+        v-if="type === 'skeleton'"
+        v-show="open"
+        id="skeleton-control"
+        class="skeleton"
+      />
     </transition>
   </section>
 </template>
@@ -27,11 +33,13 @@
 import { updateRouter } from '~/utils/router'
 
 import FilterColorItem from '~/components/FilterColorItem'
+import SkeletonFront from '~/assets/skeleton-front.svg'
 
 export default {
-  components: { FilterColorItem },
+  components: { FilterColorItem, SkeletonFront },
   props: {
-    facet: { type: Object, required: true }
+    facet: { type: Object, required: true },
+    type: { type: String, default: 'list' }
   },
   data() {
     return { open: false }
