@@ -6,13 +6,24 @@
     @mouseenter="toggleControls"
     @mouseleave="toggleControls"
   >
-    <div class="basic-info">
-      <div class="individual">
-        {{ individual.individual }}
-      </div>
-      <div class="age">{{ individual.age }}</div>
-      <div class="sex">{{ individual.sex }}</div>
+    <div class="individual">
+      {{ individual.individual }}
     </div>
+    <div class="basic-info">
+      <div class="age" :style="'border-color:' + ageColors[individual.age]">
+        {{ individual.age }}
+      </div>
+      <div class="sex" :style="'border-color:' + sexColors[individual.sex]">
+        {{ individual.sex }}
+      </div>
+    </div>
+    <nuxt-link
+      :to="'/skeleton/' + individual.identifier"
+      class="skeleton-link"
+      target="_blank"
+    >
+      open skeleton
+    </nuxt-link>
     <div :id="individual.identifier + '-more'" class="discussion">
       {{
         longDiscussion && !discussionToggled
@@ -42,15 +53,15 @@
       <button class="link-button">
         show building
       </button>
-      <nuxt-link :to="`/skeleton/${individual.identifier}`" target="_blank"
-        >open skeleton</nuxt-link
-      >
     </div>
   </li>
 </template>
 
 <script>
+import { RDF_AGES, RDF_SEXES } from '~/utils/constants'
+
 let maxLength = 80 // for the discussion
+
 export default {
   props: {
     individual: { type: Object, required: true },
@@ -58,7 +69,12 @@ export default {
     cellClick: { type: Function, required: true }
   },
   data() {
-    return { discussionToggled: false, controlsToggled: false }
+    return {
+      discussionToggled: false,
+      controlsToggled: false,
+      ageColors: RDF_AGES.values,
+      sexColors: RDF_SEXES.values
+    }
   },
   computed: {
     longDiscussion() {
@@ -93,14 +109,23 @@ export default {
 }
 .basic-info {
   display: flex;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  margin: 0.25rem 0;
+}
+.age {
+  width: 10rem;
 }
 .individual,
 .age {
   margin-right: 1rem;
 }
+.age,
+.sex {
+  border-left: 0.5rem solid white;
+  padding-left: 0.25rem;
+}
 .discussion {
-  margin-bottom: 0.5rem;
+  margin: 0.5rem 0;
 }
 .link-button {
   background: none;

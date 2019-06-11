@@ -6,6 +6,7 @@
 
 <script>
 import BubbleComponent from '~/components/BubbleComponent'
+
 export default {
   components: { BubbleComponent },
   asyncData({ params }) {
