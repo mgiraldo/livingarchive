@@ -23,10 +23,9 @@ import { updateRouter } from '~/utils/router'
 import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
 
 import SearchFilter from '~/components/SearchFilter'
-import SkeletonFront from '~/assets/skeleton-front.svg'
 
 export default {
-  components: { SkeletonFront, SearchFilter },
+  components: { SearchFilter },
   data() {
     return {
       ages: RDF_AGES,
