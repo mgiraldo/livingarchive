@@ -3,6 +3,8 @@
     :key="individual.identifier"
     class="list-item"
     :identifier="individual.identifier"
+    @mouseenter="toggleControls"
+    @mouseleave="toggleControls"
   >
     <div class="basic-info">
       <div class="individual">
@@ -11,7 +13,7 @@
       <div class="age">{{ individual.age }}</div>
       <div class="sex">{{ individual.sex }}</div>
     </div>
-    <div class="discussion">
+    <div :id="individual.identifier + '-more'" class="discussion">
       {{
         longDiscussion && !discussionToggled
           ? truncatedDiscussion
@@ -20,12 +22,14 @@
       <button
         v-if="longDiscussion"
         class="link-button"
+        :aria-expanded="discussionToggled ? 'true' : 'false'"
+        :aria-controls="individual.identifier + '-more'"
         @click="toggleDiscussion"
       >
         {{ !discussionToggled ? 'more' : 'less' }}
       </button>
     </div>
-    <div class="actions">
+    <div v-show="controlsToggled" class="actions">
       <button class="link-button" @click="cellClick(individual)">
         show on map
       </button>
@@ -54,7 +58,7 @@ export default {
     cellClick: { type: Function, required: true }
   },
   data() {
-    return { discussionToggled: false }
+    return { discussionToggled: false, controlsToggled: false }
   },
   computed: {
     longDiscussion() {
@@ -65,7 +69,11 @@ export default {
     }
   },
   methods: {
-    toggleDiscussion() {
+    toggleControls() {
+      this.controlsToggled = !this.controlsToggled
+    },
+    toggleDiscussion(e) {
+      e.stopPropagation()
       this.discussionToggled = !this.discussionToggled
     }
   }
@@ -76,8 +84,8 @@ export default {
 .list-item {
   display: flex;
   flex-direction: column;
-  margin: 0;
-  padding: 0.2rem 0.2rem 1.5rem;
+  margin-bottom: 0;
+  padding: 0.2rem 0.2rem 1rem;
 
   &:hover {
     background-color: lighten($color: $global-background-color, $amount: 10%);
