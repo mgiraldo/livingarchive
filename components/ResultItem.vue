@@ -121,7 +121,7 @@ export default {
 }
 .age,
 .sex {
-  border-left: 0.75rem solid white;
+  border-left: 0.75rem solid transparent;
   padding-left: 0.25rem;
 }
 .discussion {
