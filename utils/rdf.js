@@ -172,12 +172,13 @@ export const getSkeleton = async identifier => {
 
   const geoData = await performRdfQuery(query)
 
-  let geoShape = geoData.data.results.bindings.map(binding =>
-    wellknown.parse(binding.coordinates.value)
+  let geoShape = geoData.data.results.bindings.map(
+    binding => binding.coordinates.value
   )
   let shapeIsPoint = false
   if (Array.isArray(geoShape) && geoShape.length === 1) {
-    if (geoShape[0].type === 'Point') {
+    const parsed = wellknown.parse(geoShape[0])
+    if (parsed.type === 'Point') {
       shapeIsPoint = true
     }
   }

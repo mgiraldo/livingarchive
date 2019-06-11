@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import wellknown from 'wellknown'
 import bbox from '@turf/bbox'
 import * as d3 from 'd3-geo'
 
@@ -26,7 +27,8 @@ export default {
     plotBonesD3() {
       // console.log('plotting', this.shape)
       let features = []
-      this.shape.forEach(parsed => {
+      this.shape.forEach(wkt => {
+        const parsed = wellknown.parse(wkt)
         if (parsed.type !== 'Point') {
           features.push(parsed)
         }
