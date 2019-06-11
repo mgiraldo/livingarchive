@@ -172,13 +172,12 @@ export const getSkeleton = async identifier => {
 
   const geoData = await performRdfQuery(query)
 
-  let geoShape = geoData.data.results.bindings.map(
-    binding => binding.coordinates.value
+  let geoShape = geoData.data.results.bindings.map(binding =>
+    wellknown.parse(binding.coordinates.value)
   )
   let shapeIsPoint = false
   if (Array.isArray(geoShape) && geoShape.length === 1) {
-    const parsed = wellknown.parse(geoShape[0])
-    if (parsed.type === 'Point') {
+    if (geoShape[0].type === 'Point') {
       shapeIsPoint = true
     }
   }
@@ -186,47 +185,22 @@ export const getSkeleton = async identifier => {
   return { skeleton: skeleton, shape: geoShape, shapeIsPoint: shapeIsPoint }
 }
 
-export const getBubbles = async (type = 'Unit') => {
+export const getBuilding = async identifier => {
   // TODO: sanitize params
 
   let query = `
-  SELECT DISTINCT ?subject ?supertype
-  WHERE {
-      {
-          ?subject a owl:Class .
-  OPTIONAL { ?subject sesame:directSubClassOf
-  ?supertype } .
-          OPTIONAL { ?subject rdfs:label ?label }.
-      }
-            FILTER (
-            (
-              ?supertype = catalhoyuk:${type} ||
-              ?subject = catalhoyuk:${type}
-            ) &&
-            ?subject != owl:Class &&
-            ?subject != rdf:List &&
-            ?subject != rdf:Property &&
-            ?subject != rdfs:Class &&
-            ?subject != rdfs:Datatype &&
-            ?subject != rdfs:ContainerMembershipProperty &&
-            ?subject != owl:DatatypeProperty &&
-            ?subject != owl:NamedIndividual &&
-            ?subject != owl:Ontology &&
-            ?subject != ?supertype)
-  } ORDER BY ?subject`
+  SELECT ?building ?geometry ?shape WHERE {
+    ?building catalhoyuk:hasIdentifier ${identifier} .
+    ?building catalhoyuk:hasGeometry ?geometry .
+    ?geometry :hasSerialization ?shape .
+  }`
 
   const data = await performRdfQuery(query)
 
   const results = data.data.results.bindings.map(item => {
     return {
-      supertype: item.supertype.value.replace(
-        'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#',
-        ''
-      ),
-      subject: item.subject.value.replace(
-        'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#',
-        ''
-      )
+      supertype: item.supertype.value.replace(RDF_PLACEHOLDER, ''),
+      subject: item.subject.value.replace(RDF_PLACEHOLDER, '')
     }
   })
   return results

@@ -3,18 +3,18 @@ export const RDF_URL =
 // export const RDF_URL =
 //   'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
 
+export const RDF_PLACEHOLDER =
+  'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#'
+
 export const RDF_PREFIXES = `PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX owl:    <http://www.w3.org/2002/07/owl#>
-PREFIX catalhoyuk:    <http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#>
-PREFIX : <http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#>
+PREFIX catalhoyuk:    <${RDF_PLACEHOLDER}>
+PREFIX : <${RDF_PLACEHOLDER}>
 PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 `
 
 export const RDF_TIMEOUT = 10000
-
-export const RDF_PLACEHOLDER =
-  'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#'
 
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
