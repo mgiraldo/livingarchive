@@ -5,27 +5,16 @@
       <section ref="resultsPane" class="results">
         <h1>{{ individualCount }} individuals</h1>
         <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Individual</th>
-              <th scope="col">Age</th>
-              <th scope="col">Sex</th>
-              <th scope="col">Discussion</th>
-              <th scope="col">💀</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              is="result-cell"
-              v-for="individual in individuals"
-              :key="individual.identifier"
-              :individual="individual"
-              :vars="vars"
-              :cell-click="cellClick"
-            ></tr>
-          </tbody>
-        </table>
+        <ul class="results-list">
+          <li
+            is="result-item"
+            v-for="individual in individuals"
+            :key="individual.identifier"
+            :individual="individual"
+            :vars="vars"
+            :cell-click="cellClick"
+          ></li>
+        </ul>
       </section>
       <div class="resizer" @mousedown="resizeDown">⋮</div>
       <results-map ref="mapPane" :individuals="individuals" />
@@ -37,7 +26,7 @@
 import { parseParams } from '~/utils/params'
 
 import SearchControls from '~/components/SearchControls'
-import ResultCell from '~/components/ResultCell'
+import ResultItem from '~/components/ResultItem'
 import ResultsMap from '~/components/ResultsMap'
 
 export default {
@@ -47,7 +36,7 @@ export default {
   key: '_map',
   components: {
     SearchControls,
-    ResultCell,
+    ResultItem,
     ResultsMap
   },
   data() {
@@ -171,9 +160,19 @@ export default {
   overflow-y: auto;
   padding: 0.5rem;
 
-  table {
-    border-collapse: collapse;
+  h1 {
+    font-size: 2rem;
   }
+
+  h1,
+  p {
+    margin-left: 0.2rem;
+  }
+}
+.results-list {
+  list-style-type: none;
+  margin: 0.5rem 0 0 0;
+  padding: 0;
 }
 .resizer {
   background-color: lighten($global-background-color, 30%);
