@@ -190,19 +190,19 @@ export const getBuilding = async identifier => {
   // TODO: sanitize params
 
   let query = `
-  SELECT ?building ?geometry ?shape WHERE {
-    ?building catalhoyuk:hasIdentifier ${identifier} .
-    ?building catalhoyuk:hasGeometry ?geometry .
-    ?geometry :hasSerialization ?shape .
+  SELECT ?shape WHERE {
+    ?skeleton :hasIdentifier catalhoyuk:${identifier} .
+    ?skeleton :isConstitutedBy ?individual .
+    ?individual :isLocatedIn ?space .
+    ?unit :isLocatedIn ?space .
+    ?unit :constitutes ?feature .
+    ?feature a catalhoyuk:Wall .
+    ?unit :hasGeometry ?geom .
+    ?geom :hasSerialization ?shape .
   }`
 
   const data = await performRdfQuery(query)
 
-  const results = data.data.results.bindings.map(item => {
-    return {
-      supertype: item.supertype.value.replace(RDF_PLACEHOLDER, ''),
-      subject: item.subject.value.replace(RDF_PLACEHOLDER, '')
-    }
-  })
+  const results = data.data.results.bindings.map(item => item.shape.value)
   return results
 }

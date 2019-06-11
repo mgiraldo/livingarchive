@@ -3,8 +3,8 @@
     :key="individual.identifier"
     class="list-item"
     :identifier="individual.identifier"
-    @mouseenter="toggleControls"
-    @mouseleave="toggleControls"
+    @mouseenter="showControls"
+    @mouseleave="hideControls"
   >
     <div class="individual">
       {{ individual.individual }}
@@ -41,7 +41,7 @@
       </button>
     </div>
     <div v-show="controlsToggled" class="actions">
-      <button class="link-button" @click="cellClick(individual)">
+      <button class="link-button" @click="showClick(individual)">
         show on map
       </button>
       <button class="link-button">
@@ -50,7 +50,7 @@
       <button class="link-button">
         show area
       </button>
-      <button class="link-button">
+      <button class="link-button" @click="buildingClick(individual)">
         show building
       </button>
     </div>
@@ -66,7 +66,8 @@ export default {
   props: {
     individual: { type: Object, required: true },
     vars: { type: Array, required: true },
-    cellClick: { type: Function, required: true }
+    showClick: { type: Function, required: true },
+    buildingClick: { type: Function, required: true }
   },
   data() {
     return {
@@ -85,8 +86,11 @@ export default {
     }
   },
   methods: {
-    toggleControls() {
-      this.controlsToggled = !this.controlsToggled
+    showControls() {
+      this.controlsToggled = true
+    },
+    hideControls() {
+      this.controlsToggled = false
     },
     toggleDiscussion(e) {
       e.stopPropagation()

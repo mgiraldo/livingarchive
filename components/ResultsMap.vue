@@ -4,7 +4,7 @@
       <l-map ref="map">
         <l-tile-layer
           v-for="(layer, index) in tilelayers"
-          :key="index"
+          :key="'layer-' + index"
           :url="layer.url"
           :options="layer.options"
         ></l-tile-layer>
@@ -43,7 +43,7 @@
         </l-control>
         <l-marker
           v-for="(individual, index) in individuals"
-          :key="index"
+          :key="'ind-' + index"
           :ref="individual.identifier"
           :data-identifier="individual.identifier"
           :lat-lng="individual.point.coordinates"
@@ -88,8 +88,12 @@
 </template>
 
 <script>
-import { TILELAYERS } from '~/utils/constants'
+import wellknown from 'wellknown'
+
+import { TILELAYERS, BUILDING_COLOR } from '~/utils/constants'
 import { updateRouter } from '~/utils/router'
+import { getBuilding } from '~/utils/rdf'
+import { reprojectGeoJson } from '~/utils/geo'
 
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
@@ -106,7 +110,9 @@ export default {
   },
   data() {
     return {
-      tilelayers: TILELAYERS
+      tilelayers: TILELAYERS,
+      polygons: [],
+      polygonLayer: null
     }
   },
   computed: {
@@ -132,6 +138,44 @@ export default {
   methods: {
     selectMarker(who) {
       this.$refs[who.identifier][0].mapObject.openPopup()
+    },
+    async showBuilding(who) {
+      if (this.polygonLayer)
+        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
+      // get the building
+      const building = await getBuilding(who.identifier)
+      const polygons = []
+      if (building && building.length) {
+        building.forEach(shape => {
+          let parsed = wellknown.parse(shape)
+          if (parsed) {
+            let projected = reprojectGeoJson(parsed)
+            if (projected.type !== 'Point') {
+              polygons.push(projected)
+            }
+          }
+        })
+      }
+      this.polygons = polygons
+      this.updatePolygonLayer()
+    },
+    updatePolygonLayer() {
+      if (this.polygons.length > 0) {
+        this.polygonLayer = L.geoJSON(this.polygons, {
+          style: function() {
+            return {
+              weight: 1,
+              color: BUILDING_COLOR,
+              fillColor: BUILDING_COLOR,
+              fillOpacity: 0.5
+            }
+          }
+        })
+        this.$refs.map.mapObject.addLayer(this.polygonLayer)
+        this.$refs.map.mapObject.fitBounds(this.polygonLayer.getBounds())
+      } else {
+        this.fitMap()
+      }
     },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct

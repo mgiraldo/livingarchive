@@ -119,6 +119,7 @@ export const actions = {
     rdfIndividuals.results.forEach(element => {
       let identifier = element.identifier
       if (!individuals[identifier]) {
+        // we assume we recive a point
         let point = reprojectGeoJson(wellknown.parse(element.coordinates))
         if (point.type !== 'Point') point = center(point).geometry
         individuals[identifier] = element

@@ -12,7 +12,8 @@
             :key="individual.identifier"
             :individual="individual"
             :vars="vars"
-            :cell-click="cellClick"
+            :show-click="showClick"
+            :building-click="buildingClick"
           ></li>
         </ul>
       </section>
@@ -87,8 +88,11 @@ export default {
     })
   },
   methods: {
-    cellClick(who) {
+    showClick(who) {
       this.$refs.mapPane.selectMarker(who)
+    },
+    buildingClick(who) {
+      this.$refs.mapPane.showBuilding(who)
     },
     checkResizer() {
       this.checkPane = setInterval(() => {
