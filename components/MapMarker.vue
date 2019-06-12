@@ -11,14 +11,21 @@ export default {
   computed: {
     markerColor() {
       let style = 'background-color: '
+      let value = ''
       if (this.type === 'sex') {
-        style += Object.values(this.$store.state.sexes)[
+        value = Object.values(this.$store.state.sexes)[
           Object.keys(this.$store.state.sexes).indexOf(this.individual.sex)
         ]
       } else {
-        style += Object.values(this.$store.state.ages)[
+        value = Object.values(this.$store.state.ages)[
           Object.keys(this.$store.state.ages).indexOf(this.individual.age)
         ]
+      }
+      if (value) {
+        style += value
+      } else {
+        // TODO: remove hard-coded white
+        style += '#fff'
       }
       return style
     }
