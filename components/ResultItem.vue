@@ -44,12 +44,19 @@
       <button class="link-button" @click="showClick(individual)">
         show on map
       </button>
+      <span class="separator">|</span>
+      <button class="link-button">
+        show find
+      </button>
+      <span class="separator">←</span>
       <button class="link-button">
         show hole
       </button>
+      <span class="separator">←</span>
       <button class="link-button">
         show area
       </button>
+      <span class="separator">←</span>
       <button class="link-button" @click="buildingClick(individual)">
         show building
       </button>
@@ -139,11 +146,16 @@ export default {
   color: $global-link-color;
   cursor: pointer;
   font: inherit;
-  margin-right: 0.5rem;
   padding: 0;
 
   &:hover {
     text-decoration: none;
   }
+}
+.actions {
+  display: flex;
+}
+.separator {
+  margin: 0 0.2rem;
 }
 </style>

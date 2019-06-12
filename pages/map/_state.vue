@@ -4,7 +4,10 @@
     <div ref="splitPane" class="splitview">
       <section ref="resultsPane" class="results">
         <h1>{{ individualCount }} individuals</h1>
-        <p>Filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}</p>
+        <p>
+          Showing first {{ displayedIndividuals }} filtered by: Age:
+          {{ ageFilter }} and Sex: {{ sexFilter }}
+        </p>
         <ul class="results-list">
           <li
             is="result-item"
@@ -58,6 +61,9 @@ export default {
     },
     individuals() {
       return this.$store.state.individuals
+    },
+    displayedIndividuals() {
+      return Object.keys(this.$store.state.individuals).length
     }
   },
   beforeRouteUpdate(to, from, next) {

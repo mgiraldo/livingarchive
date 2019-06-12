@@ -58,11 +58,11 @@ export const countIndividuals = async filters => {
   WHERE {
         ?individual a catalhoyuk:Individual .
         ?individual :hasIdentifier ?identifier .
-        ?individual :hasAge ?age .
-        ?individual :hasSex ?sex .
+        OPTIONAL {?individual :hasAge ?age}.
+        OPTIONAL {?individual :hasSex ?sex}.
         ?individual :isConstitutedBy ?skeleton .
-        ?skeleton :isExcavatedIn ?find .
-        ?find :hasDiscussion ?discussion .
+        OPTIONAL {?skeleton :isExcavatedIn ?find}.
+        OPTIONAL {?find :hasDiscussion ?discussion}.
         ${ageStr}
         ${sexStr}
   }`
@@ -97,11 +97,11 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
       SELECT * WHERE {
         ?individual a catalhoyuk:Individual .
         ?individual :hasIdentifier ?identifier .
-        ?individual :hasAge ?age .
-        ?individual :hasSex ?sex .
+        OPTIONAL {?individual :hasAge ?age}.
+        OPTIONAL {?individual :hasSex ?sex}.
         ?individual :isConstitutedBy ?skeleton .
-        ?skeleton :isExcavatedIn ?find .
-        ?find :hasDiscussion ?discussion .
+        OPTIONAL {?skeleton :isExcavatedIn ?find}.
+        OPTIONAL {?find :hasDiscussion ?discussion}.
         ${ageStr}
         ${sexStr}
       } ${limitStr}
@@ -117,7 +117,7 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
   const results = data.data.results.bindings.map(item => {
     let newItem = {}
     vars.forEach(element => {
-      newItem[element] = cleanString(item[element].value)
+      newItem[element] = item[element] ? cleanString(item[element].value) : ''
     })
     return newItem
   })
