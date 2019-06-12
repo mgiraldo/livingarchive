@@ -82,7 +82,7 @@ export default {
       return this.individual.discussion.length > maxLength
     },
     truncatedDiscussion() {
-      return this.individual.discussion.substring(0, maxLength) + '…'
+      return this.individual.discussion.substring(0, maxLength).trim() + '…'
     }
   },
   methods: {
