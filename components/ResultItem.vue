@@ -46,19 +46,23 @@
       </button>
       <span class="separator">|</span>
       <button class="link-button">
-        show find
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button">
-        show hole
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button">
         show area
       </button>
       <span class="separator">←</span>
       <button class="link-button" @click="buildingClick(individual)">
         show building
+      </button>
+      <span class="separator">←</span>
+      <button class="link-button">
+        show space
+      </button>
+      <span class="separator">←</span>
+      <button class="link-button">
+        show feature
+      </button>
+      <span class="separator">←</span>
+      <button class="link-button">
+        show unit
       </button>
     </div>
   </li>
