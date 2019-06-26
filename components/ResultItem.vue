@@ -143,19 +143,6 @@ export default {
 .discussion {
   margin: 0.5rem 0;
 }
-.link-button {
-  background: none;
-  border: none;
-  text-decoration: underline;
-  color: $global-link-color;
-  cursor: pointer;
-  font: inherit;
-  padding: 0;
-
-  &:hover {
-    text-decoration: none;
-  }
-}
 .actions {
   display: flex;
 }

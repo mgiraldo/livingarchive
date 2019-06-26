@@ -46,4 +46,17 @@ a {
     text-decoration: none;
   }
 }
+.link-button {
+  background: none;
+  border: none;
+  text-decoration: underline;
+  color: $global-link-color;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
 </style>

@@ -23,6 +23,7 @@ const isFiltered = state => {
 
 export const state = () => ({
   vars: [],
+  viewMode: 'map',
   individuals: {},
   individualCount: 0,
   points: [],
@@ -45,6 +46,9 @@ export const mutations = {
     state.points = newState.points
     state.individualCount = newState.individualCount
     state.filtered = isFiltered(newState)
+  },
+  toggleViewMode(state, mode) {
+    state.viewMode = mode
   },
   toggledLegend(state) {
     state.legendType = state.legendType === 'age' ? 'sex' : 'age'

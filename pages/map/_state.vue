@@ -8,6 +8,11 @@
           Showing first {{ displayedIndividuals }} filtered by: Age:
           {{ ageFilter }} and Sex: {{ sexFilter }}
         </p>
+        <p>
+          <button class="link-button" @click="toggleGrid">
+            View grid
+          </button>
+        </p>
         <ul class="results-list">
           <li
             is="result-item"
@@ -28,6 +33,7 @@
 
 <script>
 import { parseParams } from '~/utils/params'
+import { updateRouter } from '~/utils/router'
 
 import SearchControls from '~/components/SearchControls'
 import ResultItem from '~/components/ResultItem'
@@ -145,6 +151,10 @@ export default {
       this.pane.style['-webkit-user-select'] = ''
       this.pane.style['-ms-user-select'] = ''
       this.pane.style.userSelect = ''
+    },
+    toggleGrid() {
+      this.$store.commit('toggleViewMode', 'grid')
+      updateRouter({ router: this.$router, store: this.$store })
     }
   }
 }
