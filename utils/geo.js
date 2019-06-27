@@ -3,7 +3,6 @@ import proj4 from 'proj4'
 import { PROJ4_DEFS } from '~/utils/constants'
 
 export const reprojectGeoJson = geoJson => {
-  proj4.defs(PROJ4_DEFS)
   let newGeoJson = JSON.parse(JSON.stringify(geoJson))
   switch (newGeoJson.type) {
     case 'Point':
@@ -19,6 +18,7 @@ export const reprojectGeoJson = geoJson => {
   }
 }
 export const reprojectPoint = coords => {
+  proj4.defs(PROJ4_DEFS)
   return proj4('catalhoyuk', 'EPSG:4326', coords)
 }
 export const reprojectArray = (coords, levelsDeep) => {
