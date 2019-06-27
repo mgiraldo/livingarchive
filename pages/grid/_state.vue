@@ -12,14 +12,37 @@
           View map
         </button>
       </p>
-      <ul class="results-list">
-        <li
-          is="grid-view-item"
+      <div class="results-list">
+        <grid-view-item
           v-for="individual in individuals"
           :key="individual.identifier"
           :individual="individual"
-        ></li>
-      </ul>
+          :show-click="gridItemClick"
+        ></grid-view-item>
+        <div
+          v-show="selectedIndividual !== null"
+          ref="expansionElement"
+          class="expansion"
+        >
+          <div v-if="selectedIndividual" class="expansion-contents">
+            <p v-if="selectedIndividual.individual">
+              {{ selectedIndividual.individual }}
+            </p>
+            <p v-if="selectedIndividual.identifier">
+              {{ selectedIndividual.identifier }}
+            </p>
+            <p v-if="selectedIndividual.age">
+              {{ selectedIndividual.age }}
+            </p>
+            <p v-if="selectedIndividual.sex">
+              {{ selectedIndividual.sex }}
+            </p>
+            <p v-if="selectedIndividual.discussion">
+              {{ selectedIndividual.discussion }}
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -42,6 +65,13 @@ export default {
   },
   data() {
     return {
+      expanded: null,
+      selectedIndividual: null,
+      currentIdentifier: '',
+      currentDiscussion: '',
+      currentIndividual: '',
+      currentAge: '',
+      currentSex: '',
       ageFilter: [...this.$store.state.checkedAges],
       sexFilter: [...this.$store.state.checkedSexes]
     }
@@ -83,6 +113,8 @@ export default {
   },
   created() {},
   mounted() {
+    this.setRow()
+    window.addEventListener('resize', this.setRow)
     this.$store.subscribe(mutation => {
       if (
         mutation.type === 'setFilters' ||
@@ -93,6 +125,9 @@ export default {
         this.updateFilters()
       }
     })
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.setRow)
   },
   methods: {
     updateFilters() {
@@ -114,6 +149,55 @@ export default {
     toggleMap() {
       this.$store.commit('toggleViewMode', 'map')
       updateRouter({ router: this.$router, store: this.$store })
+    },
+    setRow() {
+      if (!this.expanded) return
+      let topExpanded = this.expanded.offsetTop
+      if (topExpanded === 0) {
+        // first row
+        this.$refs.expansionElement.style = 'grid-row-start: 1;'
+        return
+      }
+      // not in top so we need to find what row
+      let tops = [topExpanded]
+      let el = this.expanded.previousElementSibling
+      while (el) {
+        tops.push(el.offsetTop)
+        el = el.previousElementSibling
+      }
+      let unique = tops.filter((val, idx, array) => array.indexOf(val) === idx)
+      this.$refs.expansionElement.style =
+        'grid-row-start: ' + (unique.length + 1) + ';'
+    },
+    createExpansion(who) {
+      let currentExpansion = this.$refs.expansionElement
+      currentExpansion.classList.remove('open')
+      setTimeout(() => {
+        this.showExpansion(who)
+      }, 200) // to wait until existing expansion closes
+    },
+    showExpansion(who) {
+      let sibling = who.element
+      let currentExpanded = this.expanded
+      if (currentExpanded) {
+        currentExpanded.classList.remove('expanded')
+      }
+      if (sibling === currentExpanded) {
+        // just closing the existing one
+        this.expanded = undefined
+        return
+      }
+      this.selectedIndividual = who.data
+      sibling.classList.add('expanded')
+      this.$refs.expansionElement.classList.add('expansion', 'open')
+      if (sibling.classList.contains('selected'))
+        this.$refs.expansionElement.classList.add('selected')
+      this.expanded = sibling
+      this.setRow()
+      setTimeout(() => this.$refs.expansionElement.classList.add('open'), 10)
+    },
+    gridItemClick(who) {
+      this.createExpansion(who)
     }
   }
 }
@@ -154,8 +238,47 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, 10rem);
   grid-gap: 1rem;
-  list-style-type: none;
   margin: 1rem 0 0 0;
   padding: 0;
+}
+
+/* expansion ui */
+.expanded {
+  position: relative;
+}
+
+.expanded:after {
+  display: block;
+  position: absolute;
+  content: '';
+  border: 1rem solid transparent;
+  border-bottom-color: $grid-expansion-color;
+  border-top: none;
+  bottom: -1rem;
+  left: 50%;
+  margin-left: -1rem;
+}
+
+.expansion {
+  background-color: $grid-expansion-color;
+  color: $global-text-color;
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 1;
+  grid-column-end: -1;
+  grid-row-start: 1;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  transition: all 0.2s ease-in;
+}
+
+.expansion-contents {
+  padding: 1rem 0.5rem;
+}
+
+.expansion.open {
+  max-height: 20vh;
+  overflow-y: auto;
 }
 </style>

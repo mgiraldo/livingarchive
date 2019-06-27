@@ -1,8 +1,8 @@
 <template>
-  <li class="grid-item">
+  <div ref="item" class="grid-item" @click="click">
     <h1 class="item-title">{{ individual.individual }}</h1>
     <bones-find-view :shape="individual.skeleton" />
-  </li>
+  </div>
 </template>
 
 <script>
@@ -13,7 +13,13 @@ export default {
     BonesFindView
   },
   props: {
-    individual: { type: Object, required: true }
+    individual: { type: Object, required: true },
+    showClick: { type: Function, required: true }
+  },
+  methods: {
+    click() {
+      this.showClick({ element: this.$refs.item, data: this.individual })
+    }
   }
 }
 </script>
