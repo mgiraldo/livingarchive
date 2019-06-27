@@ -14,12 +14,11 @@
       </p>
       <ul class="results-list">
         <li
+          is="grid-view-item"
           v-for="individual in individuals"
           :key="individual.identifier"
-          class="results-list-item"
-        >
-          <bones-find-view :shape="individual.skeleton" />
-        </li>
+          :individual="individual"
+        ></li>
       </ul>
     </section>
   </div>
@@ -30,7 +29,7 @@ import { parseParams } from '~/utils/params'
 import { updateRouter } from '~/utils/router'
 
 import SearchControls from '~/components/SearchControls'
-import BonesFindView from '~/components/BonesFindView'
+import GridViewItem from '~/components/GridViewItem'
 
 export default {
   head() {
@@ -39,7 +38,7 @@ export default {
   key: '_map',
   components: {
     SearchControls,
-    BonesFindView
+    GridViewItem
   },
   data() {
     return {
@@ -138,8 +137,9 @@ export default {
 .results {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   overflow-y: auto;
-  padding: 0.5rem;
+  padding: 0.5rem 0 0 1rem;
 
   h1 {
     font-size: 2rem;
@@ -151,15 +151,11 @@ export default {
   }
 }
 .results-list {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 10rem);
+  grid-gap: 1rem;
   list-style-type: none;
-  margin: 0.5rem 0 0 0;
+  margin: 1rem 0 0 0;
   padding: 0;
-}
-.results-list-item {
-  height: 10rem;
-  margin: 0.5rem;
-  width: 10rem;
 }
 </style>
