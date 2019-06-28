@@ -16,6 +16,8 @@ PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 
 export const RDF_TIMEOUT = 10000
 
+export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
+
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
   [
