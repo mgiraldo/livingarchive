@@ -4,44 +4,24 @@
     <section ref="resultsPane" class="results">
       <h1>{{ individualCount }} individuals</h1>
       <p>
-        Showing first {{ displayedIndividuals }} sorted by shape count and
-        filtered by: Age: {{ ageFilter }} and Sex: {{ sexFilter }}
+        Showing first
+        {{ displayedIndividuals }} sorted by shape count and filtered by: Age:
+        {{ ageFilter }} and Sex: {{ sexFilter }}
       </p>
       <p>
         <button class="link-button" @click="toggleMap">
           View map
         </button>
       </p>
-      <div class="results-list">
+      <div ref="grid" class="results-list">
         <grid-view-item
           v-for="individual in individuals"
           :key="individual.identifier"
           :individual="individual"
           :show-click="gridItemClick"
+          :expanded="selectedIndividual === individual"
+          :row="selectedIndividual === individual ? row : null"
         ></grid-view-item>
-        <div
-          v-show="selectedIndividual !== null"
-          ref="expansionElement"
-          class="expansion"
-        >
-          <div v-if="selectedIndividual" class="expansion-contents">
-            <p v-if="selectedIndividual.individual">
-              {{ selectedIndividual.individual }}
-            </p>
-            <p v-if="selectedIndividual.identifier">
-              {{ selectedIndividual.identifier }}
-            </p>
-            <p v-if="selectedIndividual.age">
-              {{ selectedIndividual.age }}
-            </p>
-            <p v-if="selectedIndividual.sex">
-              {{ selectedIndividual.sex }}
-            </p>
-            <p v-if="selectedIndividual.discussion">
-              {{ selectedIndividual.discussion }}
-            </p>
-          </div>
-        </div>
       </div>
     </section>
   </div>
@@ -65,13 +45,8 @@ export default {
   },
   data() {
     return {
-      expanded: null,
-      selectedIndividual: null,
-      currentIdentifier: '',
-      currentDiscussion: '',
-      currentIndividual: '',
-      currentAge: '',
-      currentSex: '',
+      selectedGridItem: null,
+      rowNumber: 0,
       ageFilter: [...this.$store.state.checkedAges],
       sexFilter: [...this.$store.state.checkedSexes]
     }
@@ -79,9 +54,6 @@ export default {
   computed: {
     individualCount() {
       return this.$store.state.individualCount
-    },
-    vars() {
-      return this.$store.state.vars.individuals
     },
     individuals() {
       let individuals = []
@@ -94,13 +66,15 @@ export default {
       individuals.sort((a, b) => b.skeleton.length - a.skeleton.length)
       return individuals
     },
+    selectedIndividual() {
+      return this.selectedGridItem ? this.selectedGridItem.individual : null
+    },
     displayedIndividuals() {
       return this.individuals.length
+    },
+    row() {
+      return this.rowNumber
     }
-  },
-  beforeRouteUpdate(to, from, next) {
-    // console.log('route change', to, from, next)
-    next()
   },
   fetch: async function({ store, params }) {
     // console.log('fetch')
@@ -111,7 +85,6 @@ export default {
     }
     await store.dispatch('fetchIndividuals')
   },
-  created() {},
   mounted() {
     this.setRow()
     window.addEventListener('resize', this.setRow)
@@ -134,70 +107,36 @@ export default {
       this.ageFilter = [...this.$store.state.checkedAges]
       this.sexFilter = [...this.$store.state.checkedSexes]
     },
-    disableSelect() {
-      this.pane.style['-moz-user-select'] = 'none'
-      this.pane.style['-webkit-user-select'] = 'none'
-      this.pane.style['-ms-user-select'] = 'none'
-      this.pane.style.userSelect = 'none'
-    },
-    enableSelect() {
-      this.pane.style['-moz-user-select'] = ''
-      this.pane.style['-webkit-user-select'] = ''
-      this.pane.style['-ms-user-select'] = ''
-      this.pane.style.userSelect = ''
-    },
     toggleMap() {
       this.$store.commit('toggleViewMode', 'map')
       updateRouter({ router: this.$router, store: this.$store })
     },
     setRow() {
-      if (!this.expanded) return
-      let topExpanded = this.expanded.offsetTop
-      if (topExpanded === 0) {
-        // first row
-        this.$refs.expansionElement.style = 'grid-row-start: 1;'
-        return
-      }
-      // not in top so we need to find what row
-      let tops = [topExpanded]
-      let el = this.expanded.previousElementSibling
+      if (!this.selectedGridItem) return
+      let offsets = []
+      let el = this.selectedGridItem.$refs.item
       while (el) {
-        tops.push(el.offsetTop)
+        // ignore the expansion itself
+        if (!el.classList.contains('expansion')) offsets.push(el.offsetTop)
         el = el.previousElementSibling
       }
-      let unique = tops.filter((val, idx, array) => array.indexOf(val) === idx)
-      this.$refs.expansionElement.style =
-        'grid-row-start: ' + (unique.length + 1) + ';'
+      let rows = offsets.filter(
+        (val, idx, array) => val && array.indexOf(val) === idx
+      )
+      console.log('setRow', rows.length + 1)
+      this.rowNumber = rows.length + 1
     },
-    createExpansion(who) {
-      let currentExpansion = this.$refs.expansionElement
-      currentExpansion.classList.remove('open')
-      setTimeout(() => {
-        this.showExpansion(who)
-      }, 200) // to wait until existing expansion closes
-    },
-    showExpansion(who) {
-      let sibling = who.element
-      let currentExpanded = this.expanded
-      if (currentExpanded) {
-        currentExpanded.classList.remove('expanded')
-      }
-      if (sibling === currentExpanded) {
+    showHideExpansion(who) {
+      if (who === this.selectedGridItem) {
         // just closing the existing one
-        this.expanded = undefined
+        this.selectedGridItem = null
         return
       }
-      this.selectedIndividual = who.data
-      sibling.classList.add('expanded')
-      this.$refs.expansionElement.classList.add('expansion', 'open')
-      if (sibling.classList.contains('selected'))
-        this.$refs.expansionElement.classList.add('selected')
-      this.expanded = sibling
-      this.setRow()
-      setTimeout(() => this.$refs.expansionElement.classList.add('open'), 10)
+      this.selectedGridItem = who
     },
     gridItemClick(who) {
-      this.createExpansion(who)
+      this.showHideExpansion(who)
+      this.setRow()
     }
   }
 }
@@ -240,45 +179,5 @@ export default {
   grid-gap: 1rem;
   margin: 1rem 0 0 0;
   padding: 0;
-}
-
-/* expansion ui */
-.expanded {
-  position: relative;
-}
-
-.expanded:after {
-  display: block;
-  position: absolute;
-  content: '';
-  border: 1rem solid transparent;
-  border-bottom-color: $grid-expansion-color;
-  border-top: none;
-  bottom: -1rem;
-  left: 50%;
-  margin-left: -1rem;
-}
-
-.expansion {
-  background-color: $grid-expansion-color;
-  color: $global-text-color;
-  display: flex;
-  flex-direction: column;
-  grid-column-start: 1;
-  grid-column-end: -1;
-  grid-row-start: 1;
-  max-height: 0;
-  overflow: hidden;
-  padding: 0;
-  transition: all 0.2s ease-in;
-}
-
-.expansion-contents {
-  padding: 1rem 0.5rem;
-}
-
-.expansion.open {
-  max-height: 20vh;
-  overflow-y: auto;
 }
 </style>

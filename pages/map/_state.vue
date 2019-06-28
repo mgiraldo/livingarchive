@@ -72,10 +72,6 @@ export default {
       return Object.keys(this.$store.state.individuals).length
     }
   },
-  beforeRouteUpdate(to, from, next) {
-    // console.log('route change', to, from, next)
-    next()
-  },
   fetch: async function({ store, params }) {
     // console.log('fetch')
     if (params.state) {
