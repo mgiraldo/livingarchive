@@ -123,7 +123,6 @@ export default {
       let rows = offsets.filter(
         (val, idx, array) => val && array.indexOf(val) === idx
       )
-      console.log('setRow', rows.length + 1)
       this.rowNumber = rows.length + 1
     },
     showHideExpansion(who) {
