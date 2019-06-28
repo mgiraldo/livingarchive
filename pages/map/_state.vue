@@ -187,7 +187,7 @@ export default {
 }
 .results-list {
   list-style-type: none;
-  margin: 0.5rem 0 0 0;
+  margin: 0.5rem 0 5rem 0;
   padding: 0;
 }
 .resizer {

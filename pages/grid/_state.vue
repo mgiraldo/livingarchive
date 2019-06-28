@@ -178,6 +178,6 @@ export default {
   grid-template-columns: repeat(auto-fill, 10rem);
   grid-gap: 1rem;
   margin: 1rem 0 0 0;
-  padding: 0;
+  padding: 0 0 5rem 0;
 }
 </style>
