@@ -1,5 +1,5 @@
 <template>
-  <fragment>
+  <div>
     <div class="individual">
       {{ individual.individual }}
     </div>
@@ -32,7 +32,7 @@
         {{ !discussionToggled ? 'more' : 'less' }}
       </button>
     </div>
-  </fragment>
+  </div>
 </template>
 
 <script>

@@ -117,7 +117,7 @@ export default {
       this.disableSelect()
     },
     resizeMove(e) {
-      if (this.resizing) {
+      if (this.resizing && this.$refs.resultsPane && this.$refs.mapPane) {
         let left = this.$refs.resultsPane
         let newX = e.clientX
         let pct = ((newX - this.splitPaneX) / this.splitPaneWidth) * 100
@@ -137,12 +137,14 @@ export default {
       this.sexFilter = [...this.$store.state.checkedSexes]
     },
     disableSelect() {
+      if (!this.pane) return
       this.pane.style['-moz-user-select'] = 'none'
       this.pane.style['-webkit-user-select'] = 'none'
       this.pane.style['-ms-user-select'] = 'none'
       this.pane.style.userSelect = 'none'
     },
     enableSelect() {
+      if (!this.pane) return
       this.pane.style['-moz-user-select'] = ''
       this.pane.style['-webkit-user-select'] = ''
       this.pane.style['-ms-user-select'] = ''

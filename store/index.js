@@ -103,16 +103,14 @@ export const actions = {
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
 
     // TODO: fix limit magic number
-    let { vars, individuals, count, points } = await getIndividualsRDF({
-      limit: 500,
-      filters: filters
-    })
-
-    // let { vars, individuals, count, points } = await getIndividualsES({
+    // let { vars, individuals, count, points } = await getIndividualsRDF({
+    //   limit: 500,
     //   filters: filters
     // })
 
-    console.log(vars, individuals, count, points)
+    let { vars, individuals, count, points } = await getIndividualsES({
+      filters: filters
+    })
 
     let newState = {
       vars: { individuals: vars },

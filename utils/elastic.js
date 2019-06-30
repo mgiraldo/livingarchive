@@ -114,21 +114,16 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
       individuals[identifier] = element
       individuals[identifier].skeleton = []
       if (point.type !== 'Point') {
-        individuals[identifier].skeleton = [point] // not really a point
+        individuals[identifier].skeleton = element.spatial_list // not really a point
         point = center(point).geometry
       }
       individuals[identifier].point = JSON.parse(JSON.stringify(point))
       points.push(point.coordinates)
     } else {
-      individuals[identifier].skeleton.push(element.spatial_list)
+      individuals[identifier].skeleton = individuals[
+        identifier
+      ].skeleton.concat(element.spatial_list)
     }
-    // we assume we recive a point
-    let point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
-    if (point.type !== 'Point') point = center(point).geometry
-    individuals[identifier] = element
-    individuals[identifier].skeleton = element.spatial_list
-    individuals[identifier].point = JSON.parse(JSON.stringify(point))
-    points.push(point.coordinates)
   })
 
   return { count, individuals, vars: sources, points }
