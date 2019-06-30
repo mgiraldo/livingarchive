@@ -1,20 +1,8 @@
-import wellknown from 'wellknown'
-import center from '@turf/center'
-
 import { RDF_AGES, RDF_SEXES, RDF_PHASES, RDF_LEVELS } from '~/utils/constants'
-import { getIndividuals, countIndividuals } from '~/utils/rdf'
-import { reprojectGeoJson } from '~/utils/geo'
+import { getIndividuals as getIndividualsRDF } from '~/utils/rdf'
+import { getIndividuals as getIndividualsES } from '~/utils/elastic'
 
 const isFiltered = state => {
-  // console.log(
-  //   'filtered',
-  //   state.checkedAges,
-  //   state.checkedSexes,
-  //   Array.from(state.checkedAges).length,
-  //   Object.keys(RDF_AGES).length,
-  //   Array.from(state.checkedSexes).length,
-  //   Object.keys(RDF_SEXES).length
-  // )
   return (
     Array.from(state.checkedAges).length !== 0 ||
     Array.from(state.checkedSexes).length !== 0
@@ -113,32 +101,21 @@ export const actions = {
       window.$nuxt.$root.$loading.start()
     }
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
+
     // TODO: fix limit magic number
-    let rdfIndividuals = await getIndividuals({
+    let { vars, individuals, count, points } = await getIndividualsRDF({
       limit: 500,
       filters: filters
     })
-    let individuals = {}
-    let points = []
-    rdfIndividuals.results.forEach(element => {
-      let identifier = element.identifier
-      if (!individuals[identifier]) {
-        // we assume we recive a point
-        let point = reprojectGeoJson(wellknown.parse(element.coordinates))
-        if (point.type !== 'Point') point = center(point).geometry
-        individuals[identifier] = element
-        individuals[identifier].skeleton = []
-        individuals[identifier].point = JSON.parse(JSON.stringify(point))
-        points.push(point.coordinates)
-      } else {
-        individuals[identifier].skeleton.push(element.coordinates)
-      }
-    })
 
-    let count = await countIndividuals(filters)
+    // let { vars, individuals, count, points } = await getIndividualsES({
+    //   filters: filters
+    // })
+
+    console.log(vars, individuals, count, points)
 
     let newState = {
-      vars: { individuals: rdfIndividuals.vars },
+      vars: { individuals: vars },
       checkedAges: new Set(state.checkedAges),
       checkedSexes: new Set(state.checkedSexes),
       individuals: individuals,

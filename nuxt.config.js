@@ -45,7 +45,8 @@ module.exports = {
   ],
   env: {
     MAPTILER_KEY: process.env.MAPTILER_KEY,
-    BASE_URL: process.env.BASE_URL || 'http://localhost:3000'
+    BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
+    RDF_URL: process.env.RDF_URL
   },
   /*
    ** Axios module configuration

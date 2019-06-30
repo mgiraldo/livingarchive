@@ -1,21 +1,11 @@
 import axios from 'axios'
 import https from 'https'
 import wellknown from 'wellknown'
+import center from '@turf/center'
 
-import {
-  RDF_PREFIXES,
-  RDF_URL,
-  RDF_PLACEHOLDER,
-  RDF_TIMEOUT,
-  RDF_SEXES,
-  RDF_AGES
-} from './constants'
-
-const cleanString = (str, extra) => {
-  str = str.replace(RDF_PLACEHOLDER, '')
-  str = extra ? str.replace(extra, '') : str
-  return str
-}
+import { RDF_PREFIXES, RDF_TIMEOUT, RDF_SEXES, RDF_AGES } from './constants'
+import { reprojectGeoJson } from './geo'
+import { cleanString } from './stringUtils'
 
 const performRdfQuery = async query => {
   const instance = axios.create({
@@ -33,7 +23,7 @@ const performRdfQuery = async query => {
   console.log(query)
 
   const results = await instance.get(
-    RDF_URL + '?query=' + encodeURIComponent(RDF_PREFIXES + query)
+    process.env.RDF_URL + '?query=' + encodeURIComponent(RDF_PREFIXES + query)
   )
   return results
 }
@@ -121,7 +111,30 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
     })
     return newItem
   })
-  return { vars, results }
+
+  // prepare for store
+  // TODO: fix limit magic number
+  // TODO: remove extra looping
+  let individuals = {}
+  let points = []
+  results.forEach(element => {
+    let identifier = element.identifier
+    if (!individuals[identifier]) {
+      // we assume we recive a point
+      let point = reprojectGeoJson(wellknown.parse(element.coordinates))
+      if (point.type !== 'Point') point = center(point).geometry
+      individuals[identifier] = element
+      individuals[identifier].skeleton = []
+      individuals[identifier].point = JSON.parse(JSON.stringify(point))
+      points.push(point.coordinates)
+    } else {
+      individuals[identifier].skeleton.push(element.coordinates)
+    }
+  })
+
+  let count = await countIndividuals(filters)
+
+  return { vars, individuals, count, points }
 }
 
 export const getSkeleton = async identifier => {

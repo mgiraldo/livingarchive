@@ -51,7 +51,10 @@ export default {
   },
   computed: {
     longDiscussion() {
-      return this.individual.discussion.length > MAX_TEXT_LENGTH
+      return (
+        this.individual.discussion &&
+        this.individual.discussion.length > MAX_TEXT_LENGTH
+      )
     },
     truncatedDiscussion() {
       return (

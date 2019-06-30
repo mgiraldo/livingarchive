@@ -1,8 +1,3 @@
-export const RDF_URL =
-  'http://lac.catalhoyuk.com:8080/rdf4j-server/repositories/catalhoyuk'
-// export const RDF_URL =
-//   'http://lac.catalhoyuk.com/blazegraph/namespace/catalhoyuk/sparql'
-
 export const RDF_PLACEHOLDER =
   'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#'
 
@@ -64,6 +59,7 @@ export const RDF_AGES = {
 export const RDF_SEXES = {
   name: 'Sexes',
   values: {
+    '?': '#aaa',
     'too young to determine': '#aaa',
     female: '#fc8d62',
     'female?': '#FDC5AE',
