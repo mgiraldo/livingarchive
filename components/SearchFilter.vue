@@ -1,5 +1,5 @@
 <template>
-  <section class="section">
+  <section class="filter">
     <h1 :aria-controls="'facet_' + facet.name + '_toggle'" @click="toggle">
       <span class="toggle">{{ open ? '-' : '+' }}</span>
       {{ facet.name }}
@@ -112,7 +112,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.section {
+.filter {
+  border-bottom: 0.1rem solid $global-border-color;
+  margin-bottom: 1rem;
+
   h1 {
     cursor: pointer;
     font-size: 1.25rem;
@@ -139,10 +142,15 @@ ul {
   padding: 0;
 }
 .facet {
+  border-bottom: 0.1rem solid $global-border-color;
   margin-bottom: 1rem;
+
+  &:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
 }
 .aggregation {
-  border-bottom: 0.05rem solid $global-border-color;
   display: flex;
   padding-bottom: 0.125rem;
   padding-left: 0.125rem;
@@ -158,6 +166,9 @@ ul {
       )
       100%;
   }
+}
+.skeleton {
+  margin-bottom: 1rem;
 }
 label {
   cursor: pointer;
