@@ -16,7 +16,7 @@ export default {
 
 <style lang="scss" scoped>
 .color-item-container {
-  align-items: center;
+  align-items: flex-start;
   display: flex;
 }
 .dot {

@@ -3,11 +3,7 @@
     <search-controls class="controls" />
     <section ref="resultsPane" class="results">
       <h1>{{ individualCount }} individuals</h1>
-      <p>
-        Showing first
-        {{ displayedIndividuals }} sorted by shape count and filtered by: Age:
-        {{ ageFilter }} and Sex: {{ sexFilter }}
-      </p>
+      <results-explained />
       <p>
         <button class="link-button" @click="toggleMap">
           View map
@@ -33,6 +29,7 @@ import { updateRouter } from '~/utils/router'
 
 import SearchControls from '~/components/SearchControls'
 import GridViewItem from '~/components/GridViewItem'
+import ResultsExplained from '~/components/ResultsExplained'
 
 export default {
   head() {
@@ -41,7 +38,8 @@ export default {
   key: '_map',
   components: {
     SearchControls,
-    GridViewItem
+    GridViewItem,
+    ResultsExplained
   },
   data() {
     return {

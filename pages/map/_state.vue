@@ -4,10 +4,7 @@
     <div ref="splitPane" class="splitview">
       <section ref="resultsPane" class="results">
         <h1>{{ individualCount }} individuals</h1>
-        <p>
-          Showing first {{ displayedIndividuals }} filtered by: Age:
-          {{ ageFilter }} and Sex: {{ sexFilter }}
-        </p>
+        <results-explained />
         <p>
           <button class="link-button" @click="toggleGrid">
             View grid
@@ -37,6 +34,7 @@ import { updateRouter } from '~/utils/router'
 
 import SearchControls from '~/components/SearchControls'
 import ResultItem from '~/components/ResultItem'
+import ResultsExplained from '~/components/ResultsExplained'
 import ResultsMap from '~/components/ResultsMap'
 
 export default {
@@ -47,6 +45,7 @@ export default {
   components: {
     SearchControls,
     ResultItem,
+    ResultsExplained,
     ResultsMap
   },
   data() {
@@ -180,11 +179,6 @@ export default {
 
   h1 {
     font-size: 2rem;
-  }
-
-  h1,
-  p {
-    margin-left: 0.2rem;
   }
 }
 .results-list {

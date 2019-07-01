@@ -7,21 +7,28 @@
     <transition name="fade">
       <div :id="'facet_' + facet.name + '_toggle'">
         <ul v-if="type !== 'skeleton'" v-show="open">
-          <li v-for="(color, name, index) in facet.values" :key="index">
+          <li
+            v-for="(color, name, index) in nonEmptyFacets"
+            :key="index"
+            class="facet"
+          >
             <label :for="`${name}_${index}`">
               <input
                 :id="`${name}_${index}`"
                 type="checkbox"
                 :value="index"
-                :checked="inStore(facet.name, index)"
-                :disabled="!aggregations[name] || aggregations[name] === 0"
-                @change="toggled(facet.name, index, $event.target.checked)"
+                :checked="inStore(facet.name, name)"
+                :disabled="
+                  aggPercent(aggregations[name]) === 0 ||
+                    aggPercent(aggregations[name]) === 'None'
+                "
+                @change="toggled(facet.name, name, $event.target.checked)"
               />
               <filter-color-item :name="name" :color="color" />
             </label>
-            <span v-if="aggregations[name]"
-              >{{ aggregations[name] }} / {{ totalResults }}</span
-            >
+            <div :class="'aggregation agg-' + aggPercent(aggregations[name])">
+              {{ aggPercent(aggregations[name]) }}
+            </div>
           </li>
         </ul>
         <skeleton-front
@@ -30,7 +37,19 @@
           id="skeleton-control"
           class="skeleton"
         />
-        <span v-if="type === 'skeleton' && open">{{ aggregations }}</span>
+        <div v-if="type === 'skeleton' && open">
+          <!-- <ul>
+            <li
+              v-for="(value, aggregation, index) in aggregations"
+              :key="index"
+              class="facet"
+            >
+              <div :class="'aggregation agg-' + aggPercent(value)">
+                {{ cleanBone(aggregation) }} {{ value }}
+              </div>
+            </li>
+          </ul> -->
+        </div>
       </div>
     </transition>
   </section>
@@ -53,19 +72,39 @@ export default {
     return { open: false }
   },
   computed: {
+    nonEmptyFacets() {
+      let nonEmpty = {}
+      for (const facet in this.facet.values) {
+        if (
+          this.aggPercent(this.aggregations[facet]) > 0 &&
+          this.aggPercent(this.aggregations[facet]) !== 'None'
+        )
+          nonEmpty[facet] = this.facet.values[facet]
+      }
+      return nonEmpty
+    },
     totalResults() {
       return this.$store.state.individualCount
     }
   },
   methods: {
+    cleanBone(bone) {
+      return bone.substring(0, bone.lastIndexOf('-'))
+    },
+    aggPercent(value) {
+      if (!value) return 'None'
+      return Math.round((value / this.$store.state.individualCount) * 100)
+    },
     toggle() {
       this.open = !this.open
     },
-    toggled(filter, index, value) {
+    toggled(filter, name, value) {
+      const index = Object.keys(this.facet.values).indexOf(name)
       this.$store.commit('checkedFilter', { filter, index, value })
       updateRouter({ router: this.$router, store: this.$store })
     },
-    inStore(filter, index) {
+    inStore(filter, name) {
+      const index = Object.keys(this.facet.values).indexOf(name)
       return this.$store.state['checked' + filter].has(index)
     }
   }
@@ -99,10 +138,31 @@ ul {
   margin: 0;
   padding: 0;
 }
+.facet {
+  margin-bottom: 1rem;
+}
+.aggregation {
+  border-bottom: 0.05rem solid $global-border-color;
+  display: flex;
+  padding-bottom: 0.125rem;
+  padding-left: 0.125rem;
+}
+@for $i from 0 through 100 {
+  .agg-#{$i} {
+    background: linear-gradient(
+        to right,
+        $aggregation-bar-color 0%,
+        $aggregation-bar-color #{$i + '%'},
+        $aggregation-bar-background-color #{$i + '%'},
+        $aggregation-bar-background-color
+      )
+      100%;
+  }
+}
 label {
   cursor: pointer;
   display: flex;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 input {
   margin-right: 0.5rem;

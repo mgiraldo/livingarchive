@@ -66,7 +66,7 @@ export default {
 
 <style lang="scss" scoped>
 .list-item {
-  border-top: 0.05rem solid $global-text-color;
+  border-top: 0.05rem solid $global-border-color;
   display: flex;
   flex-direction: column;
   margin-bottom: 0;

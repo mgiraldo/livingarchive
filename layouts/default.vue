@@ -53,6 +53,7 @@ a {
   color: $global-link-color;
   cursor: pointer;
   font: inherit;
+  margin-bottom: 1rem;
   padding: 0;
 
   &:hover {

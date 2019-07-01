@@ -49,7 +49,7 @@ const buildQuery = params => {
   }
   query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
   ELASTIC_AGGS.forEach(agg => {
-    query = query.agg('terms', agg + '.keyword')
+    query = query.agg('terms', agg + '.keyword', { size: querySize })
   })
   return query.build()
 }
