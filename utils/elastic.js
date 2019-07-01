@@ -52,6 +52,7 @@ const buildQuery = params => {
   query = query.agg('terms', 'age.keyword')
   query = query.agg('terms', 'level.keyword')
   query = query.agg('terms', 'sex.keyword')
+  query = query.agg('terms', 'bones.bone.keyword')
   return query.build()
 }
 
@@ -103,20 +104,18 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
 
   let individuals = {}
   let points = []
-
   // TODO: remove extra looping
   temp.forEach(element => {
     if (!element.spatial_list || element.spatial_list.length === 0) return // NOTE: ignore individuals without latlons
     let identifier = element.identifier
-    if (!individuals[identifier]) {
-      // we assume we recive a point
+    if (individuals[identifier] === undefined) {
+      // create a point for the bones in the first spatial
       let point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
-      individuals[identifier] = element
-      individuals[identifier].skeleton = []
       if (point.type !== 'Point') {
-        individuals[identifier].skeleton = element.spatial_list // not really a point
         point = center(point).geometry
       }
+      individuals[identifier] = element
+      individuals[identifier].skeleton = element.spatial_list
       individuals[identifier].point = JSON.parse(JSON.stringify(point))
       points.push(point.coordinates)
     } else {
