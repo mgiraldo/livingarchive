@@ -13,6 +13,7 @@ export const state = () => ({
   vars: [],
   viewMode: 'map',
   individuals: {},
+  aggs: {},
   individualCount: 0,
   points: [],
   sexes: RDF_SEXES.values,
@@ -33,6 +34,7 @@ export const mutations = {
     state.individuals = newState.individuals
     state.points = newState.points
     state.individualCount = newState.individualCount
+    state.aggs = newState.aggs
     state.filtered = isFiltered(newState)
   },
   toggleViewMode(state, mode) {
@@ -108,7 +110,7 @@ export const actions = {
     //   filters: filters
     // })
 
-    let { vars, individuals, count, points } = await getIndividualsES({
+    let { vars, individuals, count, points, aggs } = await getIndividualsES({
       filters: filters
     })
 
@@ -116,10 +118,11 @@ export const actions = {
       vars: { individuals: vars },
       checkedAges: new Set(state.checkedAges),
       checkedSexes: new Set(state.checkedSexes),
-      individuals: individuals,
+      individuals,
       individualCount: count,
-      points: points,
-      filtered: isFiltered(state)
+      points,
+      filtered: isFiltered(state),
+      aggs
     }
     if (process.browser) {
       window.$nuxt.$root.$loading.finish()

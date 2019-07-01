@@ -13,6 +13,8 @@ export const RDF_TIMEOUT = 10000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 
+export const ELASTIC_AGGS = ['phase', 'age', 'level', 'sex', 'bones.bone']
+
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
   [

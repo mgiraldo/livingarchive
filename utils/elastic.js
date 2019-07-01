@@ -4,7 +4,7 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import { RDF_SEXES, RDF_AGES } from './constants'
+import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
@@ -48,11 +48,9 @@ const buildQuery = params => {
     })
   }
   query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
-  query = query.agg('terms', 'phase.keyword')
-  query = query.agg('terms', 'age.keyword')
-  query = query.agg('terms', 'level.keyword')
-  query = query.agg('terms', 'sex.keyword')
-  query = query.agg('terms', 'bones.bone.keyword')
+  ELASTIC_AGGS.forEach(agg => {
+    query = query.agg('terms', agg + '.keyword')
+  })
   return query.build()
 }
 
@@ -94,6 +92,7 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
   let query = buildQuery(params)
   let queryResults = await performESQuery(query)
   const count = queryResults.data.hits.total.value
+  let aggs = getAggregations(queryResults.data.aggregations)
   let temp = queryResults.data.hits.hits.map(hit => {
     let individual = {}
     sources.forEach(source => {
@@ -125,5 +124,17 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
     }
   })
 
-  return { count, individuals, vars: sources, points }
+  return { count, individuals, vars: sources, points, aggs }
+}
+
+const getAggregations = aggs => {
+  let result = {}
+  ELASTIC_AGGS.forEach(agg => {
+    result[agg] = {}
+    aggs['agg_terms_' + agg + '.keyword'].buckets.forEach(item => {
+      result[agg][cleanString(item.key)] = item.doc_count
+    })
+  })
+  // console.log(result)
+  return result
 }

@@ -10,11 +10,15 @@
         Clear filters
       </button>
     </transition>
-    <search-filter :facet="sexes" />
-    <search-filter :facet="ages" />
-    <search-filter :facet="levels" />
-    <search-filter :facet="phases" />
-    <search-filter :facet="{ name: 'Skeleton' }" type="skeleton" />
+    <search-filter :aggregations="aggs('sex')" :facet="sexes" />
+    <search-filter :aggregations="aggs('age')" :facet="ages" />
+    <search-filter :aggregations="aggs('level')" :facet="levels" />
+    <search-filter :aggregations="aggs('phase')" :facet="phases" />
+    <search-filter
+      :aggregations="aggs('bones.bone')"
+      :facet="{ name: 'Skeleton' }"
+      type="skeleton"
+    />
   </form>
 </template>
 
@@ -36,6 +40,9 @@ export default {
   },
   computed: {},
   methods: {
+    aggs(type) {
+      return this.$store.state.aggs[type]
+    },
     filtered() {
       return this.$store.state.filtered
     },

@@ -1,30 +1,37 @@
 <template>
   <section class="section">
-    <h1 @click="toggle">
+    <h1 :aria-controls="'facet_' + facet.name + '_toggle'" @click="toggle">
       <span class="toggle">{{ open ? '-' : '+' }}</span>
       {{ facet.name }}
     </h1>
     <transition name="fade">
-      <ul v-if="type !== 'skeleton'" v-show="open">
-        <li v-for="(color, name, index) in facet.values" :key="index">
-          <label :for="`${name}_${index}`">
-            <input
-              :id="`${name}_${index}`"
-              type="checkbox"
-              :value="index"
-              :checked="inStore(facet.name, index)"
-              @change="toggled(facet.name, index, $event.target.checked)"
-            />
-            <filter-color-item :name="name" :color="color" />
-          </label>
-        </li>
-      </ul>
-      <skeleton-front
-        v-if="type === 'skeleton'"
-        v-show="open"
-        id="skeleton-control"
-        class="skeleton"
-      />
+      <div :id="'facet_' + facet.name + '_toggle'">
+        <ul v-if="type !== 'skeleton'" v-show="open">
+          <li v-for="(color, name, index) in facet.values" :key="index">
+            <label :for="`${name}_${index}`">
+              <input
+                :id="`${name}_${index}`"
+                type="checkbox"
+                :value="index"
+                :checked="inStore(facet.name, index)"
+                :disabled="!aggregations[name] || aggregations[name] === 0"
+                @change="toggled(facet.name, index, $event.target.checked)"
+              />
+              <filter-color-item :name="name" :color="color" />
+            </label>
+            <span v-if="aggregations[name]"
+              >{{ aggregations[name] }} / {{ totalResults }}</span
+            >
+          </li>
+        </ul>
+        <skeleton-front
+          v-if="type === 'skeleton'"
+          v-show="open"
+          id="skeleton-control"
+          class="skeleton"
+        />
+        <span v-if="type === 'skeleton' && open">{{ aggregations }}</span>
+      </div>
     </transition>
   </section>
 </template>
@@ -39,10 +46,16 @@ export default {
   components: { FilterColorItem, SkeletonFront },
   props: {
     facet: { type: Object, required: true },
-    type: { type: String, default: 'list' }
+    type: { type: String, default: 'list' },
+    aggregations: { type: Object, default: null }
   },
   data() {
     return { open: false }
+  },
+  computed: {
+    totalResults() {
+      return this.$store.state.individualCount
+    }
   },
   methods: {
     toggle() {
