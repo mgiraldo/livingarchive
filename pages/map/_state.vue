@@ -23,7 +23,7 @@
         </ul>
       </section>
       <div class="resizer" @mousedown="resizeDown">⋮</div>
-      <!-- <results-map ref="mapPane" /> -->
+      <results-map ref="mapPane" />
     </div>
   </div>
 </template>
