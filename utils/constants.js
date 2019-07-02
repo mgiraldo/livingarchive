@@ -15,6 +15,8 @@ export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 
 export const ELASTIC_AGGS = ['phase', 'age', 'level', 'sex'] //, 'bones.bone']
 
+export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building
+
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
   [

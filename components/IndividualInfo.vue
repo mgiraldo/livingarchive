@@ -16,7 +16,11 @@
         open skeleton
       </nuxt-link>
     </span>
-    <div :id="individual.identifier + '-more'" class="discussion">
+    <div
+      v-if="individual.discussion && individual.discussion !== 'NULL'"
+      :id="individual.identifier + '-more'"
+      class="discussion"
+    >
       {{
         longDiscussion && !discussionToggled
           ? truncatedDiscussion
@@ -72,17 +76,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.individual {
+  margin-bottom: 0.5rem;
+}
 .basic-info {
-  display: flex;
   font-size: 1.5rem;
-  margin: 0.25rem 0;
+  margin-bottom: 0.5rem;
 }
 .age {
-  width: 10rem;
-}
-.individual,
-.age {
-  margin-right: 1rem;
+  margin-bottom: 0.1rem;
 }
 .age,
 .sex {

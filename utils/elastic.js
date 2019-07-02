@@ -4,7 +4,7 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS } from './constants'
+import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
@@ -47,7 +47,7 @@ const buildQuery = params => {
       query = query.filter('terms', filter.type, filter.value)
     })
   }
-  query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
+  // query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
   ELASTIC_AGGS.forEach(agg => {
     query = query.agg('terms', agg + '.keyword', { size: querySize })
   })
@@ -105,17 +105,21 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
   let points = []
   // TODO: remove extra looping
   temp.forEach(element => {
-    if (!element.spatial_list || element.spatial_list.length === 0) return // NOTE: ignore individuals without latlons
     let identifier = element.identifier
     if (individuals[identifier] === undefined) {
-      // create a point for the bones in the first spatial
-      let point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
-      if (point.type !== 'Point') {
-        point = center(point).geometry
-      }
       individuals[identifier] = element
-      individuals[identifier].skeleton = element.spatial_list
-      individuals[identifier].point = JSON.parse(JSON.stringify(point))
+      individuals[identifier].skeleton = []
+      let point = wellknown.parse(EMPTY_LONLAT)
+      individuals[identifier].point = point
+      // create a point for the bones in the first spatial
+      if (element.spatial_list && element.spatial_list.length > 0) {
+        point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
+        if (point.type !== 'Point') {
+          point = center(point).geometry
+        }
+        individuals[identifier].skeleton = element.spatial_list
+        individuals[identifier].point = JSON.parse(JSON.stringify(point))
+      }
       points.push(point.coordinates)
     } else {
       individuals[identifier].skeleton = individuals[

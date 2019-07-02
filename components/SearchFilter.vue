@@ -27,7 +27,7 @@
               <filter-color-item :name="name" :color="color" />
             </label>
             <div :class="'aggregation agg-' + aggPercent(aggregations[name])">
-              {{ aggPercent(aggregations[name]) }}
+              {{ aggregations[name] }}
             </div>
           </li>
         </ul>

@@ -59,7 +59,7 @@ export default {
   },
   computed: {
     individualCount() {
-      return this.$store.state.individualCount
+      return this.displayedIndividuals //this.$store.state.individualCount
     },
     vars() {
       return this.$store.state.vars.individuals

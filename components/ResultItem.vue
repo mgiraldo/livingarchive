@@ -8,28 +8,29 @@
   >
     <individual-info :individual="individual" />
     <div v-show="controlsToggled" class="actions">
+      show:&nbsp;
       <button class="link-button" @click="showClick(individual)">
-        show on map
+        on map
       </button>
       <span class="separator">|</span>
       <button class="link-button">
-        show area
+        area
       </button>
       <span class="separator">←</span>
       <button class="link-button" @click="buildingClick(individual)">
-        show building
+        building
       </button>
       <span class="separator">←</span>
       <button class="link-button">
-        show space
+        space
       </button>
       <span class="separator">←</span>
       <button class="link-button">
-        show feature
+        feature
       </button>
       <span class="separator">←</span>
       <button class="link-button">
-        show unit
+        unit
       </button>
     </div>
   </li>

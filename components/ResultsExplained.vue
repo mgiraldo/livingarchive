@@ -8,7 +8,7 @@
         class="filter"
         :style="'background-color: ' + filter.color"
       >
-        {{ filter.name }}
+        {{ filter.type }}: {{ filter.name }}
       </span>
     </div>
   </div>
@@ -28,6 +28,7 @@ export default {
       const ages = [...this.$store.state.checkedAges.values()]
       ages.forEach(index => {
         filters.push({
+          type: 'Age',
           name: Object.keys(RDF_AGES.values)[index],
           color: Object.values(RDF_AGES.values)[index]
         })
@@ -35,6 +36,7 @@ export default {
       const sexes = [...this.$store.state.checkedSexes.values()]
       sexes.forEach(index => {
         filters.push({
+          type: 'Sex',
           name: Object.keys(RDF_SEXES.values)[index],
           color: Object.values(RDF_SEXES.values)[index]
         })
