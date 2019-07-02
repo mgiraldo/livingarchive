@@ -1,6 +1,9 @@
 import { RDF_AGES, RDF_SEXES, RDF_PHASES, RDF_LEVELS } from '~/utils/constants'
 import { getIndividuals as getIndividualsRDF } from '~/utils/rdf'
-import { getIndividuals as getIndividualsES } from '~/utils/elastic'
+import {
+  getAllIndividuals as getIndividualsES,
+  getFilteredIndividuals
+} from '~/utils/elastic'
 
 const isFiltered = state => {
   return (
@@ -13,8 +16,8 @@ export const state = () => ({
   vars: [],
   viewMode: 'map',
   individuals: {},
+  displayedIdentifiers: new Set(),
   aggs: {},
-  individualCount: 0,
   points: [],
   sexes: RDF_SEXES.values,
   ages: RDF_AGES.values,
@@ -28,14 +31,59 @@ export const state = () => ({
   filtered: false
 })
 
+export const getters = {
+  displayedCount(state) {
+    if (state.displayedIdentifiers.size === 0)
+      return Object.keys(state.individuals).length
+    return state.displayedIdentifiers.size
+  },
+  displayedIndividuals(state) {
+    if (state.displayedIdentifiers.size === 0) return state.individuals
+
+    let displayed = {}
+
+    for (let i = 0; i < state.displayedIdentifiers.size; i++) {
+      const identifier = [...state.displayedIdentifiers][i]
+      if (state.individuals[identifier])
+        displayed[identifier] = state.individuals[identifier]
+    }
+
+    return displayed
+  },
+  displayedIndividualsWithBonesCount(state, getters) {
+    return getters.displayedIndividualsWithBones.length
+  },
+  displayedIndividualsWithBones(state) {
+    let individuals = []
+
+    for (let i = 0; i < state.displayedIdentifiers.size; i++) {
+      const identifier = [...state.displayedIdentifiers][i]
+      const individual = state.individuals[identifier]
+      if (individual && individual.skeleton && individual.skeleton.length > 0) {
+        individuals.push(individual)
+      }
+    }
+
+    individuals.sort((a, b) => b.skeleton.length - a.skeleton.length)
+    return individuals
+  }
+}
+
 export const mutations = {
-  fetchedIndividuals(state, newState) {
+  firstLoadComplete(state, newState) {
     state.vars = newState.vars
     state.individuals = newState.individuals
     state.points = newState.points
-    state.individualCount = newState.individualCount
     state.aggs = newState.aggs
     state.filtered = isFiltered(newState)
+  },
+  fetchedIndividuals(state, newState) {
+    state.displayedIdentifiers = newState.displayedIdentifiers
+    state.aggs = newState.aggs
+    state.filtered = isFiltered(newState)
+    state.vars = newState.vars || state.vars
+    state.individuals = newState.individuals || state.individuals
+    state.points = newState.points || state.points
   },
   toggleViewMode(state, mode) {
     state.viewMode = mode
@@ -98,10 +146,9 @@ export const mutations = {
 }
 
 export const actions = {
-  async fetchIndividuals({ commit, state }) {
-    if (process.browser) {
-      window.$nuxt.$root.$loading.start()
-    }
+  async nuxtServerInit({ commit }, { route }) {
+    if (route.name !== 'map-state' && route.name !== 'grid-state') return // no need to load the data
+
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
 
     // TODO: fix limit magic number
@@ -110,23 +157,52 @@ export const actions = {
     //   filters: filters
     // })
 
-    let { vars, individuals, count, points, aggs } = await getIndividualsES({
-      filters: filters
+    const { vars, individuals, points, aggs } = await getBaseIndividuals({
+      filters
     })
 
-    let newState = {
+    const newState = {
       vars: { individuals: vars },
       checkedAges: new Set(state.checkedAges),
       checkedSexes: new Set(state.checkedSexes),
       individuals,
-      individualCount: count,
       points,
-      filtered: isFiltered(state),
+      filtered: false,
       aggs
     }
-    if (process.browser) {
-      window.$nuxt.$root.$loading.finish()
+    commit('firstLoadComplete', newState)
+  },
+  async fetchIndividuals({ commit, state }) {
+    const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
+
+    const { identifiers, aggs } = await getFilteredIndividuals({
+      filters: filters
+    })
+
+    let newState = {
+      checkedAges: state.checkedAges,
+      checkedSexes: state.checkedSexes,
+      displayedIdentifiers: new Set(identifiers),
+      aggs
     }
+
+    // check to see if nothing is there
+    if (!state.individuals || Object.keys(state.individuals).length === 0) {
+      let { vars, individuals, points, aggs } = await getBaseIndividuals({
+        filters
+      })
+      newState.vars = vars
+      newState.individuals = individuals
+      newState.points = points
+    }
+
     commit('fetchedIndividuals', newState)
   }
+}
+
+const getBaseIndividuals = async ({ filters }) => {
+  const { vars, individuals, points, aggs } = await getIndividualsES({
+    filters
+  })
+  return { vars, individuals, points, aggs }
 }

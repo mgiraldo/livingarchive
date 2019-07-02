@@ -11,11 +11,13 @@
         {{ individual.sex }}
       </div>
     </div>
-    <span>
-      <nuxt-link :to="'/skeleton/' + individual.identifier" target="_blank">
-        open skeleton
-      </nuxt-link>
-    </span>
+    <nuxt-link
+      :to="'/skeleton/' + individual.identifier"
+      class="skeleton-link"
+      target="_blank"
+    >
+      open skeleton
+    </nuxt-link>
     <div
       v-if="individual.discussion && individual.discussion !== 'NULL'"
       :id="individual.identifier + '-more'"
@@ -90,6 +92,10 @@ export default {
 .sex {
   border-left: 0.75rem solid transparent;
   padding-left: 0.25rem;
+}
+.skeleton-link {
+  display: inline-block;
+  margin-bottom: 0.25rem;
 }
 .discussion {
   margin: 0.5rem 0;

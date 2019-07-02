@@ -188,15 +188,8 @@ export const getSkeleton = async identifier => {
   let geoShape = geoData.data.results.bindings.map(
     binding => binding.coordinates.value
   )
-  let shapeIsPoint = false
-  if (Array.isArray(geoShape) && geoShape.length === 1) {
-    const parsed = wellknown.parse(geoShape[0])
-    if (parsed.type === 'Point') {
-      shapeIsPoint = true
-    }
-  }
 
-  return { skeleton: skeleton, shape: geoShape, shapeIsPoint: shapeIsPoint }
+  return { skeleton: skeleton, shape: geoShape }
 }
 
 export const getBuilding = async identifier => {

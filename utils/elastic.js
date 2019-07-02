@@ -8,7 +8,7 @@ import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
-const querySize = 6000
+const querySize = 600
 
 const performESQuery = async query => {
   const instance = axios.create({
@@ -34,7 +34,13 @@ const performESQuery = async query => {
     }
   )
 
-  return results
+  let aggs = getAggregations(results.data.aggregations)
+
+  return {
+    results: results.data.hits.hits,
+    count: results.data.hits.total.value,
+    aggs
+  }
 }
 
 const buildQuery = params => {
@@ -54,20 +60,7 @@ const buildQuery = params => {
   return query.build()
 }
 
-export const getIndividuals = async ({ filters }) => {
-  const sources = [
-    'level',
-    'phase',
-    'identifier',
-    'description',
-    'sex',
-    'spatial_list',
-    'age',
-    'discussion',
-    'individual',
-    'unit'
-  ]
-
+const parseFilters = filters => {
   let esFilters = []
 
   let ages = filters.ages ? Array.from(filters.ages) : []
@@ -85,15 +78,59 @@ export const getIndividuals = async ({ filters }) => {
   if (sexFilter.length)
     esFilters.push({ type: 'sex.keyword', value: sexFilter })
 
-  let params = {
+  return esFilters
+}
+
+/**
+ * Get a compacted version of the individuals that we then compared to the store
+ * @param {*} param0 the filters to apply
+ * @returns {object} the results in form `{ identifiers, aggs, count }`
+ */
+export const getFilteredIndividuals = async ({ filters }) => {
+  const source = 'individual'
+  const esFilters = parseFilters(filters)
+
+  let query = buildQuery({
+    source: [source],
+    filters: esFilters
+  })
+
+  const { results, aggs, count } = await performESQuery(query)
+
+  let identifiers = results.map(hit => cleanString(hit._source[source]))
+
+  return { identifiers, aggs, count }
+}
+
+/**
+ * Get a compacted version of the individuals that we then compared to the store
+ * @param {*} param0 the filters to apply
+ * @returns {object} the results in form `{ count, individuals, vars: sources, points, aggs }`
+ */
+export const getAllIndividuals = async ({ filters }) => {
+  const sources = [
+    'level',
+    'phase',
+    'identifier',
+    'description',
+    'sex',
+    'spatial_list',
+    'age',
+    'discussion',
+    'individual',
+    'unit'
+  ]
+
+  const esFilters = parseFilters(filters)
+
+  let query = buildQuery({
     source: sources,
     filters: esFilters
-  }
-  let query = buildQuery(params)
-  let queryResults = await performESQuery(query)
-  const count = queryResults.data.hits.total.value
-  let aggs = getAggregations(queryResults.data.aggregations)
-  let temp = queryResults.data.hits.hits.map(hit => {
+  })
+
+  const { results, aggs, count } = await performESQuery(query)
+
+  let temp = results.map(hit => {
     let individual = {}
     sources.forEach(source => {
       individual[source] = cleanString(hit._source[source])
@@ -105,7 +142,7 @@ export const getIndividuals = async ({ filters }) => {
   let points = []
   // TODO: remove extra looping
   temp.forEach(element => {
-    let identifier = element.identifier
+    let identifier = element.individual
     if (individuals[identifier] === undefined) {
       individuals[identifier] = element
       individuals[identifier].skeleton = []

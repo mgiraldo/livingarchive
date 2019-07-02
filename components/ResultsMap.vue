@@ -105,9 +105,7 @@ export default {
     FilterColorItem,
     BonesFindView
   },
-  props: {
-    individuals: { type: Object, required: true }
-  },
+  props: {},
   data() {
     return {
       tilelayers: TILELAYERS,
@@ -118,6 +116,9 @@ export default {
   computed: {
     legendType() {
       return this.$store.state.legendType
+    },
+    individuals() {
+      return this.$store.getters.displayedIndividuals
     },
     legend() {
       if (this.$store.state.legendType === 'age') {

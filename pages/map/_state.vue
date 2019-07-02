@@ -13,7 +13,7 @@
         <ul class="results-list">
           <li
             is="result-item"
-            v-for="individual in individuals"
+            v-for="individual in displayedIndividuals"
             :key="individual.identifier"
             :individual="individual"
             :vars="vars"
@@ -23,7 +23,7 @@
         </ul>
       </section>
       <div class="resizer" @mousedown="resizeDown">⋮</div>
-      <results-map ref="mapPane" :individuals="individuals" />
+      <!-- <results-map ref="mapPane" /> -->
     </div>
   </div>
 </template>
@@ -59,16 +59,13 @@ export default {
   },
   computed: {
     individualCount() {
-      return this.displayedIndividuals //this.$store.state.individualCount
+      return this.$store.getters.displayedCount
+    },
+    displayedIndividuals() {
+      return this.$store.getters.displayedIndividuals
     },
     vars() {
       return this.$store.state.vars.individuals
-    },
-    individuals() {
-      return this.$store.state.individuals
-    },
-    displayedIndividuals() {
-      return Object.keys(this.$store.state.individuals).length
     }
   },
   fetch: async function({ store, params }) {

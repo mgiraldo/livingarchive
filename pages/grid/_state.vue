@@ -11,7 +11,7 @@
       </p>
       <div ref="grid" class="results-list">
         <grid-view-item
-          v-for="individual in individuals"
+          v-for="individual in displayedIndividuals"
           :key="individual.identifier"
           :individual="individual"
           :show-click="gridItemClick"
@@ -51,24 +51,13 @@ export default {
   },
   computed: {
     individualCount() {
-      return this.$store.state.individualCount
+      return this.$store.getters.displayedCount
     },
-    individuals() {
-      let individuals = []
-      for (const identifier in this.$store.state.individuals) {
-        const individual = this.$store.state.individuals[identifier]
-        if (individual.skeleton && individual.skeleton.length > 0) {
-          individuals.push(individual)
-        }
-      }
-      individuals.sort((a, b) => b.skeleton.length - a.skeleton.length)
-      return individuals
+    displayedIndividuals() {
+      return this.$store.getters.displayedIndividualsWithBones
     },
     selectedIndividual() {
       return this.selectedGridItem ? this.selectedGridItem.individual : null
-    },
-    displayedIndividuals() {
-      return this.individuals.length
     },
     row() {
       return this.rowNumber

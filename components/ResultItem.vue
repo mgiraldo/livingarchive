@@ -3,12 +3,21 @@
     :key="individual.identifier"
     class="list-item"
     :identifier="individual.identifier"
-    @mouseenter="showControls"
-    @mouseleave="hideControls"
   >
     <individual-info :individual="individual" />
-    <div v-show="controlsToggled" class="actions">
-      show:&nbsp;
+    <button
+      class="link-button"
+      :aria-controls="'controls-' + individual.identifier"
+      @click="toggleControls"
+    >
+      {{ controlsToggled ? 'hide controls' : 'show controls' }}
+    </button>
+    <div
+      v-show="controlsToggled"
+      :id="'controls-' + individual.identifier"
+      class="actions"
+    >
+      Show:&nbsp;
       <button class="link-button" @click="showClick(individual)">
         on map
       </button>
@@ -55,11 +64,8 @@ export default {
     }
   },
   methods: {
-    showControls() {
-      this.controlsToggled = true
-    },
-    hideControls() {
-      this.controlsToggled = false
+    toggleControls() {
+      this.controlsToggled = !this.controlsToggled
     }
   }
 }
@@ -68,8 +74,6 @@ export default {
 <style lang="scss" scoped>
 .list-item {
   border-top: 0.05rem solid $global-border-color;
-  display: flex;
-  flex-direction: column;
   margin-bottom: 0;
   padding: 0.2rem 0.2rem 1rem;
 

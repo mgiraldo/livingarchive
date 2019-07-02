@@ -84,7 +84,7 @@ export default {
       return nonEmpty
     },
     totalResults() {
-      return this.$store.state.individualCount
+      return Object.keys(this.$store.state.individuals).length
     }
   },
   methods: {
@@ -93,7 +93,8 @@ export default {
     },
     aggPercent(value) {
       if (!value) return 'None'
-      return Math.round((value / this.$store.state.individualCount) * 100)
+      const pct = Math.round((value / this.$store.getters.displayedCount) * 100)
+      return pct <= 100 ? pct : 100
     },
     toggle() {
       this.open = !this.open
