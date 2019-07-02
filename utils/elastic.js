@@ -54,7 +54,7 @@ const buildQuery = params => {
   return query.build()
 }
 
-export const getIndividuals = async ({ limit = 0, filters }) => {
+export const getIndividuals = async ({ filters }) => {
   const sources = [
     'level',
     'phase',
