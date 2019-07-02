@@ -8,7 +8,7 @@ import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
-const querySize = 600
+const querySize = 60
 
 const performESQuery = async query => {
   const instance = axios.create({
@@ -145,7 +145,7 @@ export const getAllIndividuals = async ({ filters }) => {
     let identifier = element.individual
     if (individuals[identifier] === undefined) {
       individuals[identifier] = element
-      individuals[identifier].skeleton = []
+      individuals[identifier].skeleton = new Set()
       let point = wellknown.parse(EMPTY_LONLAT)
       individuals[identifier].point = point
       // create a point for the bones in the first spatial
@@ -154,14 +154,16 @@ export const getAllIndividuals = async ({ filters }) => {
         if (point.type !== 'Point') {
           point = center(point).geometry
         }
-        individuals[identifier].skeleton = element.spatial_list
+        for (let bone of element.spatial_list) {
+          individuals[identifier].skeleton.add(bone)
+        }
         individuals[identifier].point = JSON.parse(JSON.stringify(point))
       }
       points.push(point.coordinates)
     } else {
-      individuals[identifier].skeleton = individuals[
-        identifier
-      ].skeleton.concat(element.spatial_list)
+      for (let bone of element.spatial_list) {
+        individuals[identifier].skeleton.add(bone)
+      }
     }
   })
 

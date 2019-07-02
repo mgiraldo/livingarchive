@@ -15,7 +15,7 @@ import {
 
 export default {
   props: {
-    shape: { type: Array, required: true }
+    shape: { type: Set, required: true }
   },
   data() {
     return {}
@@ -27,7 +27,8 @@ export default {
     plotBonesD3() {
       // console.log('plotting', this.shape)
       let features = []
-      this.shape.forEach(wkt => {
+      let shapeArray = [...this.shape]
+      shapeArray.forEach(wkt => {
         const parsed = wellknown.parse(wkt)
         if (parsed.type !== 'Point') {
           features.push(parsed)

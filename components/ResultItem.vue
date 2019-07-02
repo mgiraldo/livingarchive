@@ -5,42 +5,44 @@
     :identifier="individual.identifier"
   >
     <individual-info :individual="individual" />
-    <button
-      class="link-button"
-      :aria-controls="'controls-' + individual.identifier"
-      @click="toggleControls"
-    >
-      {{ controlsToggled ? 'hide controls' : 'show controls' }}
-    </button>
-    <div
-      v-show="controlsToggled"
-      :id="'controls-' + individual.identifier"
-      class="actions"
-    >
-      Show:&nbsp;
-      <button class="link-button" @click="showClick(individual)">
-        on map
+    <div class="actions-wrapper">
+      <button
+        class="actions-toggle link-button no-underline"
+        :aria-controls="'actions-' + individual.identifier"
+        @click="toggleControls"
+      >
+        {{ controlsToggled ? '-' : '+' }}
       </button>
-      <span class="separator">|</span>
-      <button class="link-button">
-        area
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button" @click="buildingClick(individual)">
-        building
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button">
-        space
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button">
-        feature
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button">
-        unit
-      </button>
+      <div
+        v-show="controlsToggled"
+        :id="'actions-' + individual.identifier"
+        class="actions"
+      >
+        Show:&nbsp;
+        <button class="link-button" @click="showClick(individual)">
+          on map
+        </button>
+        <span class="separator">|</span>
+        <button class="link-button">
+          area
+        </button>
+        <span class="separator">←</span>
+        <button class="link-button" @click="buildingClick(individual)">
+          building
+        </button>
+        <span class="separator">←</span>
+        <button class="link-button">
+          space
+        </button>
+        <span class="separator">←</span>
+        <button class="link-button">
+          feature
+        </button>
+        <span class="separator">←</span>
+        <button class="link-button">
+          unit
+        </button>
+      </div>
     </div>
   </li>
 </template>
@@ -73,13 +75,18 @@ export default {
 
 <style lang="scss" scoped>
 .list-item {
-  border-top: 0.05rem solid $global-border-color;
-  margin-bottom: 0;
-  padding: 0.2rem 0.2rem 1rem;
-
-  &:hover {
-    background-color: lighten($color: $global-background-color, $amount: 10%);
-  }
+  border-bottom: 0.1rem solid $global-border-color;
+  margin-bottom: 1rem;
+  padding: 0;
+}
+.actions-wrapper {
+  align-items: flex-start;
+  background-color: $lighter-background-color;
+  display: flex;
+  padding: 0.2rem 0.2rem 1rem 0.2rem;
+}
+.actions-toggle {
+  width: 1rem;
 }
 .actions {
   display: flex;

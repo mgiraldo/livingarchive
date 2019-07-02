@@ -189,7 +189,7 @@ export const getSkeleton = async identifier => {
     binding => binding.coordinates.value
   )
 
-  return { skeleton: skeleton, shape: geoShape }
+  return { skeleton: skeleton, shape: new Set(geoShape) }
 }
 
 export const getBuilding = async identifier => {

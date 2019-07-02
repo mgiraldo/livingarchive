@@ -107,7 +107,7 @@ export const mutations = {
     state.filtered = isFiltered(state)
   },
   checkedFilter(state, { filter, index, value }) {
-    console.log(filter, index, value)
+    // console.log(filter, index, value)
     if (value === false) {
       state['checked' + filter].delete(index)
     } else {

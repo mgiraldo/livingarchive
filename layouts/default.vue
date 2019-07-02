@@ -56,6 +56,10 @@ a {
   margin-bottom: 1rem;
   padding: 0;
 
+  &.no-underline {
+    text-decoration: none;
+  }
+
   &:hover {
     text-decoration: none;
   }
