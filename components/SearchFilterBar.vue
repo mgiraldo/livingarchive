@@ -7,8 +7,14 @@
 <script>
 export default {
   props: {
-    percent: { type: Number, required: true },
+    total: { type: Number, required: true },
     value: { type: Number, required: true }
+  },
+  computed: {
+    percent() {
+      let pct = Math.round((this.value / this.total) * 100)
+      return pct < 100 ? pct : 100
+    }
   }
 }
 </script>

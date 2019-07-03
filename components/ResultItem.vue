@@ -7,11 +7,11 @@
     <individual-info :individual="individual" />
     <div class="actions-wrapper">
       <button
-        class="actions-toggle link-button no-underline"
+        class="link-button no-underline"
         :aria-controls="'actions-' + individual.identifier"
         @click="toggleControls"
       >
-        {{ controlsToggled ? '-' : '+' }}
+        <disclosure-icon :open="controlsToggled" label="Show controls" />
       </button>
       <div
         v-show="controlsToggled"
@@ -49,10 +49,12 @@
 
 <script>
 import IndividualInfo from '~/components/IndividualInfo'
+import DisclosureIcon from '~/components/DisclosureIcon'
 
 export default {
   components: {
-    IndividualInfo
+    IndividualInfo,
+    DisclosureIcon
   },
   props: {
     individual: { type: Object, required: true },
@@ -84,9 +86,6 @@ export default {
   background-color: $lighter-background-color;
   display: flex;
   padding: 0.2rem 0.2rem 1rem 0.2rem;
-}
-.actions-toggle {
-  width: 1rem;
 }
 .actions {
   display: flex;

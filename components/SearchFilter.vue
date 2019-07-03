@@ -1,16 +1,14 @@
 <template>
   <section class="filter">
     <h1 :aria-controls="'facet_' + facet.name + '_toggle'" @click="toggle">
-      <span :class="'toggle ' + (open ? 'open' : '')" aria-label="Toggle facet"
-        >✕</span
-      >
+      <disclosure-icon :open="open" label="Toggle facet" />
       {{ facet.name }}
     </h1>
     <transition name="fade">
       <div :id="'facet_' + facet.name + '_toggle'">
         <ul v-if="type !== 'skeleton'" v-show="open">
           <li
-            v-for="(color, name, index) in nonEmptyFacets"
+            v-for="(color, name, index) in presentFacets"
             :key="index"
             class="facet"
           >
@@ -20,15 +18,11 @@
                 type="checkbox"
                 :value="index"
                 :checked="inStore(facet.name, name)"
-                :disabled="aggPercent(aggregations[name]) === 0"
                 @change="toggled(facet.name, name, $event.target.checked)"
               />
               <filter-color-item :name="name" :color="color" />
             </label>
-            <search-filter-bar
-              :percent="aggPercent(aggregations[name])"
-              :value="aggregations[name]"
-            />
+            <search-filter-bar :total="total" :value="aggregations[name]" />
           </li>
         </ul>
         <skeleton-aggregations
@@ -37,8 +31,18 @@
           :key="$route.fullPath"
           :aggregations="fixedAggregations"
         />
-        <div v-if="type === 'skeleton' && open">
-          <ul>
+        <div v-if="type === 'skeleton'">
+          <button
+            v-show="open"
+            class="bones-toggle link-button no-underline"
+            aria-controls="bones"
+            @click="toggleBones"
+          >
+            <disclosure-icon :open="bonesOpen" label="" />
+            {{ bonesOpen ? 'Hide' : 'Show' }} bones
+          </button>
+
+          <ul v-if="bonesOpen" id="bones">
             <li
               v-for="(value, aggregation, index) in fixedAggregations"
               :key="index"
@@ -47,7 +51,7 @@
               <div class="bone-label">
                 {{ aggregation }}
               </div>
-              <search-filter-bar :percent="aggPercent(value)" :value="value" />
+              <search-filter-bar :total="total" :value="value" />
             </li>
           </ul>
         </div>
@@ -62,28 +66,35 @@ import { updateRouter } from '~/utils/router'
 import FilterColorItem from '~/components/FilterColorItem'
 import SearchFilterBar from '~/components/SearchFilterBar'
 import SkeletonAggregations from '~/components/SkeletonAggregations'
+import DisclosureIcon from '~/components/DisclosureIcon'
 
 export default {
-  components: { FilterColorItem, SkeletonAggregations, SearchFilterBar },
+  components: {
+    FilterColorItem,
+    SkeletonAggregations,
+    SearchFilterBar,
+    DisclosureIcon
+  },
   props: {
     facet: { type: Object, required: true },
     type: { type: String, default: 'list' },
     aggregations: { type: Object, default: null }
   },
   data() {
-    return { open: false }
+    return { open: false, bonesOpen: false }
   },
   computed: {
-    nonEmptyFacets() {
-      let nonEmpty = {}
-      for (const facet in this.facet.values) {
-        if (this.aggPercent(this.aggregations[facet]) > 0)
-          nonEmpty[facet] = this.facet.values[facet]
-      }
-      return nonEmpty
+    total() {
+      return this.$store.getters.individualCount
     },
-    totalResults() {
-      return Object.keys(this.$store.state.individuals).length
+    presentFacets() {
+      if (this.type === 'skeleton') return null
+      let facets = {}
+      let aggs = Object.keys(this.aggregations)
+      aggs.forEach(agg => {
+        facets[agg] = this.facet.values[agg]
+      })
+      return facets
     },
     fixedAggregations() {
       if (this.type !== 'skeleton') return this.aggregations
@@ -103,13 +114,6 @@ export default {
     cleanBone(bone) {
       return bone.substring(0, bone.lastIndexOf('-'))
     },
-    aggPercent(value) {
-      if (!value) return 0
-      const pct = Math.round(
-        (value / this.$store.getters.individualCount) * 100
-      )
-      return pct <= 100 ? pct : 100
-    },
     toggle() {
       this.open = !this.open
     },
@@ -121,6 +125,10 @@ export default {
     inStore(filter, name) {
       const index = Object.keys(this.facet.values).indexOf(name)
       return this.$store.state['checked' + filter].has(index)
+    },
+    toggleBones(e) {
+      e.preventDefault()
+      this.bonesOpen = !this.bonesOpen
     }
   }
 }
@@ -138,19 +146,6 @@ export default {
     font-weight: normal;
     margin-bottom: 0.5rem;
     text-transform: uppercase;
-  }
-}
-.toggle {
-  align-self: center;
-  justify-self: center;
-  text-align: center;
-  transform: rotate(-45deg);
-  transition: transform 0.1s ease-in;
-  width: 1.5rem;
-  line-height: 0;
-
-  &.open {
-    transform: rotate(0deg);
   }
 }
 .fade-enter-active,
@@ -187,5 +182,8 @@ input {
 }
 .bone-label {
   margin-bottom: 0.25rem;
+}
+.bones-toggle {
+  display: flex;
 }
 </style>
