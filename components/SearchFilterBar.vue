@@ -8,7 +8,7 @@
 export default {
   props: {
     percent: { type: Number, required: true },
-    value: { type: String, required: true }
+    value: { type: Number, required: true }
   }
 }
 </script>

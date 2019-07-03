@@ -1,7 +1,9 @@
 <template>
   <section class="filter">
     <h1 :aria-controls="'facet_' + facet.name + '_toggle'" @click="toggle">
-      <span class="toggle">{{ open ? '-' : '+' }}</span>
+      <span :class="'toggle ' + (open ? 'open' : '')" aria-label="Toggle facet"
+        >✕</span
+      >
       {{ facet.name }}
     </h1>
     <transition name="fade">
@@ -131,6 +133,7 @@ export default {
 
   h1 {
     cursor: pointer;
+    display: flex;
     font-size: 1.25rem;
     font-weight: normal;
     margin-bottom: 0.5rem;
@@ -138,9 +141,17 @@ export default {
   }
 }
 .toggle {
-  display: inline-block;
+  align-self: center;
+  justify-self: center;
   text-align: center;
-  width: 1rem;
+  transform: rotate(-45deg);
+  transition: transform 0.1s ease-in;
+  width: 1.5rem;
+  line-height: 0;
+
+  &.open {
+    transform: rotate(0deg);
+  }
 }
 .fade-enter-active,
 .fade-leave-active {
