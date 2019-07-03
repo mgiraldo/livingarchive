@@ -53,7 +53,6 @@ a {
   color: $global-link-color;
   cursor: pointer;
   font: inherit;
-  margin-bottom: 1em;
   padding: 0;
 
   &.no-underline {

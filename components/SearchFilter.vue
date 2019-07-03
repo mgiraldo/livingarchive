@@ -1,7 +1,7 @@
 <template>
   <section class="filter">
     <h1 :aria-controls="'facet_' + facet.name + '_toggle'" @click="toggle">
-      <disclosure-icon :open="open" label="Toggle facet" />
+      <disclosure-icon :open="open" class="icon" label="Toggle facet" />
       {{ facet.name }}
     </h1>
     <transition name="fade">
@@ -42,7 +42,7 @@
             {{ bonesOpen ? 'Hide' : 'Show' }} bones
           </button>
 
-          <ul v-if="bonesOpen" id="bones">
+          <ul v-if="open && bonesOpen" id="bones">
             <li
               v-for="(value, aggregation, index) in fixedAggregations"
               :key="index"
@@ -136,7 +136,6 @@ export default {
 
 <style lang="scss" scoped>
 .filter {
-  border-bottom: 0.1rem solid $global-border-color;
   margin-bottom: 1rem;
 
   h1 {
@@ -147,6 +146,9 @@ export default {
     margin-bottom: 0.5rem;
     text-transform: uppercase;
   }
+}
+.icon {
+  margin-right: 0.25rem;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -161,11 +163,9 @@ ul {
   padding: 0;
 }
 .facet {
-  border-bottom: 0.1rem solid $global-border-color;
   margin-bottom: 1rem;
 
   &:last-child {
-    border-bottom: none;
     margin-bottom: 0;
   }
 }
@@ -185,5 +185,7 @@ input {
 }
 .bones-toggle {
   display: flex;
+  margin-bottom: 0.5rem;
+  margin-left: 0.25rem;
 }
 </style>

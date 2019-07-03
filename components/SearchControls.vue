@@ -58,6 +58,7 @@ export default {
 .controls {
   background-color: lighten($color: $global-background-color, $amount: 5%);
   font-size: 0.8rem;
+  overflow-y: scroll;
   padding: 0.5rem;
 }
 .filter-button {

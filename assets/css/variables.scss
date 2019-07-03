@@ -1,10 +1,10 @@
 $global-background-color:rgb(33, 33, 33);
-$global-alert-color: rgb(255, 60, 0);
 $global-text-color:rgb(232, 232, 232);
+$global-alert-color: $global-text-color;
 $global-border-color:darken($global-text-color,30%);
 $global-link-color: hsla(42, 100%, 75%, 1);
 
-$lighter-background-color: lighten($global-background-color,10%);
+$lighter-background-color: lighten($global-background-color,5%);
 $grid-expansion-color: lighten($global-background-color, 10%);
 
 $aggregation-bar-background-color: lighten($global-background-color,6%);

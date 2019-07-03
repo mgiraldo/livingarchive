@@ -7,7 +7,7 @@
     <individual-info :individual="individual" />
     <div class="actions-wrapper">
       <button
-        class="link-button no-underline"
+        class="actions-toggle link-button no-underline"
         :aria-controls="'actions-' + individual.identifier"
         @click="toggleControls"
       >
@@ -77,15 +77,19 @@ export default {
 
 <style lang="scss" scoped>
 .list-item {
-  border-bottom: 0.1rem solid $global-border-color;
+  background-color: $lighter-background-color;
   margin-bottom: 1rem;
-  padding: 0;
+  padding: 0 0.25rem;
 }
 .actions-wrapper {
-  align-items: flex-start;
-  background-color: $lighter-background-color;
+  align-items: center;
   display: flex;
-  padding: 0.2rem 0.2rem 1rem 0.2rem;
+  line-height: 1;
+  padding: 0.2rem 0 1.5rem 0;
+}
+.actions-toggle {
+  margin-right: 0.25rem;
+  min-height: 1rem;
 }
 .actions {
   display: flex;
