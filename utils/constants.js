@@ -13,7 +13,7 @@ export const RDF_TIMEOUT = 10000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 
-export const ELASTIC_AGGS = ['phase', 'age', 'level', 'sex'] //, 'bones.bone']
+export const ELASTIC_AGGS = ['phase', 'age', 'level', 'sex', 'bones.bone']
 
 export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building
 

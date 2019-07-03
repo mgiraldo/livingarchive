@@ -31,24 +31,26 @@
             </div>
           </li>
         </ul>
-        <skeleton-front
+        <skeleton-aggregations
           v-if="type === 'skeleton'"
           v-show="open"
-          id="skeleton-control"
-          class="skeleton"
+          :aggregations="fixedAggregations"
         />
         <div v-if="type === 'skeleton' && open">
-          <!-- <ul>
+          <ul>
             <li
-              v-for="(value, aggregation, index) in aggregations"
+              v-for="(value, aggregation, index) in fixedAggregations"
               :key="index"
               class="facet"
             >
+              <div class="bone-label">
+                {{ aggregation }}
+              </div>
               <div :class="'aggregation agg-' + aggPercent(value)">
-                {{ cleanBone(aggregation) }} {{ value }}
+                {{ value }}
               </div>
             </li>
-          </ul> -->
+          </ul>
         </div>
       </div>
     </transition>
@@ -59,10 +61,10 @@
 import { updateRouter } from '~/utils/router'
 
 import FilterColorItem from '~/components/FilterColorItem'
-import SkeletonFront from '~/assets/skeleton-front.svg'
+import SkeletonAggregations from '~/components/SkeletonAggregations'
 
 export default {
-  components: { FilterColorItem, SkeletonFront },
+  components: { FilterColorItem, SkeletonAggregations },
   props: {
     facet: { type: Object, required: true },
     type: { type: String, default: 'list' },
@@ -85,6 +87,19 @@ export default {
     },
     totalResults() {
       return Object.keys(this.$store.state.individuals).length
+    },
+    fixedAggregations() {
+      if (this.type !== 'skeleton') return this.aggregations
+      let fixedAggregations = {}
+      for (const aggregation in this.aggregations) {
+        const bone = this.cleanBone(aggregation)
+        if (fixedAggregations[bone]) {
+          fixedAggregations[bone] += this.aggregations[aggregation]
+        } else {
+          fixedAggregations[bone] = this.aggregations[aggregation]
+        }
+      }
+      return fixedAggregations
     }
   },
   methods: {
@@ -93,7 +108,9 @@ export default {
     },
     aggPercent(value) {
       if (!value) return 'None'
-      const pct = Math.round((value / this.$store.getters.displayedCount) * 100)
+      const pct = Math.round(
+        (value / this.$store.getters.individualCount) * 100
+      )
       return pct <= 100 ? pct : 100
     },
     toggle() {
@@ -151,6 +168,14 @@ ul {
     margin-bottom: 0;
   }
 }
+label {
+  cursor: pointer;
+  display: flex;
+  margin-bottom: 0.25rem;
+}
+input {
+  margin-right: 0.5rem;
+}
 .aggregation {
   display: flex;
   padding-bottom: 0.125rem;
@@ -171,12 +196,7 @@ ul {
 .skeleton {
   margin-bottom: 1rem;
 }
-label {
-  cursor: pointer;
-  display: flex;
+.bone-label {
   margin-bottom: 0.25rem;
-}
-input {
-  margin-right: 0.5rem;
 }
 </style>
