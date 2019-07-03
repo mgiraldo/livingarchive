@@ -15,6 +15,7 @@ export const state = () => ({
   vars: [],
   viewMode: 'map',
   individuals: {},
+  count: 0,
   displayedIdentifiers: new Set(),
   aggs: {},
   points: [],
@@ -32,7 +33,7 @@ export const state = () => ({
 
 export const getters = {
   individualCount(state) {
-    return Object.keys(state.individuals).length
+    return state.count
   },
   displayedCount(state) {
     if (state.displayedIdentifiers.size === 0)
@@ -77,11 +78,13 @@ export const mutations = {
     state.individuals = newState.individuals
     state.points = newState.points
     state.aggs = newState.aggs
+    state.count = newState.count
     state.filtered = isFiltered(newState)
   },
   fetchedIndividuals(state, newState) {
     state.displayedIdentifiers = newState.displayedIdentifiers
     state.aggs = newState.aggs
+    state.count = newState.count
     state.filtered = isFiltered(newState)
     state.vars = newState.vars || state.vars
     state.individuals = newState.individuals || state.individuals
@@ -164,9 +167,11 @@ export const actions = {
     //   filters: filters
     // })
 
-    const { vars, individuals, points, aggs } = await getBaseIndividuals({
-      filters
-    })
+    const { vars, individuals, points, aggs, count } = await getBaseIndividuals(
+      {
+        filters
+      }
+    )
 
     const newState = {
       vars: { individuals: vars },
@@ -182,7 +187,7 @@ export const actions = {
   async fetchIndividuals({ commit, state }) {
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
 
-    const { identifiers, aggs } = await getFilteredIndividuals({
+    const { identifiers, aggs, count } = await getFilteredIndividuals({
       filters: filters
     })
 
@@ -190,18 +195,22 @@ export const actions = {
       checkedAges: state.checkedAges,
       checkedSexes: state.checkedSexes,
       displayedIdentifiers: new Set(identifiers),
-      aggs
+      aggs,
+      count
     }
 
     // check to see if nothing is there
     if (!state.individuals || Object.keys(state.individuals).length === 0) {
-      let { vars, individuals, points, aggs } = await getBaseIndividuals({
-        filters
-      })
+      let { vars, individuals, points, aggs, count } = await getBaseIndividuals(
+        {
+          filters
+        }
+      )
       newState.vars = vars
       newState.individuals = individuals
       newState.points = points
       newState.aggs = aggs
+      newState.count = count
     }
 
     commit('fetchedIndividuals', newState)
@@ -209,8 +218,8 @@ export const actions = {
 }
 
 const getBaseIndividuals = async ({ filters }) => {
-  const { vars, individuals, points, aggs } = await getIndividualsES({
+  const { vars, individuals, points, aggs, count } = await getIndividualsES({
     filters
   })
-  return { vars, individuals, points, aggs }
+  return { vars, individuals, points, aggs, count }
 }

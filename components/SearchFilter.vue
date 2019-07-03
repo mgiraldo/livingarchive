@@ -34,6 +34,7 @@
         <skeleton-aggregations
           v-if="type === 'skeleton'"
           v-show="open"
+          :key="$route.fullPath"
           :aggregations="fixedAggregations"
         />
         <div v-if="type === 'skeleton' && open">

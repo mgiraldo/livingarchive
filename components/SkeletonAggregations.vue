@@ -14,7 +14,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      console.log(this.aggregations)
+      this.updateSkeleton()
+    })
+  },
+  methods: {
+    updateSkeleton() {
       let prefix = '#skeleton-front-'
       let skeletonElement = document.querySelector('#skeleton-control')
       skeletonElement.querySelectorAll('path').forEach(elem => {
@@ -26,7 +30,6 @@ export default {
         if (boneElem) {
           boneElem.querySelectorAll('path').forEach(elem => {
             const value = this.aggregations[bone]
-            console.log(value, this.aggPercent(value))
             if (value) {
               elem.style.fill = BONE_FILL_COLOR
               elem.style.opacity =
@@ -35,9 +38,7 @@ export default {
           })
         }
       }
-    })
-  },
-  methods: {
+    },
     aggPercent(value) {
       if (!value) return 0
       const pct = value / this.$store.getters.individualCount
