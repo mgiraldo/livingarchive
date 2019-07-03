@@ -62,7 +62,7 @@ export const getters = {
     for (let i = 0; i < state.displayedIdentifiers.size; i++) {
       const identifier = [...state.displayedIdentifiers][i]
       const individual = state.individuals[identifier]
-      if (individual && individual.skeleton && individual.skeleton.length > 0) {
+      if (individual && individual.skeleton && individual.skeleton.size > 0) {
         individuals.push(individual)
       }
     }
