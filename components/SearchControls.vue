@@ -10,15 +10,15 @@
         Clear filters
       </button>
     </transition>
-    <search-filter :aggregations="aggs('sex')" :facet="sexes" />
-    <search-filter :aggregations="aggs('age')" :facet="ages" />
-    <search-filter :aggregations="aggs('level')" :facet="levels" />
-    <search-filter :aggregations="aggs('phase')" :facet="phases" />
     <search-filter
       :aggregations="aggs('bones.bone')"
       :facet="{ name: 'Skeleton' }"
       type="skeleton"
     />
+    <search-filter :aggregations="aggs('sex')" :facet="sexes" />
+    <search-filter :aggregations="aggs('age')" :facet="ages" />
+    <search-filter :aggregations="aggs('level')" :facet="levels" />
+    <search-filter :aggregations="aggs('phase')" :facet="phases" />
   </form>
 </template>
 
