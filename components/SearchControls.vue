@@ -10,15 +10,32 @@
         Clear filters
       </button>
     </transition>
-    <search-filter
+    <search-filter-skeleton
+      class="filter"
       :aggregations="aggs('bones.bone')"
       :facet="{ name: 'Skeleton' }"
       type="skeleton"
     />
-    <search-filter :aggregations="aggs('sex')" :facet="sexes" />
-    <search-filter :aggregations="aggs('age')" :facet="ages" />
-    <search-filter :aggregations="aggs('level')" :facet="levels" />
-    <search-filter :aggregations="aggs('phase')" :facet="phases" />
+    <search-filter-standard
+      class="filter"
+      :aggregations="aggs('sex')"
+      :facet="sexes"
+    />
+    <search-filter-standard
+      class="filter"
+      :aggregations="aggs('age')"
+      :facet="ages"
+    />
+    <search-filter-standard
+      class="filter"
+      :aggregations="aggs('level')"
+      :facet="levels"
+    />
+    <search-filter-standard
+      class="filter"
+      :aggregations="aggs('phase')"
+      :facet="phases"
+    />
   </form>
 </template>
 
@@ -26,10 +43,11 @@
 import { updateRouter } from '~/utils/router'
 import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
 
-import SearchFilter from '~/components/SearchFilter'
+import SearchFilterStandard from '~/components/SearchFilterStandard'
+import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
 
 export default {
-  components: { SearchFilter },
+  components: { SearchFilterSkeleton, SearchFilterStandard },
   data() {
     return {
       ages: RDF_AGES,
@@ -78,6 +96,9 @@ export default {
     background-color: $global-text-color;
     color: lighten($color: $global-background-color, $amount: 20%);
   }
+}
+.filter {
+  margin-bottom: 1rem;
 }
 .button-slide-fade-enter-active,
 .button-slide-fade-leave-active {

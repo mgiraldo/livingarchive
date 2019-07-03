@@ -134,10 +134,10 @@ export default {
   height: 100vh;
 }
 .controls {
-  flex: 0 0 15rem;
+  flex-basis: 20rem;
   overflow-wrap: anywhere;
   overflow-y: auto;
-  width: 15rem;
+  overflow-y: -moz-scrollbars-vertical;
 }
 .splitview {
   display: flex;

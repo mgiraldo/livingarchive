@@ -67,7 +67,7 @@ export const getters = {
       }
     }
 
-    individuals.sort((a, b) => b.skeleton.length - a.skeleton.length)
+    individuals.sort((a, b) => b.skeleton.size - a.skeleton.size)
     return individuals
   }
 }
