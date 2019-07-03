@@ -6,6 +6,8 @@ $global-link-color: hsla(42, 100%, 75%, 1);
 
 $lighter-background-color: lighten($global-background-color,10%);
 $grid-expansion-color: lighten($global-background-color, 10%);
-$aggregation-bar-background-color: lighten($global-background-color,10%);
+
+$aggregation-bar-background-color: lighten($global-background-color,6%);
 $aggregation-bar-color: lighten($global-background-color,20%);
+
 $filter-button-color: darken($global-link-color,50%);

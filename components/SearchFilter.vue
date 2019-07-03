@@ -18,17 +18,15 @@
                 type="checkbox"
                 :value="index"
                 :checked="inStore(facet.name, name)"
-                :disabled="
-                  aggPercent(aggregations[name]) === 0 ||
-                    aggPercent(aggregations[name]) === 'None'
-                "
+                :disabled="aggPercent(aggregations[name]) === 0"
                 @change="toggled(facet.name, name, $event.target.checked)"
               />
               <filter-color-item :name="name" :color="color" />
             </label>
-            <div :class="'aggregation agg-' + aggPercent(aggregations[name])">
-              {{ aggregations[name] }}
-            </div>
+            <search-filter-bar
+              :percent="aggPercent(aggregations[name])"
+              :value="aggregations[name]"
+            />
           </li>
         </ul>
         <skeleton-aggregations
@@ -47,9 +45,7 @@
               <div class="bone-label">
                 {{ aggregation }}
               </div>
-              <div :class="'aggregation agg-' + aggPercent(value)">
-                {{ value }}
-              </div>
+              <search-filter-bar :percent="aggPercent(value)" :value="value" />
             </li>
           </ul>
         </div>
@@ -62,10 +58,11 @@
 import { updateRouter } from '~/utils/router'
 
 import FilterColorItem from '~/components/FilterColorItem'
+import SearchFilterBar from '~/components/SearchFilterBar'
 import SkeletonAggregations from '~/components/SkeletonAggregations'
 
 export default {
-  components: { FilterColorItem, SkeletonAggregations },
+  components: { FilterColorItem, SkeletonAggregations, SearchFilterBar },
   props: {
     facet: { type: Object, required: true },
     type: { type: String, default: 'list' },
@@ -78,10 +75,7 @@ export default {
     nonEmptyFacets() {
       let nonEmpty = {}
       for (const facet in this.facet.values) {
-        if (
-          this.aggPercent(this.aggregations[facet]) > 0 &&
-          this.aggPercent(this.aggregations[facet]) !== 'None'
-        )
+        if (this.aggPercent(this.aggregations[facet]) > 0)
           nonEmpty[facet] = this.facet.values[facet]
       }
       return nonEmpty
@@ -108,7 +102,7 @@ export default {
       return bone.substring(0, bone.lastIndexOf('-'))
     },
     aggPercent(value) {
-      if (!value) return 'None'
+      if (!value) return 0
       const pct = Math.round(
         (value / this.$store.getters.individualCount) * 100
       )
@@ -176,23 +170,6 @@ label {
 }
 input {
   margin-right: 0.5rem;
-}
-.aggregation {
-  display: flex;
-  padding-bottom: 0.125rem;
-  padding-left: 0.125rem;
-}
-@for $i from 0 through 100 {
-  .agg-#{$i} {
-    background: linear-gradient(
-        to right,
-        $aggregation-bar-color 0%,
-        $aggregation-bar-color #{$i + '%'},
-        $aggregation-bar-background-color #{$i + '%'},
-        $aggregation-bar-background-color
-      )
-      100%;
-  }
 }
 .skeleton {
   margin-bottom: 1rem;
