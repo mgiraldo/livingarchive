@@ -31,7 +31,14 @@ module.exports = {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['~/plugins/vue-d3', '~/plugins/vue-fragment'],
+  plugins: [
+    '~/plugins/vue-d3',
+    '~/plugins/vue-fragment',
+    {
+      src: '@/plugins/vue-layers',
+      ssr: false
+    }
+  ],
 
   /*
    ** Nuxt.js modules
@@ -41,7 +48,8 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
     '@nuxtjs/style-resources',
-    'nuxt-leaflet'
+    'nuxt-leaflet',
+    '~/modules/vue-layers'
   ],
 
   /*

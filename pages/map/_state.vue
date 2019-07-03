@@ -3,7 +3,7 @@
     <search-controls class="controls" />
     <div ref="splitPane" class="splitview">
       <section ref="resultsPane" class="results">
-        <h1>{{ individualCount }} individuals</h1>
+        <result-count />
         <results-explained />
         <p>
           <button class="link-button" @click="toggleGrid">
@@ -36,6 +36,7 @@ import SearchControls from '~/components/SearchControls'
 import ResultItem from '~/components/ResultItem'
 import ResultsExplained from '~/components/ResultsExplained'
 import ResultsMap from '~/components/ResultsMap'
+import ResultCount from '~/components/ResultCount'
 
 export default {
   head() {
@@ -46,7 +47,8 @@ export default {
     SearchControls,
     ResultItem,
     ResultsExplained,
-    ResultsMap
+    ResultsMap,
+    ResultCount
   },
   data() {
     return {
@@ -160,23 +162,18 @@ export default {
   height: 100vh;
 }
 .controls {
-  flex: 0 0 15rem;
+  flex-basis: 20rem;
   overflow-wrap: anywhere;
   overflow-y: auto;
-  width: 15rem;
 }
 .splitview {
   display: flex;
-  flex: 1;
+  flex-grow: 1;
 }
 .results {
   flex-basis: 50%;
   overflow-y: auto;
   padding: 0.5rem;
-
-  h1 {
-    font-size: 2rem;
-  }
 }
 .results-list {
   list-style-type: none;

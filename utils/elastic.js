@@ -8,7 +8,7 @@ import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
-const querySize = 60
+const querySize = 6000
 
 const performESQuery = async query => {
   const instance = axios.create({
@@ -45,7 +45,7 @@ const performESQuery = async query => {
 
 const buildQuery = params => {
   let query = bodybuilder()
-  query = query.size(querySize)
+  query = query.size(600)
   if (params.source) query = query.rawOption('_source', params.source)
   query = query.query('match_all', {})
   if (params.filters) {

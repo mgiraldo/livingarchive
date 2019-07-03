@@ -1,5 +1,4 @@
 import { RDF_AGES, RDF_SEXES, RDF_PHASES, RDF_LEVELS } from '~/utils/constants'
-import { getIndividuals as getIndividualsRDF } from '~/utils/rdf'
 import {
   getAllIndividuals as getIndividualsES,
   getFilteredIndividuals
@@ -32,9 +31,12 @@ export const state = () => ({
 })
 
 export const getters = {
+  individualCount(state) {
+    return Object.keys(state.individuals).length
+  },
   displayedCount(state) {
     if (state.displayedIdentifiers.size === 0)
-      return Object.keys(state.individuals).length
+      return state.getters.individualCount
     return state.displayedIdentifiers.size
   },
   displayedIndividuals(state) {
@@ -147,7 +149,12 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }, { route }) {
-    if (route.name !== 'map-state' && route.name !== 'grid-state') return // no need to load the data
+    if (
+      route.name !== 'ol' &&
+      route.name !== 'map-state' &&
+      route.name !== 'grid-state'
+    )
+      return // no need to load the data
 
     const filters = { ages: state.checkedAges, sexes: state.checkedSexes }
 
@@ -194,6 +201,7 @@ export const actions = {
       newState.vars = vars
       newState.individuals = individuals
       newState.points = points
+      newState.aggs = aggs
     }
 
     commit('fetchedIndividuals', newState)
