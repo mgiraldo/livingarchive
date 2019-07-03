@@ -14,7 +14,7 @@
         <disclosure-icon :open="controlsToggled" label="Show controls" />
       </button>
       <div
-        v-show="controlsToggled"
+        v-if="controlsToggled"
         :id="'actions-' + individual.identifier"
         class="actions"
       >

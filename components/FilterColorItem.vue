@@ -8,7 +8,7 @@
 <script>
 export default {
   props: {
-    color: { type: String, required: true },
+    color: { type: String, default: '#aaa' },
     name: { type: String, required: true }
   }
 }
