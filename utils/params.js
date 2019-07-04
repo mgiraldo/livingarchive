@@ -15,12 +15,11 @@ const parseFilter = filterStr => {
   if (filterStr.length === 0) return false
   // only the key with no values
   if (filterStr.indexOf(':') === -1)
-    return { [FILTER_PARAMS_TO_NAMES[filterStr]]: [] }
+    return { [FILTER_PARAMS_TO_NAMES[filterStr].agg]: [] }
   let [key, valuesStr] = filterStr.split(':')
   return {
-    [FILTER_PARAMS_TO_NAMES[key]]: valuesStr
+    [FILTER_PARAMS_TO_NAMES[key].agg]: valuesStr
       .split(',')
       .filter(v => v.trim() !== '')
-      .map(v => Number(v))
   }
 }

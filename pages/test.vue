@@ -70,10 +70,10 @@ export default {
   },
   methods: {
     mapInited(map) {
-      console.log('inited', map)
+      // console.log('inited', map)
     },
     mapLoaded(map) {
-      console.log('loaded', map)
+      // console.log('loaded', map)
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <span class="color-item-container">
-    <span class="dot" :style="`background-color:${color}`"></span>
+    <span v-if="color" class="dot" :style="`background-color:${color}`"></span>
     <span class="text">{{ name }}</span>
   </span>
 </template>
@@ -26,6 +26,5 @@ export default {
   min-width: 1em;
 }
 .text {
-  text-transform: uppercase;
 }
 </style>

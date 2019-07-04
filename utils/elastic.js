@@ -4,7 +4,12 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import { RDF_SEXES, RDF_AGES, ELASTIC_AGGS, EMPTY_LONLAT } from './constants'
+import {
+  RDF_SEXES,
+  RDF_AGES,
+  FILTER_PARAMS_TO_NAMES,
+  EMPTY_LONLAT
+} from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
@@ -44,6 +49,9 @@ const performESQuery = async query => {
 }
 
 const buildQuery = params => {
+  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES).map(
+    param => param.agg
+  )
   let query = bodybuilder()
   query = query.size(600)
   if (params.source) query = query.rawOption('_source', params.source)
@@ -54,29 +62,21 @@ const buildQuery = params => {
     })
   }
   // query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
-  ELASTIC_AGGS.forEach(agg => {
+  elasticAggs.forEach(agg => {
     query = query.agg('terms', agg + '.keyword', { size: querySize })
   })
   return query.build()
 }
 
 const parseFilters = filters => {
+  // console.log('elastic:', filters)
   let esFilters = []
 
-  let ages = filters.ages ? Array.from(filters.ages) : []
-  let sexes = filters.sexes ? Array.from(filters.sexes) : []
-
-  let ageFilter = ages.map(age =>
-    !isNaN(age) ? Object.keys(RDF_AGES.values)[age] : ''
-  )
-  if (ageFilter.length)
-    esFilters.push({ type: 'age.keyword', value: ageFilter })
-
-  let sexFilter = sexes.map(sex =>
-    !isNaN(sex) ? Object.keys(RDF_SEXES.values)[sex] : ''
-  )
-  if (sexFilter.length)
-    esFilters.push({ type: 'sex.keyword', value: sexFilter })
+  for (let param in FILTER_PARAMS_TO_NAMES) {
+    const agg = FILTER_PARAMS_TO_NAMES[param].agg
+    const filter = filters[agg] ? Array.from(filters[agg]) : []
+    if (filter.length) esFilters.push({ type: agg + '.keyword', value: filter })
+  }
 
   return esFilters
 }
@@ -172,7 +172,10 @@ export const getAllIndividuals = async ({ filters }) => {
 
 const getAggregations = aggs => {
   let result = {}
-  ELASTIC_AGGS.forEach(agg => {
+  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES).map(
+    param => param.agg
+  )
+  elasticAggs.forEach(agg => {
     result[agg] = {}
     aggs['agg_terms_' + agg + '.keyword'].buckets.forEach(item => {
       result[agg][cleanString(item.key)] = item.doc_count

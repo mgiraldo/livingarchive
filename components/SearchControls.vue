@@ -75,13 +75,13 @@ export default {
 <style lang="scss" scoped>
 .controls {
   background-color: lighten($color: $global-background-color, $amount: 5%);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   overflow-y: scroll;
   padding: 0.5rem;
 }
 .filter-button {
   border: none;
-  background-color: lighten($color: $global-background-color, $amount: 20%);
+  background-color: $filter-button-color;
   color: $global-text-color;
   border-radius: 0.25rem;
   border-width: 0.1rem;

@@ -75,6 +75,7 @@ export default {
     if (params.state) {
       // console.log('ssr map.fetch', params)
       let parsedParams = parseParams(params)
+      // console.log(parsedParams)
       store.commit('setFilters', { params: parsedParams })
     }
     await store.dispatch('fetchIndividuals')
@@ -86,8 +87,7 @@ export default {
       if (
         mutation.type === 'setFilters' ||
         mutation.type === 'clearFilters' ||
-        mutation.type === 'checkedFilter' ||
-        mutation.type === 'onlyProp'
+        mutation.type === 'checkedFilter'
       ) {
         this.updateFilters()
       }

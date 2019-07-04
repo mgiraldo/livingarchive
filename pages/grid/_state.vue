@@ -79,8 +79,7 @@ export default {
       if (
         mutation.type === 'setFilters' ||
         mutation.type === 'clearFilters' ||
-        mutation.type === 'checkedFilter' ||
-        mutation.type === 'onlyProp'
+        mutation.type === 'checkedFilter'
       ) {
         this.updateFilters()
       }

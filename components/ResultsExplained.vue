@@ -1,6 +1,6 @@
 <template>
   <div class="explainer">
-    <span
+    <span class="summary"
       >Showing {{ count }} results {{ isFiltered ? 'filtered by:' : '' }}</span
     >
     <label
@@ -8,21 +8,13 @@
       :key="index"
       :for="'filter-' + index"
       class="filter"
-      :style="'background-color: ' + filter.color"
     >
       <input
         :id="'filter-' + index"
         class="checkbox"
         type="checkbox"
         checked="checked"
-        @change="
-          toggled(
-            filter.index,
-            filter.filter,
-            filter.name,
-            $event.target.checked
-          )
-        "
+        @change="toggled(filter.name, filter.filter, $event.target.checked)"
       />
       {{ filter.type }}: {{ filter.name }}
       <span
@@ -36,7 +28,7 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
-import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 export default {
   components: {},
@@ -49,32 +41,28 @@ export default {
     },
     filters() {
       let filters = []
-      const ages = [...this.$store.state.checkedAges.values()]
-      ages.forEach(index => {
-        filters.push({
-          index: index,
-          filter: 'Ages',
-          type: 'Age',
-          name: Object.keys(RDF_AGES.values)[index],
-          color: Object.values(RDF_AGES.values)[index]
+
+      for (let param in FILTER_PARAMS_TO_NAMES) {
+        const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
+        const explainedName = FILTER_PARAMS_TO_NAMES[param].explainedName
+        const filterArray = [
+          ...this.$store.state['checked' + storeName].values()
+        ]
+        filterArray.forEach(filter => {
+          filters.push({
+            filter: storeName,
+            type: explainedName,
+            name: filter
+          })
         })
-      })
-      const sexes = [...this.$store.state.checkedSexes.values()]
-      sexes.forEach(index => {
-        filters.push({
-          index: index,
-          filter: 'Sexes',
-          type: 'Sex',
-          name: Object.keys(RDF_SEXES.values)[index],
-          color: Object.values(RDF_SEXES.values)[index]
-        })
-      })
+      }
+
       return filters
     }
   },
   methods: {
-    toggled(index, filter, name, value) {
-      this.$store.commit('checkedFilter', { filter, index, value })
+    toggled(name, filter, value) {
+      this.$store.commit('checkedFilter', { filter, name, value })
       updateRouter({ router: this.$router, store: this.$store })
     }
   }
@@ -85,14 +73,20 @@ export default {
 .explainer {
   margin-bottom: 0.5rem;
 }
+.summary {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
 .filter {
+  background-color: $filter-button-color;
   border: 0.1rem solid transparent;
   border-radius: 0.125rem;
-  color: $global-background-color;
+  color: $global-text-color;
   cursor: pointer;
   display: inline-block;
+  margin-bottom: 0.5rem;
   margin-right: 0.5rem;
-  padding: 0 0.25rem;
+  padding: 0.1rem 0.25rem;
   white-space: nowrap;
 
   & .remove {

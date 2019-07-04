@@ -12,29 +12,22 @@
         :key="$route.fullPath"
         :aggregations="fixedAggregations"
       />
-      <div>
-        <button
-          v-show="open"
-          class="bones-toggle link-button no-underline"
-          :aria-controls="facet.name + '_bones'"
-          @click="toggleBones"
-        >
-          <disclosure-icon :open="bonesOpen" label="" class="icon" />
-          {{ bonesOpen ? 'Hide' : 'Show' }} bones
-        </button>
-
-        <ul v-if="open && bonesOpen" :id="facet.name + '_bones'">
-          <li
-            v-for="(value, aggregation, index) in fixedAggregations"
-            :key="index"
-            class="facet"
-          >
-            <div class="bone-label">
-              {{ aggregation }}
-            </div>
-            <search-filter-bar :total="total" :value="value" />
-          </li>
-        </ul>
+      <button
+        v-show="open"
+        class="bones-toggle link-button no-underline"
+        :aria-controls="facet.name + '_bones'"
+        @click="toggleBones"
+      >
+        <disclosure-icon :open="bonesOpen" label="" class="icon" />
+        {{ bonesOpen ? 'Hide' : 'Show' }} bones
+      </button>
+      <div :id="facet.name + '_bones'">
+        <search-filter-list
+          v-if="open && bonesOpen"
+          :open="open"
+          :facet="facet"
+          :aggregations="fixedAggregations"
+        />
       </div>
     </div>
   </section>
@@ -42,14 +35,14 @@
 
 <script>
 import SearchFilterTitle from '~/components/SearchFilterTitle'
-import SearchFilterBar from '~/components/SearchFilterBar'
 import SkeletonAggregationsViewer from '~/components/SkeletonAggregationsViewer'
 import DisclosureIcon from '~/components/DisclosureIcon'
+import SearchFilterList from '~/components/SearchFilterList'
 
 export default {
   components: {
     SkeletonAggregationsViewer,
-    SearchFilterBar,
+    SearchFilterList,
     DisclosureIcon,
     SearchFilterTitle
   },

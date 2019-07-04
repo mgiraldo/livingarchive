@@ -68,16 +68,10 @@
               <dt>Sex</dt>
               <dd>
                 {{ individual.sex }}
-                <button type="button" :value="individual.sex" @click="onlySex">
-                  ONLY
-                </button>
               </dd>
               <dt>Age</dt>
               <dd>
                 {{ individual.age }}
-                <button type="button" :value="individual.age" @click="onlyAge">
-                  ONLY
-                </button>
               </dd>
             </dl>
           </l-popup>
@@ -181,17 +175,6 @@ export default {
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct
       this.$refs.map.mapObject.invalidateSize()
-    },
-    onlySex(event) {
-      this.onlyProp('sex', event.target.value)
-    },
-    onlyAge(event) {
-      this.onlyProp('age', event.target.value)
-    },
-    onlyProp(prop, value) {
-      this.$store.commit('onlyProp', { prop, value })
-      updateRouter({ router: this.$router, store: this.$store })
-      this.$store.dispatch('fetchIndividuals')
     },
     toggleLegend() {
       this.$store.commit('toggledLegend')

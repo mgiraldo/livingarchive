@@ -77,6 +77,8 @@ module.exports = {
   build: {
     splitChunks: { layouts: true },
     extend(config) {
+      config.devtool = 'source-map'
+
       const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
 
       svgRule.test = /\.(png|jpe?g|gif|webp)$/

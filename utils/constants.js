@@ -13,8 +13,18 @@ export const RDF_TIMEOUT = 10000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 
-export const ELASTIC_AGGS = ['phase', 'age', 'level', 'sex', 'bones.bone']
+export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
+export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'
+export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
+export const BUILDING_COLOR = 'hsla(33, 35%, 44%, 1)'
 
+export const FILTER_PARAMS_TO_NAMES = {
+  a: { agg: 'age', storeName: 'Ages', explainedName: 'Age' },
+  s: { agg: 'sex', storeName: 'Sexes', explainedName: 'Sex' },
+  p: { agg: 'phase', storeName: 'Phases', explainedName: 'Phase' },
+  b: { agg: 'bones.bone', storeName: 'Skeleton', explainedName: 'Bone' },
+  l: { agg: 'level', storeName: 'Levels', explainedName: 'Level' }
+}
 export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building
 
 export const PROJ4_DEFS = [
@@ -354,16 +364,4 @@ export const RDF_LEVELS = {
     'Trench 1.Chalcolithic': '#aaa',
     'Trench 5.Chalcolithic': '#aaa'
   }
-}
-
-export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
-export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'
-export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
-export const BUILDING_COLOR = 'hsla(33, 35%, 44%, 1)'
-
-export const FILTER_PARAMS_TO_NAMES = {
-  a: 'age',
-  s: 'sex',
-  p: 'phase',
-  l: 'level'
 }
