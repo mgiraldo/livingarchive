@@ -13,7 +13,6 @@ import {
 const isFiltered = state => {
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
-    console.log(storeName)
     if (state['checked' + storeName].size !== 0) return true
   }
 
