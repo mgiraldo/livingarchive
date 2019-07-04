@@ -13,7 +13,7 @@
         :aggregations="fixedAggregations"
       />
       <button
-        v-show="open"
+        v-show="open && hasSelectableBones"
         class="bones-toggle link-button no-underline"
         :aria-controls="facet.name + '_bones'"
         @click="toggleBones"
@@ -56,6 +56,9 @@ export default {
   computed: {
     total() {
       return this.$store.getters.individualCount
+    },
+    hasSelectableBones() {
+      return Object.keys(this.fixedAggregations).length > 0
     },
     fixedAggregations() {
       let fixedAggregations = {}
@@ -107,7 +110,9 @@ label {
   margin-bottom: 0.25rem;
 }
 .bones-toggle {
+  align-items: center;
   display: flex;
+  justify-content: center;
   margin-bottom: 0.5rem;
   margin-left: 0.25rem;
 }
