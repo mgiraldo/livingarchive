@@ -46,6 +46,9 @@ a {
     text-decoration: none;
   }
 }
+.not-interactive {
+  pointer-events: none;
+}
 .link-button {
   background: none;
   border: none;

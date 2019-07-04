@@ -4,14 +4,23 @@
       v-for="(value, name, index) in aggregations"
       :ref="name"
       :key="index"
-      class="facet"
+      :class="'facet ' + (isSelected(name) ? 'selected' : '')"
       :data-name="name"
       @mouseover="mouseoverHandler"
       @mouseout="mouseoutHandler"
+      @mouseup="mouseupHandler"
       @mousedown="mousedownHandler"
     >
-      <span class="label">{{ name }}: {{ value }}</span>
-      <search-filter-bar :total="total" :value="value" :show-text="false" />
+      <span
+        :class="'label not-interactive ' + (isFromTo(name) ? 'displayed' : '')"
+        >{{ name }}: {{ value }}</span
+      >
+      <search-filter-bar
+        class="not-interactive"
+        :total="total"
+        :value="value"
+        :show-text="false"
+      />
     </li>
   </ul>
 </template>
@@ -31,7 +40,7 @@ export default {
     open: { type: Boolean, required: true }
   },
   data() {
-    return { selectedItems: [] }
+    return { selectedItems: [], from: '', to: '' }
   },
   computed: {
     total() {
@@ -39,14 +48,29 @@ export default {
     }
   },
   methods: {
+    isSelected(name) {
+      return this.selectedItems.indexOf(name) !== -1
+    },
+    isFromTo(name) {
+      return this.from === name || this.to === name
+    },
     mouseoverHandler(e) {
-      // console.log('over', e)
+      e.stopPropagation()
+      // console.log('over', e.target.dataset.name)
     },
     mouseoutHandler(e) {
-      // console.log('out', e)
+      e.stopPropagation()
+      // console.log('out', e.target.dataset.name)
     },
     mousedownHandler(e) {
-      // console.log('down', e)
+      e.stopPropagation()
+      console.log('down', e.target.dataset.name)
+      this.selectedItems = [e.target.dataset.name]
+      this.from = e.target.dataset.name
+    },
+    mouseupHandler(e) {
+      e.stopPropagation()
+      // console.log('up', e.target.dataset.name)
     }
   }
 }
@@ -62,6 +86,10 @@ ul {
   margin-bottom: 0;
   position: relative;
 
+  &.selected {
+    border: 1px solid $global-alert-color;
+  }
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -71,10 +99,13 @@ ul {
   }
 }
 .label {
-  pointer-events: none;
   display: none;
-  right: 0;
+  right: 0.25rem;
   position: absolute;
+
+  &.displayed {
+    display: block;
+  }
 }
 input {
   margin-right: 0.5rem;
