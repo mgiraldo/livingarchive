@@ -35,7 +35,7 @@ module.exports = {
     '~/plugins/vue-d3',
     '~/plugins/vue-fragment',
     {
-      src: '@/plugins/vue-layers',
+      src: '~/plugins/vue-layers',
       ssr: false
     }
   ],

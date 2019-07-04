@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { fromLonLat } from 'ol/proj'
+// import { fromLonLat } from 'ol/proj'
 
 export default {
   data() {
@@ -89,7 +89,7 @@ export default {
       console.log('click', event.pixel, event.coordinate)
       this.$refs.map.forEachFeatureAtPixel(event.pixel, feature => {
         const closest = feature.getGeometry().getClosestPoint(event.coordinate)
-        console.log('closest', closest, fromLonLat(closest, 'EPSG:4326'))
+        // console.log('closest', closest, fromLonLat(closest, 'EPSG:4326'))
       })
     }
   }
