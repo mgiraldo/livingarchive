@@ -7,6 +7,7 @@
       :data-name="name"
       @mouseover="mouseoverHandler"
       @mouseout="mouseoutHandler"
+      @mousedown="mousedownHandler"
     >
       <span class="label">{{ name }}: {{ value }}</span>
       <search-filter-bar
@@ -33,6 +34,9 @@ export default {
     aggregations: { type: Object, default: null },
     open: { type: Boolean, required: true }
   },
+  data() {
+    return { selectedItems: [] }
+  },
   computed: {
     total() {
       return this.$store.getters.individualCount
@@ -44,6 +48,9 @@ export default {
     },
     mouseoutHandler(e) {
       // console.log('out', e)
+    },
+    mousedownHandler(e) {
+      // console.log('down', e)
     }
   }
 }
