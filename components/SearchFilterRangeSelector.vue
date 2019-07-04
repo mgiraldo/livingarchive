@@ -1,7 +1,14 @@
 <template>
   <ul v-show="open">
-    <li v-for="(value, name, index) in aggregations" :key="index" class="facet">
-      <span class="label">{{ name }}</span>
+    <li
+      v-for="(value, name, index) in aggregations"
+      :key="index"
+      class="facet"
+      :data-name="name"
+      @mouseover="mouseoverHandler"
+      @mouseout="mouseoutHandler"
+    >
+      <span class="label">{{ name }}: {{ value }}</span>
       <search-filter-bar
         class="bar"
         :total="total"
@@ -31,7 +38,14 @@ export default {
       return this.$store.getters.individualCount
     }
   },
-  methods: {}
+  methods: {
+    mouseoverHandler(e) {
+      // console.log('over', e)
+    },
+    mouseoutHandler(e) {
+      // console.log('out', e)
+    }
+  }
 }
 </script>
 
