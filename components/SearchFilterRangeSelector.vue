@@ -1,24 +1,26 @@
 <template>
   <ul v-show="open">
     <li
-      v-for="(value, name, index) in aggregations"
-      :ref="name"
+      v-for="(agg, index) in sortedAggregations"
+      :ref="agg.name"
       :key="index"
-      :class="'facet ' + (isSelected(name) ? 'selected' : '')"
-      :data-name="name"
+      :class="'facet ' + (isSelected(agg.name) ? selectedType(agg.name) : '')"
+      :data-name="agg.name"
       @mouseover="mouseoverHandler"
       @mouseout="mouseoutHandler"
       @mouseup="mouseupHandler"
       @mousedown="mousedownHandler"
     >
       <span
-        :class="'label not-interactive ' + (isFromTo(name) ? 'displayed' : '')"
-        >{{ name }}: {{ value }}</span
+        :class="
+          'label not-interactive ' + (isFromTo(agg.name) ? 'displayed' : '')
+        "
+        >{{ agg.name }}: {{ agg.value }}</span
       >
       <search-filter-bar
         class="not-interactive"
         :total="total"
-        :value="value"
+        :value="agg.value"
         :show-text="false"
       />
     </li>
@@ -40,23 +42,42 @@ export default {
     open: { type: Boolean, required: true }
   },
   data() {
-    return { selectedItems: [], from: '', to: '' }
+    return { selectedItems: [], from: '', to: '', selecting: false }
   },
   computed: {
     total() {
       return this.$store.getters.individualCount
+    },
+    sortedAggregations() {
+      let sorted = []
+      for (let agg in this.aggregations) {
+        sorted.push({ name: agg, value: this.aggregations[agg] })
+      }
+      sorted = sorted.sort((a, b) => a.name - a.name)
+      return sorted
     }
   },
   methods: {
     isSelected(name) {
       return this.selectedItems.indexOf(name) !== -1
     },
+    selectedType(name) {
+      return 'selected'
+    },
     isFromTo(name) {
       return this.from === name || this.to === name
     },
+    updateSelection(name) {
+      const items = this.sortedAggregations.map(agg => agg.name)
+      items.forEach(item => {})
+      console.log(items)
+    },
     mouseoverHandler(e) {
       e.stopPropagation()
-      // console.log('over', e.target.dataset.name)
+      if (this.selecting) {
+        this.to = e.target.dataset.name
+        this.updateSelection()
+      }
     },
     mouseoutHandler(e) {
       e.stopPropagation()
@@ -64,13 +85,12 @@ export default {
     },
     mousedownHandler(e) {
       e.stopPropagation()
-      console.log('down', e.target.dataset.name)
-      this.selectedItems = [e.target.dataset.name]
+      this.selecting = true
       this.from = e.target.dataset.name
     },
     mouseupHandler(e) {
       e.stopPropagation()
-      // console.log('up', e.target.dataset.name)
+      this.selecting = false
     }
   }
 }
