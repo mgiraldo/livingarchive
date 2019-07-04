@@ -75,7 +75,11 @@ export default {
 <style lang="scss" scoped>
 .controls {
   background-color: lighten($color: $global-background-color, $amount: 5%);
+  display: flex;
+  flex-basis: 20rem;
+  flex-direction: column;
   font-size: 0.9rem;
+  overflow-wrap: anywhere;
   overflow-y: scroll;
   padding: 0.5rem;
 }
@@ -87,8 +91,7 @@ export default {
   border-width: 0.1rem;
   cursor: pointer;
   font-size: 1rem;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
+  margin: 0 1rem 1rem 1rem;
   padding: 0.25rem 0.5rem;
   transition: all 0.2s;
 

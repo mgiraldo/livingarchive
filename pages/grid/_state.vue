@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <search-controls class="controls" />
+    <search-controls />
     <section ref="resultsPane" class="results">
       <h1>{{ individualCount }} individuals</h1>
       <results-explained />
@@ -131,12 +131,6 @@ export default {
 .container {
   display: flex;
   height: 100vh;
-}
-.controls {
-  flex-basis: 20rem;
-  overflow-wrap: anywhere;
-  overflow-y: auto;
-  overflow-y: -moz-scrollbars-vertical;
 }
 .splitview {
   display: flex;

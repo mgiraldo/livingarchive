@@ -1,6 +1,6 @@
 <template>
   <div class="container" @mouseup="resizeUp" @mousemove="resizeMove">
-    <search-controls class="controls" />
+    <search-controls />
     <div ref="splitPane" class="splitview">
       <section ref="resultsPane" class="results">
         <result-count />
@@ -160,11 +160,6 @@ export default {
 .container {
   display: flex;
   height: 100vh;
-}
-.controls {
-  flex-basis: 20rem;
-  overflow-wrap: anywhere;
-  overflow-y: auto;
 }
 .splitview {
   display: flex;
