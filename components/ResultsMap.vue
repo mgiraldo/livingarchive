@@ -219,19 +219,22 @@ export default {
 }
 .legend {
   background-color: transparentize($global-background-color, 0.25);
-  border-radius: 0.5rem;
+  border-radius: 0.25rem;
   list-style-type: none;
-  padding: 0.25rem;
+  margin-right: 1rem;
+  padding: 0.25rem 0.5rem;
   text-transform: uppercase;
 
   ul {
     list-style-type: none;
-    margin: 0.5rem 0;
+    margin: 0;
     padding: 0;
   }
 
   .legend-list-item {
+    display: inline-block;
     margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
     transition: all 0.5s;
   }
 
