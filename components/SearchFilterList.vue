@@ -11,7 +11,7 @@
         />
         <filter-color-item :name="name" :color="facetColor(name)" />
       </label>
-      <search-filter-bar class="bar" :total="total" :value="value" />
+      <search-filter-bar :total="total" :value="value" />
     </li>
   </ul>
 </template>

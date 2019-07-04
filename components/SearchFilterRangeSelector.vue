@@ -2,6 +2,7 @@
   <ul v-show="open">
     <li
       v-for="(value, name, index) in aggregations"
+      :ref="name"
       :key="index"
       class="facet"
       :data-name="name"
@@ -10,12 +11,7 @@
       @mousedown="mousedownHandler"
     >
       <span class="label">{{ name }}: {{ value }}</span>
-      <search-filter-bar
-        class="bar"
-        :total="total"
-        :value="value"
-        :show-text="false"
-      />
+      <search-filter-bar :total="total" :value="value" :show-text="false" />
     </li>
   </ul>
 </template>
@@ -75,6 +71,7 @@ ul {
   }
 }
 .label {
+  pointer-events: none;
   display: none;
   right: 0;
   position: absolute;
