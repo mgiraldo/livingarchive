@@ -26,7 +26,7 @@
       :aggregations="aggs('age')"
       :facet="ages"
     />
-    <search-filter-standard
+    <search-filter-range
       class="filter"
       :aggregations="aggs('level')"
       :facet="levels"
@@ -45,9 +45,10 @@ import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
+import SearchFilterRange from '~/components/SearchFilterRange'
 
 export default {
-  components: { SearchFilterSkeleton, SearchFilterStandard },
+  components: { SearchFilterSkeleton, SearchFilterStandard, SearchFilterRange },
   data() {
     return {
       ages: RDF_AGES,

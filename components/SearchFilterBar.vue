@@ -1,6 +1,6 @@
 <template>
   <div :class="'aggregation agg-' + percent">
-    {{ value }}
+    {{ showText ? value : '&nbsp;' }}
   </div>
 </template>
 
@@ -8,11 +8,13 @@
 export default {
   props: {
     total: { type: Number, required: true },
-    value: { type: Number, required: true }
+    value: { type: Number, required: true },
+    showText: { type: Boolean, default: true }
   },
   computed: {
     percent() {
       let pct = Math.round((this.value / this.total) * 100)
+      pct = pct > 0 ? pct : 1
       return pct < 100 ? pct : 100
     }
   }
