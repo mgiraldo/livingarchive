@@ -1,13 +1,12 @@
 <template>
-  <ul v-show="open">
+  <ul v-show="open" @mouseover="cancelHandler">
     <li
       v-for="(agg, index) in sortedAggregations"
       :ref="agg.name"
       :key="index"
-      :class="'facet ' + (isSelected(agg.name) ? selectedType(agg.name) : '')"
+      :class="'facet ' + selectedType(agg.name)"
       :data-name="agg.name"
       @mouseover="mouseoverHandler"
-      @mouseout="mouseoutHandler"
       @mouseup="mouseupHandler"
       @mousedown="mousedownHandler"
     >
@@ -39,10 +38,17 @@ export default {
   props: {
     facet: { type: Object, required: true },
     aggregations: { type: Object, default: null },
-    open: { type: Boolean, required: true }
+    open: { type: Boolean, required: true },
+    from: { type: String, default: '' },
+    to: { type: String, default: '' }
   },
   data() {
-    return { selectedItems: [], from: '', to: '', selecting: false }
+    return {
+      selectedItems: [],
+      selecting: false,
+      fromAgg: this.from,
+      toAgg: this.to
+    }
   },
   computed: {
     total() {
@@ -53,44 +59,75 @@ export default {
       for (let agg in this.aggregations) {
         sorted.push({ name: agg, value: this.aggregations[agg] })
       }
-      sorted = sorted.sort((a, b) => a.name - a.name)
+      sorted = sorted.sort((a, b) => (a.name > b.name ? -1 : 1))
       return sorted
+    },
+    sortedIndexes() {
+      return this.sortedAggregations.map(agg => agg.name)
+    },
+    indexFrom() {
+      return this.sortedIndexes.indexOf(this.fromAgg)
+    },
+    indexTo() {
+      return this.sortedIndexes.indexOf(this.toAgg)
     }
   },
   methods: {
-    isSelected(name) {
-      return this.selectedItems.indexOf(name) !== -1
-    },
     selectedType(name) {
-      return 'selected'
+      if (this.indexFrom === -1) return ''
+      const nameIndex = this.sortedIndexes.indexOf(name)
+      const classNames = []
+      let from = this.indexFrom
+      let to = this.indexTo
+      if (from > to) {
+        from = this.indexTo
+        to = this.indexFrom
+      }
+      if (from === nameIndex) classNames.push('start')
+      if (to === nameIndex) classNames.push('end')
+      if (to > nameIndex && from < nameIndex) classNames.push('middle')
+      return classNames.join(' ')
     },
     isFromTo(name) {
-      return this.from === name || this.to === name
+      return this.fromAgg === name || this.toAgg === name
     },
-    updateSelection(name) {
-      const items = this.sortedAggregations.map(agg => agg.name)
-      items.forEach(item => {})
-      console.log(items)
+    clearSelection() {
+      this.fromAgg = ''
+      this.toAgg = ''
+    },
+    checkFromTo() {
+      if (this.fromIndex > this.toIndex) {
+        const temp = this.fromAgg
+        this.fromAgg = this.toAgg
+        this.toAgg = temp
+      }
     },
     mouseoverHandler(e) {
       e.stopPropagation()
       if (this.selecting) {
-        this.to = e.target.dataset.name
-        this.updateSelection()
+        this.toAgg = e.target.dataset.name
       }
-    },
-    mouseoutHandler(e) {
-      e.stopPropagation()
-      // console.log('out', e.target.dataset.name)
     },
     mousedownHandler(e) {
       e.stopPropagation()
+      const name = e.target.dataset.name
+      this.clearSelection()
       this.selecting = true
-      this.from = e.target.dataset.name
+      this.fromAgg = name
+      this.toAgg = name
     },
     mouseupHandler(e) {
       e.stopPropagation()
+      if (this.selecting) {
+        this.toAgg = e.target.dataset.name
+        this.selecting = false
+        this.checkFromTo()
+      }
+    },
+    cancelHandler(e) {
+      e.stopPropagation()
       this.selecting = false
+      this.checkFromTo()
     }
   }
 }
@@ -100,7 +137,7 @@ export default {
 ul {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 0.25rem;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
@@ -110,8 +147,17 @@ ul {
   margin-bottom: 0;
   position: relative;
 
-  &.selected {
-    border: 1px solid $global-alert-color;
+  &.start,
+  &.middle,
+  &.end {
+    border-left: 1px solid $global-alert-color;
+    border-right: 1px solid $global-alert-color;
+  }
+  &.start {
+    border-top: 1px solid $global-alert-color;
+  }
+  &.end {
+    border-bottom: 1px solid $global-alert-color;
   }
 
   &:last-child {
