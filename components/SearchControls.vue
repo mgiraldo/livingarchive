@@ -79,6 +79,7 @@ export default {
   display: flex;
   flex-basis: 20rem;
   flex-direction: column;
+  flex-shrink: 0;
   font-size: 0.9rem;
   overflow-wrap: anywhere;
   overflow-y: scroll;

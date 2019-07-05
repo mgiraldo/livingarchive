@@ -101,6 +101,10 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .facet {
   margin-bottom: 0;
