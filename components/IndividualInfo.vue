@@ -4,11 +4,23 @@
       {{ individual.individual }}
     </div>
     <div class="basic-info">
-      <div class="age" :style="'border-color:' + ageColors[individual.age]">
+      <div
+        class="basic-info-item"
+        :style="'border-color:' + ageColors[individual.age]"
+      >
         {{ individual.age }}
       </div>
-      <div class="sex" :style="'border-color:' + sexColors[individual.sex]">
+      <div
+        class="basic-info-item"
+        :style="'border-color:' + sexColors[individual.sex]"
+      >
         {{ individual.sex }}
+      </div>
+      <div class="basic-info-item">
+        {{ individual.level }}
+      </div>
+      <div class="basic-info-item">
+        {{ individual.phase }}
       </div>
     </div>
     <nuxt-link
@@ -18,6 +30,9 @@
     >
       open skeleton
     </nuxt-link>
+    <div v-if="individual.description" class="description">
+      Description: {{ individual.description }}
+    </div>
     <div
       v-if="individual.discussion && individual.discussion !== 'NULL'"
       :id="individual.identifier + '-more'"
@@ -82,20 +97,24 @@ export default {
   margin-bottom: 0.5rem;
 }
 .basic-info {
+  display: flex;
+  flex-wrap: wrap;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
-.age {
-  margin-bottom: 0.1rem;
-}
-.age,
-.sex {
+.basic-info-item {
   border-left: 0.75rem solid transparent;
+  flex-basis: 48%;
+  margin-bottom: 0.5rem;
+  margin-right: 0.5rem;
   padding-left: 0.25rem;
 }
 .skeleton-link {
   display: inline-block;
   margin-bottom: 0.25rem;
+}
+.description {
+  margin: 0.5rem 0;
 }
 .discussion {
   margin: 0.5rem 0;
