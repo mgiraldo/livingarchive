@@ -32,7 +32,20 @@ export default {
   data() {
     return { open: false }
   },
-  computed: {},
+  computed: {
+    sortedAggregations() {
+      let sorted = []
+      for (let agg in this.aggregations) {
+        sorted.push({
+          name: agg,
+          value: this.aggregations[agg],
+          sortableName: agg.toLowerCase()
+        })
+      }
+      sorted = sorted.sort((a, b) => (a.sortableName < b.sortableName ? -1 : 1))
+      return sorted
+    }
+  },
   methods: {
     toggle() {
       this.open = !this.open

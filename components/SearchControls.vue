@@ -31,7 +31,7 @@
       :aggregations="aggs('level')"
       :facet="levels"
     />
-    <search-filter-standard
+    <search-filter-tree
       class="filter"
       :aggregations="aggs('phase')"
       :facet="phases"
@@ -51,9 +51,15 @@ import {
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
 import SearchFilterRange from '~/components/SearchFilterRange'
+import SearchFilterTree from '~/components/SearchFilterTree'
 
 export default {
-  components: { SearchFilterSkeleton, SearchFilterStandard, SearchFilterRange },
+  components: {
+    SearchFilterSkeleton,
+    SearchFilterStandard,
+    SearchFilterRange,
+    SearchFilterTree
+  },
   data() {
     return {
       ages: AGES_COLORS,

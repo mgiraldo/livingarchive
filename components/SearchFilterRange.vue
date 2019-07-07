@@ -34,16 +34,7 @@ export default {
   data() {
     return { open: false }
   },
-  computed: {
-    presentFacets() {
-      let facets = {}
-      let aggs = Object.keys(this.aggregations)
-      aggs.forEach(agg => {
-        facets[agg] = this.facet.values[agg]
-      })
-      return facets
-    }
-  },
+  computed: {},
   methods: {
     toggle() {
       this.open = !this.open
