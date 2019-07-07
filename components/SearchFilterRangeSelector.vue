@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { updateRouter } from '~/utils/router'
-
 import SearchFilterBar from '~/components/SearchFilterBar'
 
 export default {
@@ -40,7 +38,8 @@ export default {
     aggregations: { type: Object, default: null },
     open: { type: Boolean, required: true },
     from: { type: String, default: '' },
-    to: { type: String, default: '' }
+    to: { type: String, default: '' },
+    onChange: { type: Function, default: null }
   },
   data() {
     return {
@@ -122,12 +121,14 @@ export default {
         this.toAgg = e.target.dataset.name
         this.selecting = false
         this.checkFromTo()
+        if (this.onChange) this.onChange(this)
       }
     },
     cancelHandler(e) {
       e.stopPropagation()
       this.selecting = false
       this.checkFromTo()
+      if (this.onChange) this.onChange(this)
     }
   }
 }

@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { updateRouter } from '~/utils/router'
+
 import SearchFilterTitle from '~/components/SearchFilterTitle'
 import SearchFilterRangeSelector from '~/components/SearchFilterRangeSelector'
 
