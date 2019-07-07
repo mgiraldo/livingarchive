@@ -37,7 +37,7 @@ export default {
       let facets = {}
       let aggs = Object.keys(this.aggregations)
       aggs.forEach(agg => {
-        facets[agg] = this.facet.values[agg]
+        facets[agg] = this.facet.values ? this.facet.values[agg] : null
       })
       return facets
     }

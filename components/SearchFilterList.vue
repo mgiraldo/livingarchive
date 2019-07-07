@@ -43,9 +43,9 @@ export default {
       updateRouter({ router: this.$router, store: this.$store })
     },
     facetColor(name) {
-      const nullColor = '#aaa'
       // we assume facet has colors or else just null
       if (!this.facet.values) return null
+      const nullColor = '#aaa'
       const index = Object.keys(this.facet.values).indexOf(name)
       // has colors but not present so default color #aaa
       if (index === -1) return nullColor
