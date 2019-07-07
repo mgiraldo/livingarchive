@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { RDF_AGES, RDF_SEXES, MAX_TEXT_LENGTH } from '~/utils/constants'
+import { AGES_COLORS, SEXES_COLORS, MAX_TEXT_LENGTH } from '~/utils/constants'
 
 export default {
   props: {
@@ -66,8 +66,8 @@ export default {
   data() {
     return {
       discussionToggled: false,
-      ageColors: RDF_AGES.values,
-      sexColors: RDF_SEXES.values
+      ageColors: AGES_COLORS.values,
+      sexColors: SEXES_COLORS.values
     }
   },
   computed: {

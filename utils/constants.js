@@ -54,7 +54,7 @@ export const TILELAYERS = [
   }
 ]
 
-export const RDF_AGES = {
+export const AGES_COLORS = {
   name: 'Ages',
   values: {
     'Age not determinable': '#ccc',
@@ -70,7 +70,7 @@ export const RDF_AGES = {
   }
 }
 
-export const RDF_SEXES = {
+export const SEXES_COLORS = {
   name: 'Sexes',
   values: {
     '?': '#aaa',
@@ -82,7 +82,7 @@ export const RDF_SEXES = {
   }
 }
 
-export const RDF_PHASES = {
+export const PHASES_COLORS = {
   name: 'Phases',
   values: {
     ' S94.B.1': '#aaa',
@@ -304,7 +304,7 @@ export const RDF_PHASES = {
   }
 }
 
-export const RDF_LEVELS = {
+export const LEVELS_COLORS = {
   name: 'Levels',
   values: {
     'IST.Unassigned': '#aaa',

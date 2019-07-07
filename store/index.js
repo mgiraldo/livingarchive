@@ -1,8 +1,8 @@
 import {
-  RDF_AGES,
-  RDF_SEXES,
-  RDF_PHASES,
-  RDF_LEVELS,
+  AGES_COLORS,
+  SEXES_COLORS,
+  PHASES_COLORS,
+  LEVELS_COLORS,
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
 import {
@@ -27,10 +27,10 @@ export const state = () => ({
   displayedIdentifiers: new Set(),
   aggs: {},
   points: [],
-  sexes: RDF_SEXES.values,
-  ages: RDF_AGES.values,
-  levels: RDF_LEVELS.values,
-  phases: RDF_PHASES.values,
+  sexes: SEXES_COLORS.values,
+  ages: AGES_COLORS.values,
+  levels: LEVELS_COLORS.values,
+  phases: PHASES_COLORS.values,
   checkedAges: new Set(),
   checkedSexes: new Set(),
   checkedLevels: new Set(),

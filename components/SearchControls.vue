@@ -41,7 +41,12 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
-import { RDF_SEXES, RDF_AGES, RDF_LEVELS, RDF_PHASES } from '~/utils/constants'
+import {
+  SEXES_COLORS,
+  AGES_COLORS,
+  LEVELS_COLORS,
+  PHASES_COLORS
+} from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
@@ -51,10 +56,10 @@ export default {
   components: { SearchFilterSkeleton, SearchFilterStandard, SearchFilterRange },
   data() {
     return {
-      ages: RDF_AGES,
-      sexes: RDF_SEXES,
-      levels: RDF_LEVELS,
-      phases: RDF_PHASES
+      ages: AGES_COLORS,
+      sexes: SEXES_COLORS,
+      levels: LEVELS_COLORS,
+      phases: PHASES_COLORS
     }
   },
   computed: {},

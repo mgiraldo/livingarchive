@@ -3,7 +3,12 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import { RDF_PREFIXES, RDF_TIMEOUT, RDF_SEXES, RDF_AGES } from './constants'
+import {
+  RDF_PREFIXES,
+  RDF_TIMEOUT,
+  SEXES_COLORS,
+  AGES_COLORS
+} from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
@@ -34,12 +39,16 @@ export const countIndividuals = async filters => {
   let sexes = filters.sexes ? Array.from(filters.sexes) : []
 
   let ageStr = ages
-    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES.values)[age]}"` : ''))
+    .map(age =>
+      !isNaN(age) ? `"${Object.keys(AGES_COLORS.values)[age]}"` : ''
+    )
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
-    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES.values)[sex]}"` : ''))
+    .map(sex =>
+      !isNaN(sex) ? `"${Object.keys(SEXES_COLORS.values)[sex]}"` : ''
+    )
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
 
@@ -71,12 +80,16 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
   let sexes = filters.sexes ? Array.from(filters.sexes) : []
 
   let ageStr = ages
-    .map(age => (!isNaN(age) ? `"${Object.keys(RDF_AGES.values)[age]}"` : ''))
+    .map(age =>
+      !isNaN(age) ? `"${Object.keys(AGES_COLORS.values)[age]}"` : ''
+    )
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
-    .map(sex => (!isNaN(sex) ? `"${Object.keys(RDF_SEXES.values)[sex]}"` : ''))
+    .map(sex =>
+      !isNaN(sex) ? `"${Object.keys(SEXES_COLORS.values)[sex]}"` : ''
+    )
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
 

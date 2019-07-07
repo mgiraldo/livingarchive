@@ -4,12 +4,7 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import {
-  RDF_SEXES,
-  RDF_AGES,
-  FILTER_PARAMS_TO_NAMES,
-  EMPTY_LONLAT
-} from './constants'
+import { FILTER_PARAMS_TO_NAMES, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
