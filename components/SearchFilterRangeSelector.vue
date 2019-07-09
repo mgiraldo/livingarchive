@@ -10,17 +10,11 @@
       @mouseup="mouseupHandler"
       @mousedown="mousedownHandler"
     >
-      <span
-        :class="
-          'label not-interactive ' + (isFromTo(agg.name) ? 'displayed' : '')
-        "
-        >{{ agg.name }}: {{ agg.value }}</span
-      >
+      <span class="label not-interactive">{{ agg.name }}</span>
       <search-filter-bar
         class="not-interactive"
         :total="total"
         :value="agg.value"
-        :show-text="false"
       />
     </li>
   </ul>
@@ -43,7 +37,6 @@ export default {
   },
   data() {
     return {
-      selectedItems: [],
       selecting: false,
       fromAgg: this.from,
       toAgg: this.to
@@ -111,6 +104,11 @@ export default {
         this.toAgg = temp
       }
     },
+    stopSelection() {
+      this.selecting = false
+      this.checkFromTo()
+      if (this.onChange) this.onChange(this)
+    },
     mouseoverHandler(e) {
       e.stopPropagation()
       if (this.selecting) {
@@ -129,16 +127,14 @@ export default {
       e.stopPropagation()
       if (this.selecting) {
         this.toAgg = e.target.dataset.name
-        this.selecting = false
-        this.checkFromTo()
-        if (this.onChange) this.onChange(this)
+        this.stopSelection()
       }
     },
     cancelHandler(e) {
       e.stopPropagation()
-      this.selecting = false
-      this.checkFromTo()
-      if (this.onChange) this.onChange(this)
+      if (this.selecting) {
+        this.stopSelection()
+      }
     }
   }
 }
@@ -155,6 +151,7 @@ ul {
   user-select: none;
 }
 .facet {
+  cursor: pointer;
   margin-bottom: 0;
   position: relative;
 
@@ -174,19 +171,10 @@ ul {
   &:last-child {
     margin-bottom: 0;
   }
-
-  &:hover .label {
-    display: block;
-  }
 }
 .label {
-  display: none;
   right: 0.25rem;
   position: absolute;
-
-  &.displayed {
-    display: block;
-  }
 }
 input {
   margin-right: 0.5rem;

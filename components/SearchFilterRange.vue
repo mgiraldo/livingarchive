@@ -8,6 +8,7 @@
     />
     <div :id="'facet_' + facet.name + '_toggle'">
       <search-filter-range-selector
+        :key="$route.fullPath"
         :open="open"
         :facet="facet"
         :aggregations="aggregations"
