@@ -44,36 +44,40 @@ const performESQuery = async query => {
 }
 
 const buildQuery = params => {
-  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES).map(
-    param => param.agg
-  )
+  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES)
   let query = bodybuilder()
   query = query.size(600)
   if (params.source) query = query.rawOption('_source', params.source)
   query = query.query('match_all', {})
   if (params.filters) {
-    params.filters.forEach(filter => {
-      query = query.filter('terms', filter.type, filter.value)
-    })
+    for (let param in FILTER_PARAMS_TO_NAMES) {
+      const agg = FILTER_PARAMS_TO_NAMES[param]
+      const filter = params.filters[agg.agg]
+        ? Array.from(params.filters[agg.agg])
+        : []
+      if (filter.length) {
+        switch (agg.queryType) {
+          case 'keyword':
+            query = query.filter('terms', agg.agg + '.' + agg.queryType, filter)
+            break
+          case 'starts_with':
+            filter.forEach(term => {
+              query = query.filter(
+                'match_phrase_prefix',
+                agg.agg,
+                agg.startsWithPrefix + term
+              )
+            })
+            break
+        }
+      }
+    }
   }
   // query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
   elasticAggs.forEach(agg => {
-    query = query.agg('terms', agg + '.keyword', { size: querySize })
+    query = query.agg('terms', agg.agg + '.' + agg.aggType, { size: querySize })
   })
   return query.build()
-}
-
-const parseFilters = filters => {
-  // console.log('elastic:', filters)
-  let esFilters = []
-
-  for (let param in FILTER_PARAMS_TO_NAMES) {
-    const agg = FILTER_PARAMS_TO_NAMES[param].agg
-    const filter = filters[agg] ? Array.from(filters[agg]) : []
-    if (filter.length) esFilters.push({ type: agg + '.keyword', value: filter })
-  }
-
-  return esFilters
 }
 
 /**
@@ -83,11 +87,10 @@ const parseFilters = filters => {
  */
 export const getFilteredIndividuals = async ({ filters }) => {
   const source = 'individual'
-  const esFilters = parseFilters(filters)
 
   let query = buildQuery({
     source: [source],
-    filters: esFilters
+    filters
   })
 
   const { results, aggs, count } = await performESQuery(query)
@@ -116,11 +119,9 @@ export const getAllIndividuals = async ({ filters }) => {
     'unit'
   ]
 
-  const esFilters = parseFilters(filters)
-
   let query = buildQuery({
     source: sources,
-    filters: esFilters
+    filters
   })
 
   const { results, aggs, count } = await performESQuery(query)
@@ -169,13 +170,11 @@ export const getAllIndividuals = async ({ filters }) => {
 
 const getAggregations = aggs => {
   let result = {}
-  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES).map(
-    param => param.agg
-  )
+  const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES)
   elasticAggs.forEach(agg => {
-    result[agg] = {}
-    aggs['agg_terms_' + agg + '.keyword'].buckets.forEach(item => {
-      result[agg][cleanString(item.key)] = item.doc_count
+    result[agg.agg] = {}
+    aggs['agg_terms_' + agg.agg + '.' + agg.aggType].buckets.forEach(item => {
+      result[agg.agg][cleanString(item.key)] = item.doc_count
     })
   })
   // console.log(result)

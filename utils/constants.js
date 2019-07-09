@@ -19,23 +19,39 @@ export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
 export const BUILDING_COLOR = 'hsla(33, 35%, 44%, 1)'
 
 export const FILTER_PARAMS_TO_NAMES = {
-  a: { agg: 'age', type: 'keyword', storeName: 'Ages', explainedName: 'Age' },
-  s: { agg: 'sex', type: 'keyword', storeName: 'Sexes', explainedName: 'Sex' },
+  a: {
+    agg: 'age',
+    aggType: 'keyword',
+    queryType: 'keyword',
+    storeName: 'Ages',
+    explainedName: 'Age'
+  },
+  s: {
+    agg: 'sex',
+    aggType: 'keyword',
+    queryType: 'keyword',
+    storeName: 'Sexes',
+    explainedName: 'Sex'
+  },
   p: {
     agg: 'phase',
-    type: 'keyword',
+    aggType: 'keyword',
+    queryType: 'keyword',
     storeName: 'Phases',
     explainedName: 'Phase'
   },
   b: {
     agg: 'bones.bone',
-    type: 'keyword',
+    aggType: 'keyword',
+    queryType: 'starts_with',
+    startsWithPrefix: RDF_PLACEHOLDER,
     storeName: 'Skeleton',
     explainedName: 'Bone'
   },
   l: {
     agg: 'level',
-    type: 'keyword',
+    aggType: 'keyword',
+    queryType: 'keyword',
     storeName: 'Levels',
     explainedName: 'Level'
   }
