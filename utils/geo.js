@@ -4,6 +4,7 @@ import { PROJ4_DEFS } from '~/utils/constants'
 
 export const reprojectGeoJson = geoJson => {
   let newGeoJson = JSON.parse(JSON.stringify(geoJson))
+  if (!newGeoJson) return
   switch (newGeoJson.type) {
     case 'Point':
       newGeoJson.coordinates = reprojectPoint(newGeoJson.coordinates)
