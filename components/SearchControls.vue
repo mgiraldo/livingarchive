@@ -31,7 +31,7 @@
       :aggregations="aggs('level')"
       :facet="levels"
     />
-    <search-filter-tree
+    <search-filter-graph
       class="filter"
       :aggregations="aggs('phase')"
       :facet="phases"
@@ -51,14 +51,14 @@ import {
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
 import SearchFilterRange from '~/components/SearchFilterRange'
-import SearchFilterTree from '~/components/SearchFilterTree'
+import SearchFilterGraph from '~/components/SearchFilterGraph'
 
 export default {
   components: {
     SearchFilterSkeleton,
     SearchFilterStandard,
     SearchFilterRange,
-    SearchFilterTree
+    SearchFilterGraph
   },
   data() {
     return {

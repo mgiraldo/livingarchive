@@ -33,8 +33,20 @@ export default {
     return { open: false }
   },
   computed: {
-    aggregationTree() {
-      let treeArray = []
+    sortedAggregations() {
+      let sorted = []
+      for (let agg in this.aggregations) {
+        sorted.push({
+          name: agg.trim(),
+          value: this.aggregations[agg],
+          sortableName: agg.trim().toLowerCase()
+        })
+      }
+      sorted = sorted.sort((a, b) => (a.sortableName < b.sortableName ? -1 : 1))
+      return sorted
+    },
+    aggregationGraph() {
+      let graph = {}
       for (let index in this.sortedAggregations) {
         const agg = this.sortedAggregations[index]
         let node = { ...agg }
@@ -48,63 +60,31 @@ export default {
             nameArray.slice(1),
             agg.value
           )
-        treeArray.push(node)
+        graph[nodeArray[0]] = node
       }
-      let finalArray = {}
-      treeArray.forEach(element => {
-        if (finalArray.hasOwnProperty(element.sortableName)) {
-          // console.log(
-          //   'has',
-          //   element.sortableName,
-          //   finalArray[element.sortableName],
-          //   element.children
-          // )
-          finalArray[element.sortableName].children = {
-            ...this.putChildren(
-              finalArray[element.sortableName].children,
-              element.children
-            )
-          }
-        } else {
-          finalArray[element.sortableName] = { ...element }
-        }
-      })
-      return finalArray
-    },
-    sortedAggregations() {
-      let sorted = []
-      for (let agg in this.aggregations) {
-        sorted.push({
-          name: agg.trim(),
-          value: this.aggregations[agg],
-          sortableName: agg.trim().toLowerCase()
-        })
-      }
-      sorted = sorted.sort((a, b) => (a.sortableName < b.sortableName ? -1 : 1))
-      return sorted
+      return graph
     }
   },
   methods: {
-    putChildren(node, child) {
-      // console.log('node', node, child)
-      if (child.children) {
-        node = { ...child }
-        node.children = { ...this.putChildren(node, child.children) }
-      } else {
-        return node
-      }
-    },
     parseNode(nodeArray, nameArray, value) {
       if (nodeArray.length <= 1) {
-        return { name: nameArray[0], value: value, sortableName: nodeArray[0] }
+        return {
+          [nameArray[0]]: {
+            name: nameArray[0],
+            value: value,
+            sortableName: nodeArray[0]
+          }
+        }
       }
       const sortableName = nodeArray.splice(0, 1)[0]
       const name = nameArray.splice(0, 1)[0]
       return {
-        name: name,
-        value: value,
-        sortableName: sortableName,
-        children: this.parseNode(nodeArray, nameArray, value)
+        [name]: {
+          name: name,
+          value: value,
+          sortableName: sortableName,
+          children: this.parseNode(nodeArray, nameArray, value)
+        }
       }
     },
     toggle() {
