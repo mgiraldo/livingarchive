@@ -146,8 +146,10 @@ export const getAllIndividuals = async ({ filters }) => {
       // create a point for the bones in the first spatial
       if (element.spatial_list && element.spatial_list.length > 0) {
         point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
-        if (point.type !== 'Point') {
+        if (point && point.type !== 'Point') {
           point = center(point).geometry
+        } else {
+          point = wellknown.parse(EMPTY_LONLAT)
         }
         for (let bone of element.spatial_list) {
           individuals[identifier].skeleton.add(bone)

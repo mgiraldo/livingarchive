@@ -30,7 +30,7 @@ export default {
       let shapeArray = [...this.shape]
       shapeArray.forEach(wkt => {
         const parsed = wellknown.parse(wkt)
-        if (parsed.type !== 'Point') {
+        if (parsed && parsed.type !== 'Point') {
           features.push(parsed)
         }
       })
