@@ -13,6 +13,8 @@
         :facet="facet"
         :aggregations="aggregations"
         :on-change="handleChange"
+        :from="from"
+        :to="to"
       />
     </div>
   </section>
@@ -36,7 +38,18 @@ export default {
   data() {
     return { open: false }
   },
-  computed: {},
+  computed: {
+    from() {
+      const selected = [...this.$store.state['checked' + this.facet.name]]
+      if (selected.size === 0) return ''
+      return selected[0]
+    },
+    to() {
+      const selected = [...this.$store.state['checked' + this.facet.name]]
+      if (selected.size === 0) return ''
+      return selected[selected.length - 1]
+    }
+  },
   methods: {
     handleChange(e) {
       const filter = this.facet.name

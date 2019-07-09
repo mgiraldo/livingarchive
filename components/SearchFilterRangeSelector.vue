@@ -4,7 +4,7 @@
       v-for="(agg, index) in sortedAggregations"
       :ref="agg.name"
       :key="index"
-      :class="'facet ' + selectedClasses(agg.name)"
+      class="facet"
       :data-name="agg.name"
       @mouseover="mouseoverHandler"
       @mouseup="mouseupHandler"
@@ -12,7 +12,7 @@
     >
       <span class="label not-interactive">{{ agg.name }}</span>
       <search-filter-bar
-        class="not-interactive"
+        :class="'not-interactive ' + hasSelectedClasses(agg.name)"
         :total="total"
         :value="agg.value"
       />
@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    selectedClasses(name) {
+    hasSelectedClasses(name) {
       if (this.indexFrom === -1) return ''
       const nameIndex = this.sortedIndexes.indexOf(name)
       const classNames = []
@@ -155,22 +155,21 @@ ul {
   margin-bottom: 0;
   position: relative;
 
-  &.start,
-  &.middle,
-  &.end {
-    border-left: 1px solid $global-alert-color;
-    border-right: 1px solid $global-alert-color;
-  }
-  &.start {
-    border-top: 1px solid $global-alert-color;
-  }
-  &.end {
-    border-bottom: 1px solid $global-alert-color;
-  }
-
   &:last-child {
     margin-bottom: 0;
   }
+}
+.start,
+.middle,
+.end {
+  border-left: 1px solid $global-alert-color;
+  border-right: 1px solid $global-alert-color;
+}
+.start {
+  border-top: 1px solid $global-alert-color;
+}
+.end {
+  border-bottom: 1px solid $global-alert-color;
 }
 .label {
   right: 0.25rem;
