@@ -11,6 +11,7 @@
         :open="open"
         :facet="facet"
         :aggregations="aggregations"
+        :on-change="handleChange"
       />
     </div>
   </section>
@@ -36,6 +37,12 @@ export default {
   },
   computed: {},
   methods: {
+    handleChange(e) {
+      const filter = this.facet.name
+      const values = e.selectedNames
+      this.$store.commit('resetFilter', { filter, values })
+      updateRouter({ router: this.$router, store: this.$store })
+    },
     toggle() {
       this.open = !this.open
     }

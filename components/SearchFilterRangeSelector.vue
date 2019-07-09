@@ -4,7 +4,7 @@
       v-for="(agg, index) in sortedAggregations"
       :ref="agg.name"
       :key="index"
-      :class="'facet ' + selectedType(agg.name)"
+      :class="'facet ' + selectedClasses(agg.name)"
       :data-name="agg.name"
       @mouseover="mouseoverHandler"
       @mouseup="mouseupHandler"
@@ -69,10 +69,20 @@ export default {
     },
     indexTo() {
       return this.sortedIndexes.indexOf(this.toAgg)
+    },
+    range() {
+      return [this.indexFrom, this.indexTo]
+    },
+    selectedNames() {
+      return this.sortedAggregations
+        .filter(
+          (agg, index) => index <= this.indexTo && index >= this.indexFrom
+        )
+        .map(phase => phase.name)
     }
   },
   methods: {
-    selectedType(name) {
+    selectedClasses(name) {
       if (this.indexFrom === -1) return ''
       const nameIndex = this.sortedIndexes.indexOf(name)
       const classNames = []
@@ -95,7 +105,7 @@ export default {
       this.toAgg = ''
     },
     checkFromTo() {
-      if (this.fromIndex > this.toIndex) {
+      if (this.indexFrom > this.indexTo) {
         const temp = this.fromAgg
         this.fromAgg = this.toAgg
         this.toAgg = temp

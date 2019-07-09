@@ -1,8 +1,6 @@
 import {
   AGES_COLORS,
   SEXES_COLORS,
-  PHASES_COLORS,
-  LEVELS_COLORS,
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
 import {
@@ -115,6 +113,10 @@ export const mutations = {
     } else {
       state['checked' + filter].add(name)
     }
+    state.filtered = isFiltered(state)
+  },
+  resetFilter(state, { filter, values }) {
+    state['checked' + filter] = new Set(values)
     state.filtered = isFiltered(state)
   },
   clearFilters(state) {

@@ -35,11 +35,12 @@ export default {
   computed: {
     aggregationTree() {
       let treeArray = []
-      for (let item in this.sortedAggregations) {
-        const agg = this.sortedAggregations[item]
+      for (let index in this.sortedAggregations) {
+        const agg = this.sortedAggregations[index]
         let node = { ...agg }
-        const nodeArray = agg.sortableName.split('.')
-        const nameArray = agg.name.split('.')
+        const nodeArray = agg.sortableName.split('.').map(name => name.trim())
+        const nameArray = agg.name.split('.').map(name => name.trim())
+        node.name = nameArray[0]
         node.sortableName = nodeArray[0]
         if (nodeArray.length > 1)
           node.children = this.parseNode(
@@ -51,12 +52,21 @@ export default {
       }
       let finalArray = {}
       treeArray.forEach(element => {
-        finalArray[element.sortableName] = { ...element }
-        if (element.children) {
-          finalArray[element.sortableName].children = this.putChildren(
-            {},
-            element.children
-          )
+        if (finalArray.hasOwnProperty(element.sortableName)) {
+          // console.log(
+          //   'has',
+          //   element.sortableName,
+          //   finalArray[element.sortableName],
+          //   element.children
+          // )
+          finalArray[element.sortableName].children = {
+            ...this.putChildren(
+              finalArray[element.sortableName].children,
+              element.children
+            )
+          }
+        } else {
+          finalArray[element.sortableName] = { ...element }
         }
       })
       return finalArray
@@ -65,9 +75,9 @@ export default {
       let sorted = []
       for (let agg in this.aggregations) {
         sorted.push({
-          name: agg,
+          name: agg.trim(),
           value: this.aggregations[agg],
-          sortableName: agg.toLowerCase()
+          sortableName: agg.trim().toLowerCase()
         })
       }
       sorted = sorted.sort((a, b) => (a.sortableName < b.sortableName ? -1 : 1))
@@ -75,28 +85,26 @@ export default {
     }
   },
   methods: {
-    putChildren(node, children) {
-      children.forEach(element => {
-        node[element.sortableName] = { ...element }
-        if (element.children) {
-          node[element.sortableName].children = this.putChildren(
-            {},
-            element.children
-          )
-        }
-      })
+    putChildren(node, child) {
+      // console.log('node', node, child)
+      if (child.children) {
+        node = { ...child }
+        node.children = { ...this.putChildren(node, child.children) }
+      } else {
+        return node
+      }
     },
     parseNode(nodeArray, nameArray, value) {
-      const sortableName = nodeArray[0]
-      const name = nameArray[0]
       if (nodeArray.length <= 1) {
-        return { name: name, value: value, sortableName: sortableName }
+        return { name: nameArray[0], value: value, sortableName: nodeArray[0] }
       }
+      const sortableName = nodeArray.splice(0, 1)[0]
+      const name = nameArray.splice(0, 1)[0]
       return {
         name: name,
         value: value,
         sortableName: sortableName,
-        children: this.parseNode(nodeArray.slice(1), nameArray.slice(1), value)
+        children: this.parseNode(nodeArray, nameArray, value)
       }
     },
     toggle() {
