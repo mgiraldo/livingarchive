@@ -12,7 +12,7 @@
     >
       <span class="label not-interactive">{{ agg.name }}</span>
       <search-filter-bar
-        :class="'not-interactive ' + hasSelectedClasses(agg.name)"
+        :class="'not-interactive range ' + hasSelectedClasses(agg.name)"
         :total="total"
         :value="agg.value"
       />
@@ -168,6 +168,10 @@ ul {
     margin-bottom: 0;
   }
 }
+.range {
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+}
 .start,
 .middle,
 .end {
@@ -181,8 +185,9 @@ ul {
   border-bottom: 1px solid $global-alert-color;
 }
 .label {
-  right: 0.25rem;
   position: absolute;
+  right: 0.25rem;
+  top: 0.25rem;
 }
 input {
   margin-right: 0.5rem;

@@ -1,14 +1,14 @@
 <template>
   <ul v-show="open">
     <li v-for="(value, name, index) in aggregations" :key="index" class="facet">
+      <input
+        :id="`${name}_${index}`"
+        type="checkbox"
+        :value="index"
+        :checked="inStore(facet.name, name)"
+        @change="toggled(facet.name, name, $event.target.checked)"
+      />
       <label :for="`${name}_${index}`">
-        <input
-          :id="`${name}_${index}`"
-          type="checkbox"
-          :value="index"
-          :checked="inStore(facet.name, name)"
-          @change="toggled(facet.name, name, $event.target.checked)"
-        />
         <filter-color-item :name="name" :color="facetColor(name)" />
       </label>
       <search-filter-bar :total="total" :value="value" />
@@ -66,18 +66,12 @@ ul {
   padding: 0.25rem;
 }
 .facet {
+  @include custom-checkbox;
+
   margin-bottom: 1rem;
 
   &:last-child {
     margin-bottom: 0;
   }
-}
-label {
-  cursor: pointer;
-  display: flex;
-  margin-bottom: 0.25rem;
-}
-input {
-  margin-right: 0.5rem;
 }
 </style>

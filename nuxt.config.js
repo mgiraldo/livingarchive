@@ -69,7 +69,9 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
   },
 
-  styleResources: { scss: '~/assets/css/variables.scss' },
+  styleResources: {
+    scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss']
+  },
 
   /*
    ** Build configuration
