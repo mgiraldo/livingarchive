@@ -54,7 +54,6 @@ export default {
     handleChange(e) {
       const filter = this.facet.name
       const values = [e.fromAgg, e.toAgg]
-      console.log(values)
       this.$store.commit('resetFilter', { filter, values })
       updateRouter({ router: this.$router, store: this.$store })
     },
