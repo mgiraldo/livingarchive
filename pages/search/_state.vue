@@ -57,6 +57,9 @@ export default {
     }
     await store.dispatch('fetchIndividuals')
   },
+  mounted() {
+    this.$store.commit('toggleViewMode', 'search')
+  },
   methods: {}
 }
 </script>

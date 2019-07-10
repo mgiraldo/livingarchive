@@ -72,6 +72,7 @@ export default {
   },
   mounted() {
     this.setRow()
+    this.$store.commit('toggleViewMode', 'grid')
     window.addEventListener('resize', this.setRow)
   },
   beforeDestroy: function() {
