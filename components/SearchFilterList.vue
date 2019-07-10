@@ -1,6 +1,10 @@
 <template>
   <ul v-show="open">
-    <li v-for="(value, name, index) in aggregations" :key="index" class="facet">
+    <li
+      v-for="(value, name, index) in aggregations"
+      :key="index + '_' + name"
+      class="facet"
+    >
       <input
         :id="`${name}_${index}`"
         type="checkbox"

@@ -75,7 +75,9 @@ export default {
   },
   methods: {
     cleanBone(bone) {
-      return bone.substring(0, bone.lastIndexOf('-'))
+      let index = bone.lastIndexOf('-')
+      index = index === -1 ? bone.length : index
+      return bone.substring(0, index)
     },
     toggle() {
       this.open = !this.open
