@@ -61,10 +61,16 @@ export default {
       return this.sortedAggregations.map(agg => agg.name)
     },
     indexFrom() {
-      return this.sortedIndexes.indexOf(this.fromAgg)
+      if (this.fromAgg === '') return -1
+      let index = this.sortedIndexes.indexOf(this.fromAgg)
+      if (index === -1) return 0 // the from value is out of bounds of the visible facets
+      return index
     },
     indexTo() {
-      return this.sortedIndexes.indexOf(this.toAgg)
+      if (this.toAgg === '') return -1
+      let index = this.sortedIndexes.indexOf(this.toAgg)
+      if (index === -1) return this.sortedIndexes.length - 1 // the to value is out of bounds of the visible facets
+      return index
     },
     range() {
       return [this.indexFrom, this.indexTo]
