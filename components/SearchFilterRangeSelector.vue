@@ -1,23 +1,26 @@
 <template>
-  <ul v-show="open" @mouseover="cancelHandler">
-    <li
-      v-for="(agg, index) in sortedAggregations"
-      :ref="agg.name"
-      :key="index"
-      class="facet"
-      :data-name="agg.name"
-      @mouseover="mouseoverHandler"
-      @mouseup="mouseupHandler"
-      @mousedown="mousedownHandler"
-    >
-      <span class="label not-interactive">{{ agg.name }}</span>
-      <search-filter-bar
-        :class="'not-interactive range ' + hasSelectedClasses(agg.name)"
-        :total="total"
-        :value="agg.value"
-      />
-    </li>
-  </ul>
+  <div v-show="open">
+    <p class="explainer">Click and drag to select</p>
+    <ul @mouseover="cancelHandler">
+      <li
+        v-for="(agg, index) in sortedAggregations"
+        :ref="agg.name"
+        :key="index"
+        class="facet"
+        :data-name="agg.name"
+        @mouseover="mouseoverHandler"
+        @mouseup="mouseupHandler"
+        @mousedown="mousedownHandler"
+      >
+        <span class="label not-interactive">{{ agg.name }}</span>
+        <search-filter-bar
+          :class="'not-interactive range ' + hasSelectedClasses(agg.name)"
+          :total="total"
+          :value="agg.value"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -150,6 +153,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.explainer {
+  margin-left: 0.25rem;
+}
 ul {
   list-style-type: none;
   margin: 0;
