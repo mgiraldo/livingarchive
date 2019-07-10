@@ -137,7 +137,7 @@ export const getFilteredIndividuals = async ({ filters }) => {
 /**
  * Get a compacted version of the individuals that we then compared to the store
  * @param {*} param0 the filters to apply
- * @returns {object} the results in form `{ count, individuals, vars: sources, points, aggs }`
+ * @returns {object} the results in form `{ count, individuals, points, aggs }`
  */
 export const getAllIndividuals = async ({ filters }) => {
   const sources = [
@@ -199,7 +199,7 @@ export const getAllIndividuals = async ({ filters }) => {
     }
   })
 
-  return { count, individuals, vars: sources, points, aggs }
+  return { count, individuals, points, aggs }
 }
 
 const getAggregations = aggs => {

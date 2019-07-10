@@ -18,7 +18,6 @@ const isFiltered = state => {
 }
 
 export const state = () => ({
-  vars: [],
   viewMode: 'map',
   individuals: {},
   count: 0,
@@ -84,7 +83,6 @@ export const getters = {
 
 export const mutations = {
   firstLoadComplete(state, newState) {
-    state.vars = newState.vars
     state.individuals = newState.individuals
     state.points = newState.points
     state.aggs = newState.aggs
@@ -96,7 +94,6 @@ export const mutations = {
     state.aggs = newState.aggs
     state.count = newState.count
     state.filtered = isFiltered(newState)
-    state.vars = newState.vars || state.vars
     state.individuals = newState.individuals || state.individuals
     state.points = newState.points || state.points
   },
@@ -161,19 +158,16 @@ export const actions = {
     }
 
     // TODO: fix limit magic number
-    // let { vars, individuals, count, points } = await getIndividualsRDF({
+    // let { individuals, count, points } = await getIndividualsRDF({
     //   limit: 500,
     //   filters: filters
     // })
 
-    const { vars, individuals, points, aggs, count } = await getBaseIndividuals(
-      {
-        filters
-      }
-    )
+    const { individuals, points, aggs, count } = await getBaseIndividuals({
+      filters
+    })
 
     let newState = {
-      vars: { individuals: vars },
       individuals,
       points,
       filtered: false,
@@ -213,12 +207,9 @@ export const actions = {
 
     // check to see if nothing is there
     if (!state.individuals || Object.keys(state.individuals).length === 0) {
-      let { vars, individuals, points, aggs, count } = await getBaseIndividuals(
-        {
-          filters
-        }
-      )
-      newState.vars = vars
+      let { individuals, points, aggs, count } = await getBaseIndividuals({
+        filters
+      })
       newState.individuals = individuals
       newState.points = points
       newState.aggs = aggs
@@ -230,8 +221,8 @@ export const actions = {
 }
 
 const getBaseIndividuals = async ({ filters }) => {
-  const { vars, individuals, points, aggs, count } = await getIndividualsES({
+  const { individuals, points, aggs, count } = await getIndividualsES({
     filters
   })
-  return { vars, individuals, points, aggs, count }
+  return { individuals, points, aggs, count }
 }

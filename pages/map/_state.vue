@@ -16,7 +16,6 @@
             v-for="individual in displayedIndividuals"
             :key="individual.identifier"
             :individual="individual"
-            :vars="vars"
             :show-click="showClick"
             :building-click="buildingClick"
           ></li>
@@ -54,9 +53,7 @@ export default {
     return {
       resizing: false,
       splitPaneWidth: 0,
-      splitPaneX: 0,
-      ageFilter: [...this.$store.state.checkedAges],
-      sexFilter: [...this.$store.state.checkedSexes]
+      splitPaneX: 0
     }
   },
   computed: {
@@ -65,9 +62,6 @@ export default {
     },
     displayedIndividuals() {
       return this.$store.getters.displayedIndividuals
-    },
-    vars() {
-      return this.$store.state.vars.individuals
     }
   },
   fetch: async function({ store, params }) {
@@ -83,15 +77,6 @@ export default {
   created() {},
   mounted() {
     this.checkResizer()
-    this.$store.subscribe(mutation => {
-      if (
-        mutation.type === 'setFilters' ||
-        mutation.type === 'clearFilters' ||
-        mutation.type === 'checkedFilter'
-      ) {
-        this.updateFilters()
-      }
-    })
   },
   methods: {
     showClick(who) {
@@ -129,10 +114,6 @@ export default {
     resizeUp() {
       this.resizing = false
       this.enableSelect()
-    },
-    updateFilters() {
-      this.ageFilter = [...this.$store.state.checkedAges]
-      this.sexFilter = [...this.$store.state.checkedSexes]
     },
     disableSelect() {
       if (!this.pane) return

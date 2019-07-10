@@ -147,7 +147,7 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
 
   let count = await countIndividuals(filters)
 
-  return { vars, individuals, count, points }
+  return { individuals, count, points }
 }
 
 export const getSkeleton = async identifier => {

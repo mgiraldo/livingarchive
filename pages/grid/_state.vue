@@ -44,9 +44,7 @@ export default {
   data() {
     return {
       selectedGridItem: null,
-      rowNumber: 0,
-      ageFilter: [...this.$store.state.checkedAges],
-      sexFilter: [...this.$store.state.checkedSexes]
+      rowNumber: 0
     }
   },
   computed: {
@@ -75,24 +73,11 @@ export default {
   mounted() {
     this.setRow()
     window.addEventListener('resize', this.setRow)
-    this.$store.subscribe(mutation => {
-      if (
-        mutation.type === 'setFilters' ||
-        mutation.type === 'clearFilters' ||
-        mutation.type === 'checkedFilter'
-      ) {
-        this.updateFilters()
-      }
-    })
   },
   beforeDestroy: function() {
     window.removeEventListener('resize', this.setRow)
   },
   methods: {
-    updateFilters() {
-      this.ageFilter = [...this.$store.state.checkedAges]
-      this.sexFilter = [...this.$store.state.checkedSexes]
-    },
     toggleMap() {
       this.$store.commit('toggleViewMode', 'map')
       updateRouter({ router: this.$router, store: this.$store })

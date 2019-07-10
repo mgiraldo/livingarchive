@@ -85,7 +85,6 @@
 import wellknown from 'wellknown'
 
 import { TILELAYERS, BUILDING_COLOR } from '~/utils/constants'
-import { updateRouter } from '~/utils/router'
 import { getBuilding } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 

@@ -5,7 +5,7 @@
     :identifier="individual.identifier"
   >
     <individual-info :individual="individual" />
-    <div class="actions-wrapper">
+    <div v-if="showControls" class="actions-wrapper">
       <button
         class="actions-toggle link-button no-underline"
         :aria-controls="'actions-' + individual.identifier"
@@ -58,9 +58,9 @@ export default {
   },
   props: {
     individual: { type: Object, required: true },
-    vars: { type: Array, required: true },
-    showClick: { type: Function, required: true },
-    buildingClick: { type: Function, required: true }
+    showControls: { type: Boolean, default: true },
+    showClick: { type: Function, default: () => {} },
+    buildingClick: { type: Function, default: () => {} }
   },
   data() {
     return {
@@ -79,13 +79,13 @@ export default {
 .list-item {
   background-color: $lighter-background-color;
   margin-bottom: 1rem;
-  padding: 0 0.25rem;
+  padding: 0 0.25rem 1.5rem;
 }
 .actions-wrapper {
   align-items: center;
   display: flex;
   line-height: 1;
-  padding: 0.2rem 0 1.5rem 0;
+  padding: 0.2rem 0 0 0;
 }
 .actions-toggle {
   margin-right: 0.25rem;
