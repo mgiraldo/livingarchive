@@ -73,6 +73,7 @@ export default {
   flex-grow: 1;
   overflow-y: auto;
   padding: 0.5rem;
+  -webkit-overflow-scrolling: touch;
 }
 .results-list {
   list-style-type: none;

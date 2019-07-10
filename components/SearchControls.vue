@@ -95,6 +95,7 @@ export default {
   overflow-wrap: anywhere;
   overflow-y: scroll;
   padding: 0.5rem;
+  -webkit-overflow-scrolling: touch;
 }
 .filter-button {
   border: none;

@@ -74,6 +74,7 @@ export default {
   overflow-y: scroll;
   grid-column: 1 / 2;
   grid-row: 1 / 4;
+  -webkit-overflow-scrolling: touch;
 }
 .skeleton-container {
   grid-column: 2 / 3;

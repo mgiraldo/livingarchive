@@ -254,6 +254,7 @@ export default {
   .discussion {
     max-height: 5rem;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 </style>

@@ -150,6 +150,7 @@ export default {
   flex-basis: 50%;
   overflow-y: auto;
   padding: 0.5rem;
+  -webkit-overflow-scrolling: touch;
 }
 .results-list {
   list-style-type: none;

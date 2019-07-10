@@ -128,6 +128,7 @@ export default {
   flex-grow: 1;
   overflow-y: auto;
   padding: 0.5rem 0 0 1rem;
+  -webkit-overflow-scrolling: touch;
 
   h1 {
     font-size: 2rem;
