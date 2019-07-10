@@ -14,12 +14,18 @@
         class="checkbox"
         type="checkbox"
         checked="checked"
-        @change="toggled(filter.name, filter.filter, $event.target.checked)"
+        @change="
+          filter.queryType === 'keyword' || filter.queryType === 'starts_with'
+            ? remove(filter.value, filter.storeName)
+            : filter.queryType === 'range'
+            ? removeRange(filter.storeName)
+            : ''
+        "
       />
-      {{ filter.type }}: {{ filter.name }}
+      {{ filter.explainedName }}: {{ filter.value }}
       <span
         class="remove"
-        :aria-label="`Remove ${filter.type} ${filter.name} filter`"
+        :aria-label="`Remove ${filter.explainedName} ${filter.value} filter`"
         >×</span
       >
     </label>
@@ -43,26 +49,55 @@ export default {
       let filters = []
 
       for (let param in FILTER_PARAMS_TO_NAMES) {
-        const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
-        const explainedName = FILTER_PARAMS_TO_NAMES[param].explainedName
-        const filterArray = [
-          ...this.$store.state['checked' + storeName].values()
-        ]
-        filterArray.forEach(filter => {
-          filters.push({
-            filter: storeName,
-            type: explainedName,
-            name: filter
-          })
-        })
+        const filter = FILTER_PARAMS_TO_NAMES[param]
+        const storeName = filter.storeName
+        const queryType = filter.queryType
+        const explainedName = filter.explainedName
+        const filterArray = [...this.$store.state['checked' + storeName]]
+        if (filterArray.length === 0) continue
+        switch (queryType) {
+          case 'keyword':
+          case 'starts_with':
+            filterArray.forEach(value => {
+              filters.push({
+                storeName,
+                explainedName,
+                queryType,
+                value
+              })
+            })
+            break
+          case 'range': {
+            /*
+            NOTE:
+            Range accepts `filter=from` or `filter=from,to`.
+            */
+            let from = filterArray[0]
+            let to = filterArray[0]
+            if (filterArray.length > 1) {
+              to = filterArray[1]
+            }
+            filters.push({
+              storeName,
+              explainedName,
+              queryType,
+              value: 'from ' + from + ' to ' + to
+            })
+            break
+          }
+        }
       }
 
       return filters
     }
   },
   methods: {
-    toggled(name, filter, value) {
-      this.$store.commit('checkedFilter', { filter, name, value })
+    remove(name, filter) {
+      this.$store.commit('checkedFilter', { filter, name, value: false })
+      updateRouter({ router: this.$router, store: this.$store })
+    },
+    removeRange(filter) {
+      this.$store.commit('resetFilter', { filter, value: [] })
       updateRouter({ router: this.$router, store: this.$store })
     }
   }

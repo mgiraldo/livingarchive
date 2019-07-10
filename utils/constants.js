@@ -1,3 +1,5 @@
+import { SORTED_LEVELS } from './sortedLevels'
+
 export const RDF_PLACEHOLDER =
   'http://www.semanticweb.org/dlukas/ontologies/2017/1/catalhoyuk#'
 
@@ -51,7 +53,8 @@ export const FILTER_PARAMS_TO_NAMES = {
   l: {
     agg: 'level',
     aggType: 'keyword',
-    queryType: 'keyword',
+    queryType: 'range', // a fake range for KEYWORD types
+    rangeList: SORTED_LEVELS,
     storeName: 'Levels',
     explainedName: 'Level'
   }
@@ -118,5 +121,6 @@ export const PHASES_COLORS = {
 }
 
 export const LEVELS_COLORS = {
-  name: 'Levels'
+  name: 'Levels',
+  values: SORTED_LEVELS
 }

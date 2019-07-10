@@ -47,11 +47,14 @@ export default {
       return this.$store.getters.individualCount
     },
     sortedAggregations() {
+      const allValues = Object.values(this.facet.values)
+      const aggs = Object.keys(this.aggregations)
       let sorted = []
-      for (let agg in this.aggregations) {
-        sorted.push({ name: agg, value: this.aggregations[agg] })
-      }
-      sorted = sorted.sort((a, b) => (a.name > b.name ? -1 : 1))
+      allValues.forEach(value => {
+        if (aggs.indexOf(value) !== -1) {
+          sorted.push({ name: value, value: this.aggregations[value] })
+        }
+      })
       return sorted
     },
     sortedIndexes() {
@@ -71,7 +74,7 @@ export default {
         .filter(
           (agg, index) => index <= this.indexTo && index >= this.indexFrom
         )
-        .map(phase => phase.name)
+        .map(element => element.name)
     }
   },
   methods: {

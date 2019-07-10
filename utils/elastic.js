@@ -10,6 +10,9 @@ import { cleanString } from './stringUtils'
 
 const querySize = 6000
 
+const filterPath =
+  'filter_path=aggregations.*.buckets,hits.hits._source,hits.total.value'
+
 const performESQuery = async query => {
   const instance = axios.create({
     // this ignores self-signed https
@@ -25,7 +28,7 @@ const performESQuery = async query => {
   console.log(JSON.stringify(query))
 
   const results = await instance.get(
-    process.env.ELASTIC_ENDPOINT + '/individuals/_search',
+    process.env.ELASTIC_ENDPOINT + '/individuals/_search?' + filterPath,
     {
       params: {
         source: query,
@@ -57,10 +60,40 @@ const buildQuery = params => {
         : []
       if (filter.length) {
         switch (agg.queryType) {
-          case 'keyword':
+          case 'keyword': {
             query = query.filter('terms', agg.agg + '.' + agg.queryType, filter)
             break
-          case 'starts_with':
+          }
+          case 'range': {
+            /*
+            NOTE:
+            Range accepts `filter=from` or `filter=from,to`.
+            It also assumes that `agg.aggType` is 'keyword'
+            */
+            let from = filter[0]
+            let to = filter[0]
+            if (filter.length > 1) {
+              to = filter[1]
+            }
+            const sortedValues = Object.values(agg.rangeList)
+            let fromIndex = sortedValues.indexOf(from)
+            let toIndex = sortedValues.indexOf(to)
+            if (fromIndex === -1 || toIndex === -1) break
+            if (fromIndex > toIndex) {
+              let temp = toIndex
+              toIndex = fromIndex
+              fromIndex = temp
+            }
+            const rangeArray = sortedValues.slice(fromIndex, toIndex + 1)
+
+            query = query.filter(
+              'terms',
+              agg.agg + '.' + agg.aggType,
+              rangeArray
+            )
+            break
+          }
+          case 'starts_with': {
             filter.forEach(term => {
               query = query.filter(
                 'match_phrase_prefix',
@@ -69,6 +102,7 @@ const buildQuery = params => {
               )
             })
             break
+          }
         }
       }
     }
