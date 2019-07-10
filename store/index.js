@@ -127,7 +127,6 @@ export const mutations = {
     state.filtered = false
   },
   setFilters(state, { params }) {
-    // console.log('new filters', params)
     for (let param in FILTER_PARAMS_TO_NAMES) {
       const agg = FILTER_PARAMS_TO_NAMES[param].agg
       const storeName = FILTER_PARAMS_TO_NAMES[param].storeName

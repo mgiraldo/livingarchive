@@ -9,9 +9,7 @@ export const updateRouter = ({ store, router }) => {
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
     state.push(
-      [param, [...store.state['checked' + storeName]].sort().join(',')].join(
-        ':'
-      )
+      [param, [...store.state['checked' + storeName]].join(',')].join(':')
     )
   }
   router.push({
