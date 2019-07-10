@@ -67,6 +67,7 @@ export default {
   height: 100vh;
 }
 .results {
+  flex-grow: 1;
   overflow-y: auto;
   padding: 0.5rem;
 }
