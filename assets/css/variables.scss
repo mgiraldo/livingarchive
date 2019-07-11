@@ -1,5 +1,6 @@
 $global-background-color:rgb(33, 33, 33);
 $global-text-color:rgb(232, 232, 232);
+$global-secondary-text-color: darken($global-text-color, 20%);
 $global-alert-color: $global-text-color;
 $global-border-color:darken($global-text-color,30%);
 $global-link-color: hsla(42, 100%, 75%, 1);

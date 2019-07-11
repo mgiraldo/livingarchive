@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <section>
     <div class="individual">
       {{ individual.individual }}
     </div>
@@ -17,10 +17,10 @@
         {{ individual.sex }}
       </div>
       <div class="basic-info-item">
-        {{ individual.level }}
+        <span class="label">Level</span> {{ individual.level }}
       </div>
       <div class="basic-info-item">
-        {{ individual.phase }}
+        <span class="label">Phase</span> {{ individual.phase }}
       </div>
     </div>
     <nuxt-link
@@ -31,7 +31,7 @@
       open skeleton
     </nuxt-link>
     <div v-if="individual.description" class="description">
-      Description: {{ individual.description }}
+      {{ individual.description }}
     </div>
     <div
       v-if="individual.discussion && individual.discussion !== 'NULL'"
@@ -53,7 +53,7 @@
         {{ !discussionToggled ? 'more' : 'less' }}
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -112,6 +112,11 @@ export default {
 .skeleton-link {
   display: inline-block;
   margin-bottom: 0.25rem;
+}
+.label {
+  color: $global-secondary-text-color;
+  display: block;
+  font-size: 0.8em;
 }
 .description {
   margin: 0.5rem 0;

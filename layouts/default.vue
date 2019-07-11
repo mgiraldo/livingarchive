@@ -52,11 +52,12 @@ a {
 .link-button {
   background: none;
   border: none;
-  text-decoration: underline;
   color: $global-link-color;
   cursor: pointer;
+  display: flex;
   font: inherit;
   padding: 0;
+  text-decoration: underline;
 
   &.no-underline {
     text-decoration: none;

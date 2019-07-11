@@ -12,15 +12,16 @@
         @click="toggleControls"
       >
         <disclosure-icon :open="controlsToggled" label="Show controls" />
+        &nbsp;{{ controlsToggled ? 'Hide' : 'Show' }} controls
       </button>
       <div
         v-if="controlsToggled"
         :id="'actions-' + individual.identifier"
         class="actions"
       >
-        Show:&nbsp;
+        <span class="separator">|</span>
         <button class="link-button" @click="showClick(individual)">
-          on map
+          map popup
         </button>
         <span class="separator">|</span>
         <button class="link-button">

@@ -148,7 +148,6 @@ export const getAllIndividuals = async ({ filters }) => {
     'sex',
     'spatial_list',
     'age',
-    'discussion',
     'individual',
     'unit'
   ]
