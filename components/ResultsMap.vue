@@ -66,13 +66,11 @@ import { reprojectGeoJson } from '~/utils/geo'
 
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
-import BonesFindView from '~/components/BonesFindView'
 
 export default {
   components: {
     MapMarker,
-    FilterColorItem,
-    BonesFindView
+    FilterColorItem
   },
   props: {},
   data() {
@@ -107,34 +105,30 @@ export default {
   },
   methods: {
     selectMarker(who) {
-      console.log(who)
-      /*
-      <l-popup max-width="15rem" class="popup">
-            <dl>
+      // console.log(who)
+      this.$refs.map.mapObject.closePopup()
+      if (!who.point.coordinates) return
+      L.popup()
+        .setLatLng(who.point.coordinates)
+        .setContent(
+          `<dl>
               <dt>Identifier</dt>
               <dd>
-                <nuxt-link
-                  :to="`/skeleton/${individual.identifier}`"
+                <a href="/skeleton/${who.identifier}"
                   target="_blank"
-                  >{{ individual.identifier }}</nuxt-link
-                >
-              </dd>
-              <dt>Skeleton</dt>
-              <dd class="bones">
-                <bones-find-view :shape="individual.skeleton" />
+                  >${who.identifier}</a>
               </dd>
               <dt>Sex</dt>
               <dd>
-                {{ individual.sex }}
+                ${who.sex}
               </dd>
               <dt>Age</dt>
               <dd>
-                {{ individual.age }}
+                ${who.age}
               </dd>
-            </dl>
-          </l-popup>
-      */
-      // this.$refs[who.identifier][0].mapObject.openPopup()
+            </dl>`
+        )
+        .openOn(this.$refs.map.mapObject)
     },
     async showBuilding(who) {
       if (this.polygonLayer)
@@ -244,6 +238,8 @@ export default {
   }
 }
 .popup {
+  max-width: 15rem;
+
   dt {
     font-weight: bold;
   }
