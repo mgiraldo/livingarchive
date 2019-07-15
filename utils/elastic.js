@@ -2,7 +2,6 @@ import bodybuilder from 'bodybuilder'
 import axios from 'axios'
 import https from 'https'
 import wellknown from 'wellknown'
-import center from '@turf/center'
 
 import { FILTER_PARAMS_TO_NAMES, EMPTY_LONLAT } from './constants'
 import { reprojectGeoJson } from './geo'
@@ -146,7 +145,7 @@ export const getAllIndividuals = async ({ filters }) => {
     'identifier',
     'description',
     'sex',
-    'spatial_list',
+    'wkt_point',
     'age',
     'individual',
     'unit'
@@ -172,30 +171,17 @@ export const getAllIndividuals = async ({ filters }) => {
   // TODO: remove extra looping
   temp.forEach(element => {
     let identifier = element.individual
-    if (individuals[identifier] === undefined) {
-      individuals[identifier] = element
-      individuals[identifier].skeleton = new Set()
-      let point = wellknown.parse(EMPTY_LONLAT)
-      individuals[identifier].point = point
-      // create a point for the bones in the first spatial
-      if (element.spatial_list && element.spatial_list.length > 0) {
-        point = reprojectGeoJson(wellknown.parse(element.spatial_list[0]))
-        if (point && point.type !== 'Point') {
-          point = center(point).geometry
-        } else {
-          point = wellknown.parse(EMPTY_LONLAT)
-        }
-        for (let bone of element.spatial_list) {
-          individuals[identifier].skeleton.add(bone)
-        }
-        individuals[identifier].point = JSON.parse(JSON.stringify(point))
-      }
-      points.push(point.coordinates)
-    } else {
-      for (let bone of element.spatial_list) {
-        individuals[identifier].skeleton.add(bone)
+    individuals[identifier] = element
+    individuals[identifier].skeleton = new Set()
+    let point = wellknown.parse(EMPTY_LONLAT)
+    if (element.wkt_point) {
+      let parsed = reprojectGeoJson(wellknown.parse(element.wkt_point))
+      if (parsed && parsed.type === 'Point') {
+        point = parsed
       }
     }
+    individuals[identifier].point = point
+    points.push(point.coordinates)
   })
 
   return { count, individuals, points, aggs }

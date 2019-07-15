@@ -3,26 +3,46 @@
     <div class="individual">
       {{ individual.individual }}
     </div>
-    <div class="basic-info">
-      <div
-        class="basic-info-item"
-        :style="'border-color:' + ageColors[individual.age]"
-      >
-        {{ individual.age }}
-      </div>
-      <div
-        class="basic-info-item"
-        :style="'border-color:' + sexColors[individual.sex]"
-      >
-        {{ individual.sex }}
-      </div>
-      <div class="basic-info-item">
-        <span class="label">Level</span> {{ individual.level }}
-      </div>
-      <div class="basic-info-item">
-        <span class="label">Phase</span> {{ individual.phase }}
-      </div>
-    </div>
+    <ul class="basic-info">
+      <li class="basic-info-item">
+        <dl>
+          <dt>Age</dt>
+          <dd
+            class="bordered"
+            :style="'border-color:' + ageColors[individual.age]"
+          >
+            {{ individual.age }}
+          </dd>
+        </dl>
+      </li>
+      <li class="basic-info-item">
+        <dl>
+          <dt>Sex</dt>
+          <dd
+            class="bordered"
+            :style="'border-color:' + sexColors[individual.sex]"
+          >
+            {{ individual.sex }}
+          </dd>
+        </dl>
+      </li>
+      <li class="basic-info-item">
+        <dl>
+          <dt>Level</dt>
+          <dd>
+            {{ individual.level }}
+          </dd>
+        </dl>
+      </li>
+      <li class="basic-info-item">
+        <dl>
+          <dt>Phase</dt>
+          <dd>
+            {{ individual.phase }}
+          </dd>
+        </dl>
+      </li>
+    </ul>
     <nuxt-link
       :to="'/skeleton/' + individual.identifier"
       class="skeleton-link"
@@ -93,30 +113,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+section {
+  padding-top: 0.25rem;
+}
 .individual {
   margin-bottom: 0.5rem;
 }
 .basic-info {
   display: flex;
   flex-wrap: wrap;
-  font-size: 1.5rem;
+  list-style-type: none;
   margin-bottom: 0.5rem;
+  padding: 0;
 }
 .basic-info-item {
-  border-left: 0.75rem solid transparent;
   flex-basis: 48%;
   margin-bottom: 0.5rem;
   margin-right: 0.5rem;
+}
+dt {
+  color: $global-secondary-text-color;
+  margin-bottom: 0.25rem;
+}
+dd {
+  font-size: 1.5rem;
+}
+.bordered {
+  border-left: 0.75rem solid transparent;
   padding-left: 0.25rem;
 }
 .skeleton-link {
   display: inline-block;
   margin-bottom: 0.25rem;
-}
-.label {
-  color: $global-secondary-text-color;
-  display: block;
-  font-size: 0.8em;
 }
 .description {
   margin: 0.5rem 0;

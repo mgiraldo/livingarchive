@@ -51,30 +51,6 @@
           <l-icon class-name="icon">
             <map-marker :type="legendType" :individual="individual" />
           </l-icon>
-          <l-popup max-width="15rem" class="popup">
-            <dl>
-              <dt>Identifier</dt>
-              <dd>
-                <nuxt-link
-                  :to="`/skeleton/${individual.identifier}`"
-                  target="_blank"
-                  >{{ individual.identifier }}</nuxt-link
-                >
-              </dd>
-              <dt>Skeleton</dt>
-              <dd class="bones">
-                <bones-find-view :shape="individual.skeleton" />
-              </dd>
-              <dt>Sex</dt>
-              <dd>
-                {{ individual.sex }}
-              </dd>
-              <dt>Age</dt>
-              <dd>
-                {{ individual.age }}
-              </dd>
-            </dl>
-          </l-popup>
         </l-marker>
       </l-map>
     </no-ssr>
@@ -131,7 +107,34 @@ export default {
   },
   methods: {
     selectMarker(who) {
-      this.$refs[who.identifier][0].mapObject.openPopup()
+      console.log(who)
+      /*
+      <l-popup max-width="15rem" class="popup">
+            <dl>
+              <dt>Identifier</dt>
+              <dd>
+                <nuxt-link
+                  :to="`/skeleton/${individual.identifier}`"
+                  target="_blank"
+                  >{{ individual.identifier }}</nuxt-link
+                >
+              </dd>
+              <dt>Skeleton</dt>
+              <dd class="bones">
+                <bones-find-view :shape="individual.skeleton" />
+              </dd>
+              <dt>Sex</dt>
+              <dd>
+                {{ individual.sex }}
+              </dd>
+              <dt>Age</dt>
+              <dd>
+                {{ individual.age }}
+              </dd>
+            </dl>
+          </l-popup>
+      */
+      // this.$refs[who.identifier][0].mapObject.openPopup()
     },
     async showBuilding(who) {
       if (this.polygonLayer)

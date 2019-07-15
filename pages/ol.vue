@@ -65,7 +65,7 @@ export default {
   data() {
     return {
       zoom: 17,
-      center: [32.826886, 37.668639],
+      center: [-73.958128, 40.788184],
       rotation: 0,
       key: process.env.MAPTILER_KEY
     }
@@ -83,7 +83,10 @@ export default {
       // console.log('inited', map)
     },
     mapLoaded(map) {
-      // console.log('loaded', map)
+      console.log('loaded', this.points[0], this.$refs.view)
+      this.$refs.view.animate({
+        center: this.points[0]
+      })
     },
     mapClick(event) {
       console.log('click', event.pixel, event.coordinate)
