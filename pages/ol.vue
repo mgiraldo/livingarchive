@@ -5,45 +5,12 @@
       class="map"
       data-projection="EPSG:4326"
       renderer="webgl"
-      @mounted="mapLoaded"
+      @mounted="mapMounted"
       @click="mapClick"
     >
       <vl-view ref="view" :zoom.sync="zoom" :center.sync="center"></vl-view>
-      <vl-feature>
+      <vl-feature ref="pointShape" @update:properties="fitMap">
         <vl-geom-multi-point :coordinates="points" />
-        <!-- <vl-style-box>
-          <vl-style-icon :src="png" :scale="1.0" :anchor="[0.5, 1]" />
-        </vl-style-box> -->
-        <!-- <l-popup max-width="15rem" class="popup">
-          <dl>
-            <dt>Identifier</dt>
-            <dd>
-              <nuxt-link
-                :to="`/skeleton/${individual.identifier}`"
-                target="_blank"
-                >{{ individual.identifier }}</nuxt-link
-              >
-            </dd>
-            <dt>Skeleton</dt>
-            <dd class="bones">
-              <bones-find-view :shape="individual.skeleton" />
-            </dd>
-            <dt>Sex</dt>
-            <dd>
-              {{ individual.sex }}
-              <button type="button" :value="individual.sex" @click="onlySex">
-                ONLY
-              </button>
-            </dd>
-            <dt>Age</dt>
-            <dd>
-              {{ individual.age }}
-              <button type="button" :value="individual.age" @click="onlyAge">
-                ONLY
-              </button>
-            </dd>
-          </dl>
-        </l-popup> -->
       </vl-feature>
       <vl-layer-tile>
         <vl-source-xyz
@@ -59,7 +26,7 @@
 </template>
 
 <script>
-// import { fromLonLat } from 'ol/proj'
+import { AGES_COLORS, SEXES_COLORS } from '~/utils/constants'
 
 export default {
   data() {
@@ -74,19 +41,42 @@ export default {
     individuals() {
       return this.$store.getters.displayedIndividuals
     },
+    legendType() {
+      return this.$store.state.legendType
+    },
     points() {
-      return this.$store.state.points
+      let points = []
+      for (let key in this.$store.getters.displayedIndividuals) {
+        const individual = this.$store.getters.displayedIndividuals[key]
+        const data = {
+          ageColor: AGES_COLORS.values[individual.age],
+          sexColor: SEXES_COLORS.values[individual.sex],
+          point: individual.point
+        }
+        points.push(data.point.coordinates)
+      }
+      return points
     }
   },
   methods: {
     mapInited(map) {
       // console.log('inited', map)
     },
-    mapLoaded(map) {
-      console.log('loaded', this.points[0], this.$refs.view)
-      this.$refs.view.animate({
-        center: this.points[0]
-      })
+    mapMounted(map) {
+      console.log('loaded', map)
+      this.checkPointsObject()
+    },
+    checkPointsObject() {
+      this.checkPoints = setInterval(() => {
+        if (this.$refs.pointShape) {
+          clearInterval(this.checkPoints)
+          this.fitMap()
+        }
+      }, 100)
+    },
+    fitMap() {
+      console.log('fit', this.$refs.pointShape)
+      this.$refs.view.fit(this.$refs.pointShape.getGeometry())
     },
     mapClick(event) {
       console.log('click', event.pixel, event.coordinate)
