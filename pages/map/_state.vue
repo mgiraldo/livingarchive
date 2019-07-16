@@ -5,11 +5,11 @@
       <section ref="resultsPane" class="results">
         <result-count />
         <results-explained />
-        <p>
+        <!-- <p>
           <button class="link-button" @click="toggleGrid">
             View grid
           </button>
-        </p>
+        </p> -->
         <ul class="results-list">
           <li
             is="result-item"

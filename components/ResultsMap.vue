@@ -51,6 +51,30 @@
           <l-icon class-name="icon">
             <map-marker :type="legendType" :individual="individual" />
           </l-icon>
+          <l-popup max-width="15rem" class="popup">
+            <dl>
+              <dt>Identifier</dt>
+              <dd>
+                <nuxt-link
+                  :to="`/skeleton/${individual.identifier}`"
+                  target="_blank"
+                  >{{ individual.identifier }}</nuxt-link
+                >
+              </dd>
+              <dt>Skeleton</dt>
+              <dd class="bones">
+                <bones-find-view :shape="individual.skeleton" />
+              </dd>
+              <dt>Sex</dt>
+              <dd>
+                {{ individual.sex }}
+              </dd>
+              <dt>Age</dt>
+              <dd>
+                {{ individual.age }}
+              </dd>
+            </dl>
+          </l-popup>
         </l-marker>
       </l-map>
     </no-ssr>
@@ -66,11 +90,13 @@ import { reprojectGeoJson } from '~/utils/geo'
 
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
+import BonesFindView from '~/components/BonesFindView'
 
 export default {
   components: {
     MapMarker,
-    FilterColorItem
+    FilterColorItem,
+    BonesFindView
   },
   props: {},
   data() {
@@ -105,30 +131,7 @@ export default {
   },
   methods: {
     selectMarker(who) {
-      // console.log(who)
-      this.$refs.map.mapObject.closePopup()
-      if (!who.point.coordinates) return
-      L.popup()
-        .setLatLng(who.point.coordinates)
-        .setContent(
-          `<dl>
-              <dt>Identifier</dt>
-              <dd>
-                <a href="/skeleton/${who.identifier}"
-                  target="_blank"
-                  >${who.identifier}</a>
-              </dd>
-              <dt>Sex</dt>
-              <dd>
-                ${who.sex}
-              </dd>
-              <dt>Age</dt>
-              <dd>
-                ${who.age}
-              </dd>
-            </dl>`
-        )
-        .openOn(this.$refs.map.mapObject)
+      this.$refs[who.identifier][0].mapObject.openPopup()
     },
     async showBuilding(who) {
       if (this.polygonLayer)
@@ -238,8 +241,6 @@ export default {
   }
 }
 .popup {
-  max-width: 15rem;
-
   dt {
     font-weight: bold;
   }
