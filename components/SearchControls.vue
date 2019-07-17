@@ -66,7 +66,25 @@ export default {
   computed: {},
   methods: {
     aggs(type) {
-      return this.$store.state.aggs[type]
+      let aggs = this.$store.state.aggs[type]
+      let colorKeys
+      // age and sex are sorted as presented in constants.js
+      if (type === 'sex') {
+        colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)
+      } else if (type === 'age') {
+        colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)
+      }
+      if (colorKeys) {
+        const present = Object.keys(aggs)
+        const sorted = colorKeys.filter(agg => present.indexOf(agg) !== -1)
+        let sortedAggs = {}
+        sorted.forEach(key => {
+          sortedAggs[key] = aggs[key]
+        })
+        return sortedAggs
+      }
+      // default elasticsearch sorting order (usually result count)
+      return aggs
     },
     filtered() {
       return this.$store.state.filtered

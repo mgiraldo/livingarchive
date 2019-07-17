@@ -149,12 +149,6 @@ export const actions = {
       filters[agg] = state['checked' + storeName]
     }
 
-    // TODO: fix limit magic number
-    // let { individuals, count, points } = await getIndividualsRDF({
-    //   limit: 500,
-    //   filters: filters
-    // })
-
     const { individuals, points, aggs, count } = await getBaseIndividuals({
       filters
     })
