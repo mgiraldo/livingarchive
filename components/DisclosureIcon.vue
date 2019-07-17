@@ -25,7 +25,7 @@ export default {
 .toggle {
   height: 0.6em;
   transform: rotate(0deg);
-  transition: transform 0.1s ease-in;
+  transition: transform 0.1s ease-out;
   width: 0.6em;
 
   &.open {

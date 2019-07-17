@@ -1,35 +1,27 @@
 <template>
   <ul v-show="open">
     <li
+      is="search-filter-checkbox-bar"
       v-for="(value, name, index) in aggregations"
       :key="index + '_' + name"
-      class="facet"
-    >
-      <input
-        :id="`${name}_${index}`"
-        type="checkbox"
-        :value="index"
-        :checked="inStore(facet.name, name)"
-        @change="toggled(facet.name, name, $event.target.checked)"
-      />
-      <label :for="`${name}_${index}`">
-        <filter-color-item :name="name" :color="facetColor(name)" />
-      </label>
-      <search-filter-bar :total="total" :value="value" />
-    </li>
+      :name="name"
+      :color="facetColor(name)"
+      :value="value"
+      :total="total"
+      :checked="inStore(facet.name, name)"
+      @change="toggled(facet.name, name, $event)"
+    ></li>
   </ul>
 </template>
 
 <script>
 import { updateRouter } from '~/utils/router'
 
-import FilterColorItem from '~/components/FilterColorItem'
-import SearchFilterBar from '~/components/SearchFilterBar'
+import SearchFilterCheckboxBar from '~/components/SearchFilterCheckboxBar'
 
 export default {
   components: {
-    FilterColorItem,
-    SearchFilterBar
+    SearchFilterCheckboxBar
   },
   props: {
     facet: { type: Object, required: true },
