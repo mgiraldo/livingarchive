@@ -50,6 +50,7 @@ a {
   pointer-events: none;
 }
 .link-button {
+  align-items: center;
   background: none;
   border: none;
   color: $global-link-color;

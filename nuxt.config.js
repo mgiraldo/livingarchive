@@ -59,7 +59,7 @@ module.exports = {
     MAPTILER_KEY: process.env.MAPTILER_KEY,
     BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
     RDF_URL: process.env.RDF_URL,
-    ELASTIC_ENDPOINT: process.env.ELASTIC_ENDPOINT
+    ELASTIC_URL: process.env.ELASTIC_URL
   },
 
   /*
