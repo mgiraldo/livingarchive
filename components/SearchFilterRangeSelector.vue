@@ -50,7 +50,7 @@ export default {
       return this.$store.getters.individualCount
     },
     sortedAggregations() {
-      const allValues = Object.values(this.facet.values)
+      const allValues = Object.values(this.facet.rangeList)
       const aggs = Object.keys(this.aggregations)
       let sorted = []
       allValues.forEach(value => {

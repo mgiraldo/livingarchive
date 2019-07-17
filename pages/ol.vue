@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { AGES_COLORS, SEXES_COLORS } from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 export default {
   data() {
@@ -49,8 +49,8 @@ export default {
       for (let key in this.$store.getters.displayedIndividuals) {
         const individual = this.$store.getters.displayedIndividuals[key]
         const data = {
-          ageColor: AGES_COLORS.values[individual.age],
-          sexColor: SEXES_COLORS.values[individual.sex],
+          ageColor: FILTER_PARAMS_TO_NAMES.a.colors[individual.age],
+          sexColor: FILTER_PARAMS_TO_NAMES.s.colors[individual.sex],
           point: individual.point
         }
         points.push(data.point.coordinates)

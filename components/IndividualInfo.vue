@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { AGES_COLORS, SEXES_COLORS, MAX_TEXT_LENGTH } from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES, MAX_TEXT_LENGTH } from '~/utils/constants'
 
 export default {
   props: {
@@ -86,8 +86,8 @@ export default {
   data() {
     return {
       discussionToggled: false,
-      ageColors: AGES_COLORS.values,
-      sexColors: SEXES_COLORS.values
+      ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
+      sexColors: FILTER_PARAMS_TO_NAMES.s.colors
     }
   },
   computed: {

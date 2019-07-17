@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 export default {
   props: {
     type: { type: String, required: true },
@@ -13,12 +14,16 @@ export default {
       let style = 'background-color: '
       let value = ''
       if (this.type === 'sex') {
-        value = Object.values(this.$store.state.sexes)[
-          Object.keys(this.$store.state.sexes).indexOf(this.individual.sex)
+        value = Object.values(FILTER_PARAMS_TO_NAMES.s.colors)[
+          Object.keys(FILTER_PARAMS_TO_NAMES.s.colors).indexOf(
+            this.individual.sex
+          )
         ]
       } else {
-        value = Object.values(this.$store.state.ages)[
-          Object.keys(this.$store.state.ages).indexOf(this.individual.age)
+        value = Object.values(FILTER_PARAMS_TO_NAMES.a.colors)[
+          Object.keys(FILTER_PARAMS_TO_NAMES.a.colors).indexOf(
+            this.individual.age
+          )
         ]
       }
       if (value) {

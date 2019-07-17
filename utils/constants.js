@@ -22,41 +22,69 @@ export const BUILDING_COLOR = 'hsla(33, 35%, 44%, 1)'
 
 export const FILTER_PARAMS_TO_NAMES = {
   a: {
+    name: 'Ages',
     agg: 'age',
     aggType: 'keyword',
     queryType: 'keyword',
     storeName: 'Ages',
-    explainedName: 'Age'
+    explainedName: 'Age',
+    colors: {
+      'Age not determinable': '#ccc',
+      'Prenatal (pre-fullterm)': '#a6cee3',
+      'neonate (birth - 2 months)': '#6AB0E4',
+      'infant (2 months - 3 years)': '#2D88E4',
+      'child (3-12)': '#0052C6',
+      'adolescent(12-20)': '#002D87',
+      'Adult (20+)': '#E6FFDE',
+      'YA (20-35)': '#b2df8a',
+      'MA (35-50)': '#77DA3E',
+      'OA (50+)': '#2A870A'
+    }
   },
   s: {
+    name: 'Sexes',
     agg: 'sex',
     aggType: 'keyword',
     queryType: 'keyword',
     storeName: 'Sexes',
-    explainedName: 'Sex'
+    explainedName: 'Sex',
+    colors: {
+      '?': '#aaa',
+      'too young to determine': '#aaa',
+      female: '#fc8d62',
+      'female?': '#FDC5AE',
+      male: '#8da0cb',
+      'male?': '#B0C8FF'
+    }
   },
   p: {
+    name: 'Phases',
     agg: 'phase',
     aggType: 'keyword',
     queryType: 'keyword',
     storeName: 'Phases',
-    explainedName: 'Phase'
+    explainedName: 'Phase',
+    colors: null
   },
   b: {
+    name: 'Skeleton',
     agg: 'bones.bone',
     aggType: 'keyword',
     queryType: 'starts_with',
     startsWithPrefix: RDF_PLACEHOLDER,
     storeName: 'Skeleton',
-    explainedName: 'Bone'
+    explainedName: 'Bone',
+    colors: null
   },
   l: {
+    name: 'Levels',
     agg: 'level',
     aggType: 'keyword',
     queryType: 'range', // a fake range for KEYWORD types
     rangeList: SORTED_LEVELS,
     storeName: 'Levels',
-    explainedName: 'Level'
+    explainedName: 'Level',
+    colors: null
   }
 }
 export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building
@@ -87,40 +115,3 @@ export const TILELAYERS = [
     }
   }
 ]
-
-export const AGES_COLORS = {
-  name: 'Ages',
-  values: {
-    'Age not determinable': '#ccc',
-    'Prenatal (pre-fullterm)': '#a6cee3',
-    'neonate (birth - 2 months)': '#6AB0E4',
-    'infant (2 months - 3 years)': '#2D88E4',
-    'child (3-12)': '#0052C6',
-    'adolescent(12-20)': '#002D87',
-    'Adult (20+)': '#E6FFDE',
-    'YA (20-35)': '#b2df8a',
-    'MA (35-50)': '#77DA3E',
-    'OA (50+)': '#2A870A'
-  }
-}
-
-export const SEXES_COLORS = {
-  name: 'Sexes',
-  values: {
-    '?': '#aaa',
-    'too young to determine': '#aaa',
-    female: '#fc8d62',
-    'female?': '#FDC5AE',
-    male: '#8da0cb',
-    'male?': '#B0C8FF'
-  }
-}
-
-export const PHASES_COLORS = {
-  name: 'Phases'
-}
-
-export const LEVELS_COLORS = {
-  name: 'Levels',
-  values: SORTED_LEVELS
-}

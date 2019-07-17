@@ -6,6 +6,7 @@ import center from '@turf/center'
 import {
   RDF_PREFIXES,
   RDF_TIMEOUT,
+  FILTER_PARAMS_TO_NAMES,
   SEXES_COLORS,
   AGES_COLORS
 } from './constants'
@@ -40,14 +41,18 @@ export const countIndividuals = async filters => {
 
   let ageStr = ages
     .map(age =>
-      !isNaN(age) ? `"${Object.keys(AGES_COLORS.values)[age]}"` : ''
+      !isNaN(age)
+        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)[age]}"`
+        : ''
     )
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
     .map(sex =>
-      !isNaN(sex) ? `"${Object.keys(SEXES_COLORS.values)[sex]}"` : ''
+      !isNaN(sex)
+        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)[sex]}"`
+        : ''
     )
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
@@ -81,14 +86,18 @@ export const getIndividuals = async ({ limit = 0, filters }) => {
 
   let ageStr = ages
     .map(age =>
-      !isNaN(age) ? `"${Object.keys(AGES_COLORS.values)[age]}"` : ''
+      !isNaN(age)
+        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)[age]}"`
+        : ''
     )
     .join(', ')
   ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
 
   let sexStr = sexes
     .map(sex =>
-      !isNaN(sex) ? `"${Object.keys(SEXES_COLORS.values)[sex]}"` : ''
+      !isNaN(sex)
+        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)[sex]}"`
+        : ''
     )
     .join(', ')
   sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr

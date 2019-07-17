@@ -84,7 +84,11 @@
 <script>
 import wellknown from 'wellknown'
 
-import { TILELAYERS, BUILDING_COLOR } from '~/utils/constants'
+import {
+  TILELAYERS,
+  BUILDING_COLOR,
+  FILTER_PARAMS_TO_NAMES
+} from '~/utils/constants'
 import { getBuilding } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
@@ -115,9 +119,9 @@ export default {
     },
     legend() {
       if (this.$store.state.legendType === 'age') {
-        return this.$store.state.ages
+        return FILTER_PARAMS_TO_NAMES.a.colors
       } else {
-        return this.$store.state.sexes
+        return FILTER_PARAMS_TO_NAMES.s.colors
       }
     }
   },

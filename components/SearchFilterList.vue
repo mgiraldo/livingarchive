@@ -40,12 +40,12 @@ export default {
     },
     facetColor(name) {
       // we assume facet has colors or else just null
-      if (!this.facet.values) return null
+      if (!this.facet.colors) return null
       const nullColor = '#aaa'
-      const index = Object.keys(this.facet.values).indexOf(name)
+      const index = Object.keys(this.facet.colors).indexOf(name)
       // has colors but not present so default color #aaa
       if (index === -1) return nullColor
-      const color = Object.values(this.facet.values)[index]
+      const color = Object.values(this.facet.colors)[index]
       return color ? color : nullColor
     },
     inStore(filter, name) {

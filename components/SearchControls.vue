@@ -31,7 +31,7 @@
       :aggregations="aggs('level')"
       :facet="levels"
     />
-    <search-filter-graph
+    <search-filter-standard
       class="filter"
       :aggregations="aggs('phase')"
       :facet="phases"
@@ -41,12 +41,7 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
-import {
-  SEXES_COLORS,
-  AGES_COLORS,
-  LEVELS_COLORS,
-  PHASES_COLORS
-} from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
@@ -62,10 +57,10 @@ export default {
   },
   data() {
     return {
-      ages: AGES_COLORS,
-      sexes: SEXES_COLORS,
-      levels: LEVELS_COLORS,
-      phases: PHASES_COLORS
+      ages: FILTER_PARAMS_TO_NAMES.a,
+      sexes: FILTER_PARAMS_TO_NAMES.s,
+      levels: FILTER_PARAMS_TO_NAMES.l,
+      phases: FILTER_PARAMS_TO_NAMES.p
     }
   },
   computed: {},

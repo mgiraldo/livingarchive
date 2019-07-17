@@ -1,8 +1,4 @@
-import {
-  AGES_COLORS,
-  SEXES_COLORS,
-  FILTER_PARAMS_TO_NAMES
-} from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 import {
   getAllIndividuals as getIndividualsES,
   getFilteredIndividuals
@@ -24,10 +20,6 @@ export const state = () => ({
   displayedIdentifiers: new Set(),
   aggs: {},
   points: [],
-  sexes: SEXES_COLORS.values,
-  ages: AGES_COLORS.values,
-  levels: null,
-  phases: null,
   checkedAges: new Set(),
   checkedSexes: new Set(),
   checkedLevels: new Set(),
