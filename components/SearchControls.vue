@@ -12,28 +12,27 @@
     </transition>
     <search-filter-skeleton
       class="filter"
-      :aggregations="aggs('bones.bone')"
-      :facet="{ name: 'Skeleton' }"
-      type="skeleton"
+      :aggregations="aggs('b')"
+      :facet="bones"
     />
     <search-filter-standard
       class="filter"
-      :aggregations="aggs('sex')"
+      :aggregations="sortedAggs('s')"
       :facet="sexes"
     />
     <search-filter-standard
       class="filter"
-      :aggregations="aggs('age')"
+      :aggregations="sortedAggs('a')"
       :facet="ages"
     />
     <search-filter-range
       class="filter"
-      :aggregations="aggs('level')"
+      :aggregations="aggs('l')"
       :facet="levels"
     />
     <search-filter-standard
       class="filter"
-      :aggregations="aggs('phase')"
+      :aggregations="aggs('p')"
       :facet="phases"
     />
   </form>
@@ -60,31 +59,30 @@ export default {
       ages: FILTER_PARAMS_TO_NAMES.a,
       sexes: FILTER_PARAMS_TO_NAMES.s,
       levels: FILTER_PARAMS_TO_NAMES.l,
+      bones: FILTER_PARAMS_TO_NAMES.b,
       phases: FILTER_PARAMS_TO_NAMES.p
     }
   },
   computed: {},
   methods: {
-    aggs(type) {
-      let aggs = this.$store.state.aggs[type]
-      let colorKeys
-      // age and sex are sorted as presented in constants.js
-      if (type === 'sex') {
-        colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)
-      } else if (type === 'age') {
-        colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)
-      }
-      if (colorKeys) {
-        const present = Object.keys(aggs)
-        const sorted = colorKeys.filter(agg => present.indexOf(agg) !== -1)
-        let sortedAggs = {}
-        sorted.forEach(key => {
-          sortedAggs[key] = aggs[key]
-        })
-        return sortedAggs
-      }
+    aggs(param) {
       // default elasticsearch sorting order (usually result count)
+      const type = FILTER_PARAMS_TO_NAMES[param].agg
+      let aggs = this.$store.state.aggs[type]
       return aggs
+    },
+    sortedAggs(param) {
+      // age and sex are sorted as presented in constants.js
+      const type = FILTER_PARAMS_TO_NAMES[param].agg
+      let aggs = this.$store.state.aggs[type]
+      const colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES[param].colors)
+      const present = Object.keys(aggs)
+      const sorted = colorKeys.filter(agg => present.indexOf(agg) !== -1)
+      let sortedAggs = {}
+      sorted.forEach(key => {
+        sortedAggs[key] = aggs[key]
+      })
+      return sortedAggs
     },
     filtered() {
       return this.$store.state.filtered

@@ -24,24 +24,12 @@
           map popup
         </button>
         <span class="separator">|</span>
-        <button class="link-button">
-          area
-        </button>
-        <span class="separator">←</span>
         <button class="link-button" @click="buildingClick(individual)">
           building
         </button>
         <span class="separator">←</span>
         <button class="link-button">
           space
-        </button>
-        <span class="separator">←</span>
-        <button class="link-button">
-          feature
-        </button>
-        <span class="separator">←</span>
-        <button class="link-button">
-          unit
         </button>
       </div>
     </div>
