@@ -185,7 +185,7 @@ export default {
     },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct
-      this.$refs.map.mapObject.invalidateSize()
+      if (this.$refs.map) this.$refs.map.mapObject.invalidateSize()
     },
     toggleLegend() {
       this.$store.commit('toggledLegend')

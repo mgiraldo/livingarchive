@@ -48,7 +48,7 @@ const performESQuery = async query => {
 const buildQuery = params => {
   const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES)
   let query = bodybuilder()
-  query = query.size(querySize)
+  query = query.size(600)
   if (params.source) query = query.rawOption('_source', params.source)
   query = query.query('match_all', {})
   if (params.filters) {

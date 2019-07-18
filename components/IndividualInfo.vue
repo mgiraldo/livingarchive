@@ -50,36 +50,18 @@
     >
       open skeleton
     </nuxt-link>
-    <div v-if="individual.description" class="description">
-      {{ individual.description }}
-    </div>
-    <div
-      v-if="individual.discussion && individual.discussion !== 'NULL'"
-      :id="individual.identifier + '-more'"
-      class="discussion"
-    >
-      {{
-        longDiscussion && !discussionToggled
-          ? truncatedDiscussion
-          : individual.discussion
-      }}
-      <button
-        v-if="longDiscussion"
-        class="link-button"
-        :aria-expanded="discussionToggled ? 'true' : 'false'"
-        :aria-controls="individual.identifier + '-more'"
-        @click="toggleDiscussion"
-      >
-        {{ !discussionToggled ? 'more' : 'less' }}
-      </button>
-    </div>
+    <collapsible-text :text="individual.description" />
+    <collapsible-text :text="individual.discussion" />
   </section>
 </template>
 
 <script>
 import { FILTER_PARAMS_TO_NAMES, MAX_TEXT_LENGTH } from '~/utils/constants'
 
+import CollapsibleText from '~/components/CollapsibleText'
+
 export default {
+  components: { CollapsibleText },
   props: {
     individual: { type: Object, required: true }
   },
@@ -147,9 +129,6 @@ dd {
   margin-bottom: 0.25rem;
 }
 .description {
-  margin: 0.5rem 0;
-}
-.discussion {
   margin: 0.5rem 0;
 }
 </style>
