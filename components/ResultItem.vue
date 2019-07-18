@@ -28,7 +28,7 @@
           building
         </button>
         <span class="separator">←</span>
-        <button class="link-button">
+        <button class="link-button" @click="spaceClick(individual)">
           space
         </button>
       </div>
@@ -49,6 +49,7 @@ export default {
     individual: { type: Object, required: true },
     showControls: { type: Boolean, default: true },
     showClick: { type: Function, default: () => {} },
+    spaceClick: { type: Function, default: () => {} },
     buildingClick: { type: Function, default: () => {} }
   },
   data() {

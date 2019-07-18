@@ -18,6 +18,7 @@
             :individual="individual"
             :show-click="showClick"
             :building-click="buildingClick"
+            :space-click="spaceClick"
           ></li>
         </ul>
       </section>
@@ -84,6 +85,9 @@ export default {
     },
     buildingClick(who) {
       this.$refs.mapPane.showBuilding(who)
+    },
+    spaceClick(who) {
+      this.$refs.mapPane.showSpace(who)
     },
     checkResizer() {
       this.checkPane = setInterval(() => {

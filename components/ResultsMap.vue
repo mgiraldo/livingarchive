@@ -107,7 +107,7 @@ import {
   BUILDING_COLOR,
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
-import { getBuilding } from '~/utils/rdf'
+import { getBuilding, getSpace } from '~/utils/rdf'
 import { reprojectGeoJson } from '~/utils/geo'
 
 import MapMarker from '~/components/MapMarker'
@@ -169,6 +169,26 @@ export default {
       const polygons = []
       if (building && building.length) {
         building.forEach(shape => {
+          let parsed = wellknown.parse(shape)
+          if (parsed) {
+            let projected = reprojectGeoJson(parsed)
+            if (projected.type !== 'Point') {
+              polygons.push(projected)
+            }
+          }
+        })
+      }
+      this.polygons = polygons
+      this.updatePolygonLayer()
+    },
+    async showSpace(who) {
+      if (this.polygonLayer)
+        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
+      // get the space
+      const space = await getSpace(who.identifier)
+      const polygons = []
+      if (space && space.length) {
+        space.forEach(shape => {
           let parsed = wellknown.parse(shape)
           if (parsed) {
             let projected = reprojectGeoJson(parsed)

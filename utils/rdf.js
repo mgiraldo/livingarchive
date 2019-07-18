@@ -103,3 +103,25 @@ export const getBuilding = async identifier => {
   const results = data.data.results.bindings.map(item => item.shape.value)
   return results
 }
+
+export const getSpace = async identifier => {
+  // Assumes input: SkSOMENUMBER.SUFFIX
+  // and SOMENUMBER is the unit identifier
+  let numberPart = identifier.replace('Sk', '')
+  numberPart = numberPart.substring(0, numberPart.indexOf('.'))
+
+  let query = `
+  SELECT ?shape WHERE {
+    ?unit catalhoyuk:hasIdentifier ${numberPart} .
+    ?unit a catalhoyuk:Unit .
+    ?unit :isSpatiallyRelatedTo ?space .
+    ?space a catalhoyuk:Space .
+    ?space :hasGeometry ?geom_space .
+    ?geom_space :hasSerialization ?shape .
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const results = data.data.results.bindings.map(item => item.shape.value)
+  return results
+}
