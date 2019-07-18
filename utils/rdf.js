@@ -125,3 +125,35 @@ export const getSpace = async identifier => {
   const results = data.data.results.bindings.map(item => item.shape.value)
   return results
 }
+
+export const getAllSpaces = async identifier => {
+  let query = `
+  SELECT ?space ?shape WHERE {
+    ?space a catalhoyuk:Space . 
+    ?space :hasGeometry ?geom .
+    ?geom :hasSerialization ?shape
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const results = data.data.results.bindings.map(item => {
+    return { id: cleanString(item.space.value), shape: item.shape.value }
+  })
+  return results
+}
+
+export const getAllBuildings = async identifier => {
+  let query = `
+  SELECT ?space ?shape WHERE {
+    ?space a catalhoyuk:Building . 
+    ?space :hasGeometry ?geom .
+    ?geom :hasSerialization ?shape
+  }`
+
+  const data = await performRdfQuery(query)
+
+  const results = data.data.results.bindings.map(item => {
+    return { id: cleanString(item.space.value), shape: item.shape.value }
+  })
+  return results
+}
