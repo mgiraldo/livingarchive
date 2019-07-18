@@ -15,6 +15,7 @@
 
 <script>
 import { MAX_TEXT_LENGTH } from '~/utils/constants'
+
 export default {
   props: {
     text: { type: String, default: '' }

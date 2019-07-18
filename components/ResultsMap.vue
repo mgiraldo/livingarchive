@@ -117,7 +117,7 @@ export default {
   },
   computed: {
     showMap() {
-      return this.$store.state.displayedIdentifiers.size < this.displayLimit
+      return this.$store.state.displayedIdentifiers.size <= this.displayLimit
     },
     legendType() {
       return this.$store.state.legendType
