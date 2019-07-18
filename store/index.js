@@ -1,8 +1,5 @@
 import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
-import {
-  getAllIndividuals as getIndividualsES,
-  getFilteredIndividuals
-} from '~/utils/elastic'
+import { getAllIndividuals, getFilteredIndividuals } from '~/utils/elastic'
 
 const isFiltered = state => {
   for (let param in FILTER_PARAMS_TO_NAMES) {
@@ -207,7 +204,7 @@ export const actions = {
 }
 
 const getBaseIndividuals = async ({ filters }) => {
-  const { individuals, points, aggs, count } = await getIndividualsES({
+  const { individuals, points, aggs, count } = await getAllIndividuals({
     filters
   })
   return { individuals, points, aggs, count }

@@ -3,13 +3,7 @@ import https from 'https'
 import wellknown from 'wellknown'
 import center from '@turf/center'
 
-import {
-  RDF_PREFIXES,
-  RDF_TIMEOUT,
-  FILTER_PARAMS_TO_NAMES,
-  SEXES_COLORS,
-  AGES_COLORS
-} from './constants'
+import { RDF_PREFIXES, RDF_TIMEOUT, FILTER_PARAMS_TO_NAMES } from './constants'
 import { reprojectGeoJson } from './geo'
 import { cleanString } from './stringUtils'
 
@@ -32,131 +26,6 @@ const performRdfQuery = async query => {
     process.env.RDF_URL + '?query=' + encodeURIComponent(RDF_PREFIXES + query)
   )
   return results
-}
-
-export const countIndividuals = async filters => {
-  // TODO: sanitize params
-  let ages = filters.ages ? Array.from(filters.ages) : []
-  let sexes = filters.sexes ? Array.from(filters.sexes) : []
-
-  let ageStr = ages
-    .map(age =>
-      !isNaN(age)
-        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)[age]}"`
-        : ''
-    )
-    .join(', ')
-  ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
-
-  let sexStr = sexes
-    .map(sex =>
-      !isNaN(sex)
-        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)[sex]}"`
-        : ''
-    )
-    .join(', ')
-  sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
-
-  let query = `
-  SELECT (COUNT (DISTINCT ?individual) as ?count)
-  WHERE {
-        ?individual a catalhoyuk:Individual .
-        ?individual :hasIdentifier ?identifier .
-        OPTIONAL {?individual :hasAge ?age}.
-        OPTIONAL {?individual :hasSex ?sex}.
-        ?individual :isConstitutedBy ?skeleton .
-        OPTIONAL {?skeleton :isExcavatedIn ?find}.
-        OPTIONAL {?find :hasDiscussion ?discussion}.
-        ${ageStr}
-        ${sexStr}
-  }`
-
-  const data = await performRdfQuery(query)
-
-  const count = Number(data.data.results.bindings[0].count.value)
-
-  return count
-}
-
-export const getIndividuals = async ({ limit = 0, filters }) => {
-  // TODO: sanitize params
-  let limitStr = !isNaN(limit) && limit > 0 ? `LIMIT ${limit}` : ''
-  let ages = filters.ages ? Array.from(filters.ages) : []
-  let sexes = filters.sexes ? Array.from(filters.sexes) : []
-
-  let ageStr = ages
-    .map(age =>
-      !isNaN(age)
-        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.a.colors)[age]}"`
-        : ''
-    )
-    .join(', ')
-  ageStr = ages.length ? 'FILTER (?age IN (' + ageStr + '))' : ageStr
-
-  let sexStr = sexes
-    .map(sex =>
-      !isNaN(sex)
-        ? `"${Object.keys(FILTER_PARAMS_TO_NAMES.s.colors)[sex]}"`
-        : ''
-    )
-    .join(', ')
-  sexStr = sexes.length ? 'FILTER (?sex IN(' + sexStr + '))' : sexStr
-
-  let query = `
-  SELECT ?individual ?identifier ?age ?sex ?discussion ?coordinates ?skeleton
-  WHERE {
-    {
-      SELECT * WHERE {
-        ?individual a catalhoyuk:Individual .
-        ?individual :hasIdentifier ?identifier .
-        OPTIONAL {?individual :hasAge ?age}.
-        OPTIONAL {?individual :hasSex ?sex}.
-        ?individual :isConstitutedBy ?skeleton .
-        OPTIONAL {?skeleton :isExcavatedIn ?find}.
-        OPTIONAL {?find :hasDiscussion ?discussion}.
-        ${ageStr}
-        ${sexStr}
-      } ${limitStr}
-    }
-      ?skeleton a catalhoyuk:Skeleton .
-      ?skeleton :hasGeometry ?geometry .
-      ?geometry :hasSerialization ?coordinates .
-  }`
-
-  const data = await performRdfQuery(query)
-
-  const vars = data.data.head.vars
-  const results = data.data.results.bindings.map(item => {
-    let newItem = {}
-    vars.forEach(element => {
-      newItem[element] = item[element] ? cleanString(item[element].value) : ''
-    })
-    return newItem
-  })
-
-  // prepare for store
-  // TODO: fix limit magic number
-  // TODO: remove extra looping
-  let individuals = {}
-  let points = []
-  results.forEach(element => {
-    let identifier = element.identifier
-    if (!individuals[identifier]) {
-      // we assume we recive a point
-      let point = reprojectGeoJson(wellknown.parse(element.coordinates))
-      if (point.type !== 'Point') point = center(point).geometry
-      individuals[identifier] = element
-      individuals[identifier].skeleton = []
-      individuals[identifier].point = JSON.parse(JSON.stringify(point))
-      points.push(point.coordinates)
-    } else {
-      individuals[identifier].skeleton.push(element.coordinates)
-    }
-  })
-
-  let count = await countIndividuals(filters)
-
-  return { individuals, count, points }
 }
 
 export const getSkeleton = async identifier => {

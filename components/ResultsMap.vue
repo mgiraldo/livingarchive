@@ -1,7 +1,11 @@
 <template>
   <section ref="pane" class="map">
+    <div v-if="!showMap" class="no-map">
+      There are too many results to display.<br />Apply filters to reduce the
+      amount of results.
+    </div>
     <no-ssr>
-      <l-map ref="map">
+      <l-map v-if="showMap" ref="map">
         <l-tile-layer
           v-for="(layer, index) in tilelayers"
           :key="'layer-' + index"
@@ -107,10 +111,14 @@ export default {
     return {
       tilelayers: TILELAYERS,
       polygons: [],
+      displayLimit: 600,
       polygonLayer: null
     }
   },
   computed: {
+    showMap() {
+      return this.$store.state.displayedIdentifiers.size < this.displayLimit
+    },
     legendType() {
       return this.$store.state.legendType
     },
@@ -200,6 +208,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.no-map {
+  display: grid;
+  font-size: 2rem;
+  height: 100%;
+  place-content: center;
+  text-align: center;
+}
 .map {
   flex-basis: 50%;
 }
