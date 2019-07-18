@@ -70,12 +70,26 @@
                 <bones-find-view :shape="individual.skeleton" />
               </dd>
               <dt>Sex</dt>
-              <dd>
+              <dd
+                class="bordered"
+                :style="'border-color:' + sexColors[individual.sex]"
+              >
                 {{ individual.sex }}
               </dd>
               <dt>Age</dt>
-              <dd>
+              <dd
+                class="bordered"
+                :style="'border-color:' + ageColors[individual.age]"
+              >
                 {{ individual.age }}
+              </dd>
+              <dt>Phase</dt>
+              <dd>
+                {{ individual.phase }}
+              </dd>
+              <dt>Level</dt>
+              <dd>
+                {{ individual.level }}
               </dd>
             </dl>
           </l-popup>
@@ -112,6 +126,8 @@ export default {
       tilelayers: TILELAYERS,
       polygons: [],
       displayLimit: 600,
+      ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
+      sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
       polygonLayer: null
     }
   },
@@ -260,8 +276,12 @@ export default {
   }
 }
 .popup {
+  .bordered {
+    border-left: 0.75rem solid transparent;
+    padding-left: 0.25rem;
+  }
   dt {
-    font-weight: bold;
+    color: $global-secondary-text-color;
   }
   dd {
     margin-bottom: 0.5rem;
