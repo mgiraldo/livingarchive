@@ -126,7 +126,7 @@ export const getSpace = async identifier => {
   return results
 }
 
-export const getAllSpaces = async identifier => {
+export const getAllSpaces = async () => {
   let query = `
   SELECT ?space ?shape WHERE {
     ?space a catalhoyuk:Space . 
@@ -142,7 +142,7 @@ export const getAllSpaces = async identifier => {
   return results
 }
 
-export const getAllBuildings = async identifier => {
+export const getAllBuildings = async () => {
   let query = `
   SELECT ?space ?shape WHERE {
     ?space a catalhoyuk:Building . 
