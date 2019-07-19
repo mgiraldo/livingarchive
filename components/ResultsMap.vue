@@ -5,7 +5,12 @@
       amount of results.
     </div>
     <no-ssr>
-      <l-map v-if="showMap" ref="map">
+      <l-map
+        v-if="showMap"
+        ref="map"
+        @overlayadd="overlayAdded"
+        @overlayremove="overlayRemoved"
+      >
         <l-tile-layer
           v-for="(layer, index) in tilelayers"
           :key="'layer-' + index"
@@ -24,14 +29,14 @@
           layer-type="overlay"
           name="Spaces"
           :geojson="spacesGeoJSON"
-          :options="spaceOptions"
+          :options-style="spaceOptions"
         >
         </l-geo-json>
         <l-geo-json
           layer-type="overlay"
           name="Buildings"
           :geojson="buildingsGeoJSON"
-          :options="buildingOptions"
+          :options-style="buildingOptions"
         >
         </l-geo-json>
         <l-layer-group layer-type="overlay" name="Individuals">
@@ -148,6 +153,8 @@ export default {
       displayLimit: 600,
       ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
       sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
+      buildingsShown: true,
+      spacesShown: true,
       polygonLayer: null
     }
   },
@@ -160,14 +167,11 @@ export default {
     },
     buildingOptions() {
       return {
-        style: function() {
-          return {
-            weight: 0.5,
-            color: BUILDING_COLOR,
-            fillColor: BUILDING_COLOR,
-            fillOpacity: 1
-          }
-        }
+        weight: 0.5,
+        zIndex: 10,
+        color: BUILDING_COLOR,
+        fillColor: BUILDING_COLOR,
+        fillOpacity: 1
       }
     },
     spacesGeoJSON() {
@@ -175,14 +179,11 @@ export default {
     },
     spaceOptions() {
       return {
-        style: function() {
-          return {
-            weight: 0.5,
-            color: SPACE_COLOR,
-            fillColor: SPACE_COLOR,
-            fillOpacity: 1
-          }
-        }
+        weight: 0.5,
+        zIndex: 11,
+        color: SPACE_COLOR,
+        fillColor: SPACE_COLOR,
+        fillOpacity: 1
       }
     },
     legendType() {
@@ -208,6 +209,16 @@ export default {
     this.checkMapObject()
   },
   methods: {
+    overlayAdded(e) {
+      const overlay = e.name
+      if (overlay === 'Buildings') this.buildingsShown = true
+      if (overlay === 'Spaces') this.spacesShown = true
+    },
+    overlayRemoved(e) {
+      const overlay = e.name
+      if (overlay === 'Buildings') this.buildingsShown = false
+      if (overlay === 'Spaces') this.spacesShown = false
+    },
     createGeoJSON(wkt) {
       let geoJSON = {
         type: 'FeatureCollection',
@@ -291,12 +302,12 @@ export default {
       if (this.$refs.map && this.$store.state.points.length > 0) {
         bounds.extend(this.$L.latLngBounds(this.$store.state.points))
       }
-      // if (this.buildingsGeoJSON) {
-      //   bounds.extend(this.$L.geoJSON(this.buildingsGeoJSON).getBounds())
-      // }
-      // if (this.spacesGeoJSON) {
-      //   bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
-      // }
+      if (this.buildingsGeoJSON && this.buildingsShown) {
+        bounds.extend(this.$L.geoJSON(this.buildingsGeoJSON).getBounds())
+      }
+      if (this.spacesGeoJSON && this.spacesShown) {
+        bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
+      }
       if (bounds) this.$refs.map.mapObject.fitBounds(bounds)
     },
     checkMapObject() {

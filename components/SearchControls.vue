@@ -44,13 +44,11 @@ import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterRange from '~/components/SearchFilterRange'
-import SearchFilterGraph from '~/components/SearchFilterGraph'
 
 export default {
   components: {
     SearchFilterStandard,
-    SearchFilterRange,
-    SearchFilterGraph
+    SearchFilterRange
   },
   data() {
     return {
