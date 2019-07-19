@@ -49,6 +49,23 @@ a {
 .not-interactive {
   pointer-events: none;
 }
+.filter-button {
+  border: none;
+  background-color: $filter-button-color;
+  color: $global-text-color;
+  border-radius: 0.25rem;
+  border-width: 0.1rem;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0 1rem 1rem 1rem;
+  padding: 0.25rem 0.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $global-text-color;
+    color: lighten($color: $global-background-color, $amount: 20%);
+  }
+}
 .link-button {
   align-items: center;
   background: none;

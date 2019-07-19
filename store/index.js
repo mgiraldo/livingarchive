@@ -1,5 +1,6 @@
 import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 import { getAllIndividuals, getFilteredIndividuals } from '~/utils/elastic'
+import { getAllBuildings, getAllSpaces } from '~/utils/rdf'
 
 const isFiltered = state => {
   for (let param in FILTER_PARAMS_TO_NAMES) {
@@ -13,6 +14,8 @@ const isFiltered = state => {
 export const state = () => ({
   viewMode: 'map',
   individuals: {},
+  buildings: [],
+  spaces: [],
   count: 0,
   displayedIdentifiers: new Set(),
   aggs: {},
@@ -72,6 +75,8 @@ export const getters = {
 
 export const mutations = {
   firstLoadComplete(state, newState) {
+    state.buildings = newState.buildings
+    state.spaces = newState.spaces
     state.individuals = newState.individuals
     state.points = newState.points
     state.aggs = newState.aggs
@@ -150,7 +155,12 @@ export const actions = {
       filters
     })
 
+    const spaces = await getAllSpaces()
+    const buildings = await getAllBuildings()
+
     let newState = {
+      spaces,
+      buildings,
       individuals,
       points,
       filtered: false,
