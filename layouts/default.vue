@@ -38,7 +38,9 @@ html {
   box-sizing: border-box;
   margin: 0;
 }
-
+body {
+  overflow: hidden;
+}
 a {
   color: $global-link-color;
 

@@ -291,12 +291,12 @@ export default {
       if (this.$refs.map && this.$store.state.points.length > 0) {
         bounds.extend(this.$L.latLngBounds(this.$store.state.points))
       }
-      if (this.buildingsGeoJSON) {
-        bounds.extend(this.$L.geoJSON(this.buildingsGeoJSON).getBounds())
-      }
-      if (this.spacesGeoJSON) {
-        bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
-      }
+      // if (this.buildingsGeoJSON) {
+      //   bounds.extend(this.$L.geoJSON(this.buildingsGeoJSON).getBounds())
+      // }
+      // if (this.spacesGeoJSON) {
+      //   bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
+      // }
       if (bounds) this.$refs.map.mapObject.fitBounds(bounds)
     },
     checkMapObject() {

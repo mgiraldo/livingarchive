@@ -10,7 +10,7 @@
         Clear filters
       </button>
     </transition>
-    <search-filter-skeleton
+    <search-filter-standard
       class="filter"
       :aggregations="aggs('b')"
       :facet="bones"
@@ -43,13 +43,11 @@ import { updateRouter } from '~/utils/router'
 import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
-import SearchFilterSkeleton from '~/components/SearchFilterSkeleton'
 import SearchFilterRange from '~/components/SearchFilterRange'
 import SearchFilterGraph from '~/components/SearchFilterGraph'
 
 export default {
   components: {
-    SearchFilterSkeleton,
     SearchFilterStandard,
     SearchFilterRange,
     SearchFilterGraph

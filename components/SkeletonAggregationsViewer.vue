@@ -12,24 +12,46 @@ export default {
   props: {
     aggregations: { type: Object, default: null }
   },
+  computed: {
+    fixedAggregations() {
+      let fixedAggregations = {}
+      for (const aggregation in this.aggregations) {
+        const bone = this.cleanBone(aggregation)
+        if (fixedAggregations[bone]) {
+          fixedAggregations[bone] += this.aggregations[aggregation]
+        } else {
+          fixedAggregations[bone] = this.aggregations[aggregation]
+        }
+      }
+      return fixedAggregations
+    }
+  },
   mounted() {
     this.$nextTick(() => {
       this.updateSkeleton()
     })
   },
   methods: {
-    updateSkeleton() {
-      let prefix = '#skeleton-front-'
+    cleanBone(bone) {
+      let index = bone.lastIndexOf('-')
+      index = index === -1 ? bone.length : index
+      return bone.substring(0, index)
+    },
+    resetBones() {
       let skeletonElement = document.querySelector('#skeleton-control')
       skeletonElement.querySelectorAll('path').forEach(elem => {
         elem.style.fill = 'white'
         elem.style.opacity = 0.0075
       })
-      for (let bone in this.aggregations) {
+    },
+    updateSkeleton() {
+      this.resetBones()
+      let prefix = '#skeleton-front-'
+      for (let bone in this.fixedAggregations) {
         let boneElem = document.querySelector(prefix + bone)
         if (boneElem) {
           boneElem.querySelectorAll('path').forEach(elem => {
-            const value = this.aggregations[bone]
+            const value = this.fixedAggregations[bone]
             if (value) {
               elem.style.fill = BONE_FILL_COLOR
               elem.style.opacity =
@@ -48,4 +70,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.skeleton {
+  width: 100%;
+}
+</style>

@@ -5,33 +5,18 @@
     :identifier="individual.identifier"
   >
     <individual-info :individual="individual" />
-    <div v-if="showControls" class="actions-wrapper">
-      <button
-        class="actions-toggle link-button no-underline"
-        :aria-controls="'actions-' + individual.identifier"
-        @click="toggleControls"
-      >
-        <disclosure-icon :open="controlsToggled" label="Show controls" />
-        &nbsp;{{ controlsToggled ? 'Hide' : 'Show' }} controls
+    <div class="actions-wrapper">
+      <button class="link-button" @click="showClick(individual)">
+        Highlight on map
       </button>
-      <div
-        v-if="controlsToggled"
-        :id="'actions-' + individual.identifier"
-        class="actions"
-      >
-        <span class="separator">|</span>
-        <button class="link-button" @click="showClick(individual)">
-          map popup
-        </button>
-        <span class="separator">|</span>
-        <button class="link-button" @click="buildingClick(individual)">
-          building
-        </button>
-        <span class="separator">←</span>
-        <button class="link-button" @click="spaceClick(individual)">
-          space
-        </button>
-      </div>
+      <span class="separator">|</span>
+      <button class="link-button" @click="buildingClick(individual)">
+        Building
+      </button>
+      <span class="separator">←</span>
+      <button class="link-button" @click="spaceClick(individual)">
+        Space
+      </button>
     </div>
   </li>
 </template>

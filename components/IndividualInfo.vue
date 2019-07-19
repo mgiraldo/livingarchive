@@ -48,7 +48,7 @@
       class="skeleton-link"
       target="_blank"
     >
-      open skeleton
+      View skeleton in new tab
     </nuxt-link>
     <collapsible-text :text="individual.description" />
     <collapsible-text :text="individual.discussion" />

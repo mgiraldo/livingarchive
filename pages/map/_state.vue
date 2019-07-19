@@ -1,6 +1,7 @@
 <template>
   <div class="container" @mouseup="resizeUp" @mousemove="resizeMove">
     <search-controls />
+    <skeleton-pane />
     <div ref="splitPane" class="splitview">
       <section ref="resultsPane" class="results">
         <result-count />
@@ -33,6 +34,7 @@ import { parseParams } from '~/utils/params'
 import { updateRouter } from '~/utils/router'
 
 import SearchControls from '~/components/SearchControls'
+import SkeletonPane from '~/components/SkeletonPane'
 import ResultItem from '~/components/ResultItem'
 import ResultsExplained from '~/components/ResultsExplained'
 import ResultsMap from '~/components/ResultsMap'
@@ -45,6 +47,7 @@ export default {
   key: '_map',
   components: {
     SearchControls,
+    SkeletonPane,
     ResultItem,
     ResultsExplained,
     ResultsMap,
@@ -152,6 +155,7 @@ export default {
 }
 .results {
   flex-basis: 50%;
+  overflow-x: hidden;
   overflow-y: auto;
   padding: 0.5rem;
   -webkit-overflow-scrolling: touch;
@@ -159,6 +163,7 @@ export default {
 .results-list {
   list-style-type: none;
   margin: 0.5rem 0 5rem 0;
+  min-width: 20rem;
   padding: 0;
 }
 .resizer {
