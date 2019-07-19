@@ -20,34 +20,6 @@
           :metric="true"
         ></l-control-scale>
         <l-control-layers position="topright"></l-control-layers>
-        <l-control class-name="legend" position="bottomleft">
-          <div class="legend">
-            <strong>{{ legendType }}</strong>
-            <transition-group name="legend-list" class="legend-list" tag="ul">
-              <li
-                v-for="(color, name, index) in legend"
-                :key="index + name"
-                class="legend-list-item"
-              >
-                <filter-color-item :name="name" :color="color" />
-              </li>
-            </transition-group>
-            <button
-              v-if="legendType === 'sex'"
-              class="filter-button"
-              @click="toggleLegend"
-            >
-              color by age
-            </button>
-            <button
-              v-if="legendType === 'age'"
-              class="filter-button"
-              @click="toggleLegend"
-            >
-              color by sex
-            </button>
-          </div>
-        </l-control>
         <l-geo-json
           layer-type="overlay"
           name="Spaces"
@@ -113,6 +85,34 @@
             </l-popup>
           </l-marker>
         </l-layer-group>
+        <l-control class-name="legend" position="bottomleft">
+          <div class="legend">
+            <strong>{{ legendType }}</strong>
+            <transition-group name="legend-list" class="legend-list" tag="ul">
+              <li
+                v-for="(color, name, index) in legend"
+                :key="index + name"
+                class="legend-list-item"
+              >
+                <filter-color-item :name="name" :color="color" />
+              </li>
+            </transition-group>
+            <button
+              v-if="legendType === 'sex'"
+              class="filter-button"
+              @click="toggleLegend"
+            >
+              color by age
+            </button>
+            <button
+              v-if="legendType === 'age'"
+              class="filter-button"
+              @click="toggleLegend"
+            >
+              color by sex
+            </button>
+          </div>
+        </l-control>
       </l-map>
     </no-ssr>
   </section>
