@@ -48,6 +48,20 @@
             </button>
           </div>
         </l-control>
+        <l-geo-json
+          layer-type="overlay"
+          name="Spaces"
+          :geojson="spacesGeoJSON"
+          :options="spaceOptions"
+        >
+        </l-geo-json>
+        <l-geo-json
+          layer-type="overlay"
+          name="Buildings"
+          :geojson="buildingsGeoJSON"
+          :options="buildingOptions"
+        >
+        </l-geo-json>
         <l-layer-group layer-type="overlay" name="Individuals">
           <l-marker
             v-for="(individual, index) in individuals"
@@ -99,20 +113,6 @@
             </l-popup>
           </l-marker>
         </l-layer-group>
-        <l-geo-json
-          layer-type="overlay"
-          name="Spaces"
-          :geojson="spacesGeoJSON"
-          :options="spaceOptions"
-        >
-        </l-geo-json>
-        <l-geo-json
-          layer-type="overlay"
-          name="Buildings"
-          :geojson="buildingsGeoJSON"
-          :options="buildingOptions"
-        >
-        </l-geo-json>
       </l-map>
     </no-ssr>
   </section>
