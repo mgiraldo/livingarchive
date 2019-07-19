@@ -1,10 +1,7 @@
 import axios from 'axios'
 import https from 'https'
-import wellknown from 'wellknown'
-import center from '@turf/center'
 
-import { RDF_PREFIXES, RDF_TIMEOUT, FILTER_PARAMS_TO_NAMES } from './constants'
-import { reprojectGeoJson } from './geo'
+import { RDF_PREFIXES, RDF_TIMEOUT } from './constants'
 import { cleanString } from './stringUtils'
 
 const performRdfQuery = async query => {
