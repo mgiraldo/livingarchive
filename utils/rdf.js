@@ -1,8 +1,10 @@
 import axios from 'axios'
 import https from 'https'
+import wellknown from 'wellknown'
 
 import { RDF_PREFIXES, RDF_TIMEOUT } from './constants'
 import { cleanString } from './stringUtils'
+import { reprojectGeoJson } from './geo'
 
 const performRdfQuery = async query => {
   const instance = axios.create({
@@ -84,20 +86,20 @@ export const getBuilding = async identifier => {
   // TODO: sanitize params
 
   let query = `
-  SELECT ?shape WHERE {
-    ?skeleton :hasIdentifier catalhoyuk:${identifier} .
-    ?skeleton :isConstitutedBy ?individual .
+  SELECT ?id ?wkt WHERE {
+    ?id :hasIdentifier catalhoyuk:${identifier} .
+    ?id :isConstitutedBy ?individual .
     ?individual :isLocatedIn ?space .
     ?unit :isLocatedIn ?space .
     ?unit :constitutes ?feature .
     ?feature a catalhoyuk:Wall .
     ?unit :hasGeometry ?geom .
-    ?geom :hasSerialization ?shape .
+    ?geom :hasSerialization ?wkt .
   }`
 
   const data = await performRdfQuery(query)
 
-  const results = data.data.results.bindings.map(item => item.shape.value)
+  const results = parseShapes(data.data.results.bindings)
   return results
 }
 
@@ -108,49 +110,68 @@ export const getSpace = async identifier => {
   numberPart = numberPart.substring(0, numberPart.indexOf('.'))
 
   let query = `
-  SELECT ?shape WHERE {
-    ?unit catalhoyuk:hasIdentifier ${numberPart} .
-    ?unit a catalhoyuk:Unit .
-    ?unit :isSpatiallyRelatedTo ?space .
+  SELECT ?id ?wkt WHERE {
+    ?id catalhoyuk:hasIdentifier ${numberPart} .
+    ?id a catalhoyuk:Unit .
+    ?id :isSpatiallyRelatedTo ?space .
     ?space a catalhoyuk:Space .
     ?space :hasGeometry ?geom_space .
-    ?geom_space :hasSerialization ?shape .
+    ?geom_space :hasSerialization ?wkt .
   }`
 
   const data = await performRdfQuery(query)
 
-  const results = data.data.results.bindings.map(item => item.shape.value)
+  const results = parseShapes(data.data.results.bindings)
   return results
 }
 
 export const getAllSpaces = async () => {
   let query = `
-  SELECT ?space ?shape WHERE {
-    ?space a catalhoyuk:Space . 
-    ?space :hasGeometry ?geom .
-    ?geom :hasSerialization ?shape
+  SELECT ?id ?wkt WHERE {
+    ?id a catalhoyuk:Space . 
+    ?id :hasGeometry ?geom .
+    ?geom :hasSerialization ?wkt
   }`
 
   const data = await performRdfQuery(query)
 
-  const results = data.data.results.bindings.map(item => {
-    return { id: cleanString(item.space.value), shape: item.shape.value }
-  })
+  const results = parseShapes(data.data.results.bindings)
   return results
 }
 
 export const getAllBuildings = async () => {
   let query = `
-  SELECT ?space ?shape WHERE {
-    ?space a catalhoyuk:Building . 
-    ?space :hasGeometry ?geom .
-    ?geom :hasSerialization ?shape
+  SELECT ?id ?wkt WHERE {
+    ?id a catalhoyuk:Building . 
+    ?id :hasGeometry ?geom .
+    ?geom :hasSerialization ?wkt
   }`
 
   const data = await performRdfQuery(query)
 
-  const results = data.data.results.bindings.map(item => {
-    return { id: cleanString(item.space.value), shape: item.shape.value }
-  })
+  const results = parseShapes(data.data.results.bindings)
+  return results
+}
+
+/**
+ * Produces a GeoJSON from the SparQL WKT data
+ * @param {sparql-results+json} bindings The bindings as they came from SparQL
+ */
+const parseShapes = bindings => {
+  const results = bindings
+    .map(item => {
+      const wkt = item.wkt.value
+      let parsed
+      if (wkt) parsed = wellknown.parse(wkt)
+      let projected
+      if (!parsed || parsed.type === 'Point') return
+      projected = reprojectGeoJson(parsed)
+      return {
+        type: 'Feature',
+        geometry: projected,
+        properties: { id: cleanString(item.id.value) }
+      }
+    })
+    .filter(item => item !== undefined)
   return results
 }

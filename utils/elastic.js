@@ -158,24 +158,18 @@ export const getAllIndividuals = async ({ filters }) => {
 
   const { results, aggs, count } = await performESQuery(query)
 
-  let temp = results.map(hit => {
+  let individuals = {}
+  let points = []
+  results.forEach(hit => {
     let individual = {}
     sources.forEach(source => {
       individual[source] = cleanString(hit._source[source])
     })
-    return individual
-  })
-
-  let individuals = {}
-  let points = []
-  // TODO: remove extra looping
-  temp.forEach(element => {
-    let identifier = element.individual
-    individuals[identifier] = element
-    individuals[identifier].skeleton = new Set()
+    let identifier = individual.individual
+    individuals[identifier] = individual
     let point = wellknown.parse(EMPTY_LONLAT)
-    if (element.wkt_point) {
-      let parsed = reprojectGeoJson(wellknown.parse(element.wkt_point))
+    if (individual.wkt_point) {
+      let parsed = reprojectGeoJson(wellknown.parse(individual.wkt_point))
       if (parsed && parsed.type === 'Point') {
         point = parsed
       }

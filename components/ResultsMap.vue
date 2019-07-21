@@ -60,10 +60,10 @@
                     >{{ individual.identifier }}</nuxt-link
                   >
                 </dd>
-                <dt>Skeleton</dt>
+                <!-- <dt>Skeleton</dt>
                 <dd class="bones">
                   <bones-find-view :shape="individual.skeleton" />
-                </dd>
+                </dd> -->
                 <dt>Sex</dt>
                 <dd
                   class="bordered"
@@ -226,14 +226,7 @@ export default {
       }
       if (wkt.length > 0) {
         wkt.forEach(feature => {
-          let parsed = wellknown.parse(feature.shape)
-          if (parsed) {
-            let projected = reprojectGeoJson(parsed)
-            if (projected.type !== 'Point') {
-              projected.properties = { id: feature.id }
-              geoJSON.features.push(projected)
-            }
-          }
+          geoJSON.features.push(feature)
         })
       }
       return geoJSON
@@ -241,14 +234,10 @@ export default {
     selectMarker(who) {
       this.$refs[who.identifier][0].mapObject.openPopup()
     },
-    async showBuilding(who) {
-      if (this.polygonLayer)
-        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
-      // get the building
-      const building = await getBuilding(who.identifier)
+    getPolygons(wkts) {
       let polygons = []
-      if (building && building.length) {
-        building.forEach(shape => {
+      if (wkts && wkts.length) {
+        wkts.forEach(shape => {
           let parsed = wellknown.parse(shape)
           if (parsed) {
             let projected = reprojectGeoJson(parsed)
@@ -258,7 +247,14 @@ export default {
           }
         })
       }
-      this.polygons = polygons
+      return polygons
+    },
+    async showBuilding(who) {
+      if (this.polygonLayer)
+        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
+      // get the building
+      const building = await getBuilding(who.identifier)
+      this.polygons = building
       this.updatePolygonLayer()
     },
     async showSpace(who) {
@@ -266,19 +262,7 @@ export default {
         this.$refs.map.mapObject.removeLayer(this.polygonLayer)
       // get the space
       const space = await getSpace(who.identifier)
-      let polygons = []
-      if (space && space.length) {
-        space.forEach(shape => {
-          let parsed = wellknown.parse(shape)
-          if (parsed) {
-            let projected = reprojectGeoJson(parsed)
-            if (projected.type !== 'Point') {
-              polygons.push(projected)
-            }
-          }
-        })
-      }
-      this.polygons = polygons
+      this.polygons = space
       this.updatePolygonLayer()
     },
     updatePolygonLayer() {
