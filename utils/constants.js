@@ -88,7 +88,7 @@ export const FILTER_PARAMS_TO_NAMES = {
     colors: null
   }
 }
-export const EMPTY_LONLAT = 'Point (32.826886 37.668639)' // the catalhoyuk building
+export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building (order is LAT LON instead of LON LAT because that's what's working ¯\_(ツ)_/¯)
 
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
@@ -99,6 +99,10 @@ export const PROJ4_DEFS = [
   [
     'catalhoyuk2',
     '+proj=tmerc +lat_0=0 +lon_0=36 +k=0.837564 +x_0=235345.552792 +y_0=-3496198.034545 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs'
+  ],
+  [
+    'catalhoyuk3',
+    '+proj=tmerc +lat_0=32 +lon_0=37 +x_0=369184.729 +y_0=-635779.0741 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs'
   ]
 ]
 

@@ -20,7 +20,7 @@ export const reprojectGeoJson = geoJson => {
 }
 export const reprojectPoint = coords => {
   proj4.defs(PROJ4_DEFS)
-  return proj4('catalhoyuk', 'EPSG:4326', coords)
+  return proj4('catalhoyuk3', 'EPSG:4326', coords)
 }
 export const reprojectArray = (coords, levelsDeep) => {
   // based on https://github.com/Leaflet/Leaflet/blob/61e49eef24a3ba98c187248628a4584fd4e0a5b7/src/layer/GeoJSON.js
