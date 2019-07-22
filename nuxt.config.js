@@ -1,4 +1,5 @@
 const pkg = require('./package')
+const webpack = require('webpack')
 const { basename } = require('path')
 require('dotenv').config()
 
@@ -36,6 +37,10 @@ module.exports = {
     '~/plugins/vue-fragment',
     {
       src: '~/plugins/vue-layers',
+      ssr: false
+    },
+    {
+      src: '~/plugins/vue-mapboxgl',
       ssr: false
     }
   ],
@@ -78,6 +83,11 @@ module.exports = {
    */
   build: {
     splitChunks: { layouts: true },
+    plugins: [
+      new webpack.ProvidePlugin({
+        mapboxgl: 'mapbox-gl'
+      })
+    ],
     extend(config) {
       config.devtool = 'source-map'
 

@@ -5,7 +5,7 @@
       amount of results.
     </div>
     <no-ssr>
-      <l-map
+      <!-- <l-map
         v-if="showMap"
         ref="map"
         @overlayadd="overlayAdded"
@@ -60,10 +60,10 @@
                     >{{ individual.identifier }}</nuxt-link
                   >
                 </dd>
-                <!-- <dt>Skeleton</dt>
+                <dt>Skeleton</dt>
                 <dd class="bones">
                   <bones-find-view :shape="individual.skeleton" />
-                </dd> -->
+                </dd>
                 <dt>Sex</dt>
                 <dd
                   class="bordered"
@@ -118,12 +118,28 @@
             </button>
           </div>
         </l-control>
-      </l-map>
+      </l-map> -->
+      <mapbox
+        ref="mapbox"
+        access-token=""
+        :map-options="{
+          center: [-74.5, 40],
+          zoom: 13,
+          style:
+            'https://api.maptiler.com/maps/basic/style.json?key=ncZrA0dJhP6XC26EwXcY'
+        }"
+        @map-init="mapInited"
+        @map-load="mapLoaded"
+      >
+      </mapbox>
     </no-ssr>
   </section>
 </template>
 
 <script>
+import { MapboxLayer } from '@deck.gl/mapbox'
+import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers'
+
 import {
   TILELAYERS,
   BUILDING_COLOR,
@@ -152,6 +168,7 @@ export default {
       sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
       buildingsShown: true,
       spacesShown: true,
+      deck: null,
       polygonLayer: null
     }
   },
@@ -206,6 +223,83 @@ export default {
     this.checkMapObject()
   },
   methods: {
+    mapInited(map) {
+      console.log('inited', map)
+    },
+    mapLoaded(map) {
+      console.log('loaded', map)
+      const myDeckLayer = new MapboxLayer({
+        id: 'my-scatterplot',
+        type: ScatterplotLayer,
+        data: [{ position: [-74.5, 40], size: 100 }],
+        getPosition: d => d.position,
+        getRadius: d => d.size,
+        getColor: [255, 0, 0]
+      })
+      map.addLayer(myDeckLayer)
+      if (this.$refs.map) this.$refs.map.mapObject.invalidateSize()
+    },
+    initDeck() {
+      // this.deck = new Deck({
+      //   canvas: 'deck-canvas',
+      //   width: '100%',
+      //   height: '100%',
+      //   initialViewState: INITIAL_VIEW_STATE,
+      //   controller: true,
+      //   // onViewStateChange: ({ viewState }) => {
+      //   //   this.$refs.map.mapObject.setView({
+      //   //     center: [viewState.longitude, viewState.latitude],
+      //   //     zoom: viewState.zoom
+      //   //   })
+      //   // },
+      //   layers: [
+      //     new GeoJsonLayer({
+      //       data: this.buildingsGeoJSON,
+      //       opacity: 0.8,
+      //       stroked: false,
+      //       filled: true,
+      //       extruded: true,
+      //       wireframe: true,
+      //       fp64: true,
+      //       getFillColor: f => [65, 182, 196],
+      //       getLineColor: f => [255, 255, 255],
+      //       pickable: true,
+      //       onHover: info => {
+      //         //         const { x, y, object } = info
+      //         //         if (object) {
+      //         //           tooltip.style.top = `${y}px`
+      //         //           tooltip.style.left = `${x}px`
+      //         //           tooltip.innerHTML = `
+      //         //   <div><b>Average Property Value &nbsp;</b></div>
+      //         //   <div><div>${object.properties.valuePerSqm} / m<sup>2</sup></div></div>
+      //         //   <div><b>Growth</b></div>
+      //         //   <div>${Math.round(object.properties.growth * 100)}%</div>
+      //         // `
+      //         //         } else {
+      //         //           tooltip.innerHTML = ''
+      //         //         }
+      //       }
+      //     })
+      //     //   new GeoJsonLayer({
+      //     //     id: 'airports',
+      //     //     data: AIR_PORTS,
+      //     //     // Styles
+      //     //     filled: true,
+      //     //     pointRadiusMinPixels: 2,
+      //     //     opacity: 1,
+      //     //     pointRadiusScale: 2000,
+      //     //     getRadius: f => 11 - f.properties.scalerank,
+      //     //     getFillColor: [200, 0, 80, 180],
+      //     //     // Interactive props
+      //     //     pickable: true,
+      //     //     autoHighlight: true,
+      //     //     onClick: info =>
+      //     //       // eslint-disable-next-line
+      //     // info.object && alert(`${info.object.properties.name} (${info.object.properties.abbrev})`)
+      //     //   }),
+      //   ]
+      // })
+    },
     overlayAdded(e) {
       const overlay = e.name
       if (overlay === 'Buildings') this.buildingsShown = true
@@ -280,6 +374,7 @@ export default {
       this.checkMap = setInterval(() => {
         if (this.$refs.map) {
           clearInterval(this.checkMap)
+          this.initDeck()
           this.fitMap()
         }
       }, 100)
@@ -298,6 +393,10 @@ export default {
 }
 .map {
   flex-basis: 50%;
+}
+#map {
+  height: 100%;
+  width: 100%;
 }
 .legend {
   background-color: transparentize($global-background-color, 0.35);
