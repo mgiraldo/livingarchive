@@ -124,8 +124,6 @@
 </template>
 
 <script>
-import wellknown from 'wellknown'
-
 import {
   TILELAYERS,
   BUILDING_COLOR,
@@ -133,7 +131,6 @@ import {
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
 import { getBuilding, getSpace } from '~/utils/rdf'
-import { reprojectGeoJson } from '~/utils/geo'
 
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
@@ -234,21 +231,6 @@ export default {
     selectMarker(who) {
       this.$refs[who.identifier][0].mapObject.openPopup()
     },
-    getPolygons(wkts) {
-      let polygons = []
-      if (wkts && wkts.length) {
-        wkts.forEach(shape => {
-          let parsed = wellknown.parse(shape)
-          if (parsed) {
-            let projected = reprojectGeoJson(parsed)
-            if (projected.type !== 'Point') {
-              polygons.push(projected)
-            }
-          }
-        })
-      }
-      return polygons
-    },
     async showBuilding(who) {
       if (this.polygonLayer)
         this.$refs.map.mapObject.removeLayer(this.polygonLayer)
@@ -292,7 +274,7 @@ export default {
       if (this.spacesGeoJSON && this.spacesShown) {
         bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
       }
-      if (bounds) this.$refs.map.mapObject.fitBounds(bounds)
+      if (this.$refs.map && bounds) this.$refs.map.mapObject.fitBounds(bounds)
     },
     checkMapObject() {
       this.checkMap = setInterval(() => {

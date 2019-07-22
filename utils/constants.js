@@ -88,7 +88,7 @@ export const FILTER_PARAMS_TO_NAMES = {
     colors: null
   }
 }
-export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building
+export const EMPTY_LONLAT = 'Point (32.826886 37.668639)' // the catalhoyuk building
 
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
