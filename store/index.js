@@ -25,7 +25,7 @@ export const state = () => ({
   checkedLevels: new Set(),
   checkedPhases: new Set(),
   checkedSkeleton: new Set(),
-  legendType: 'sex',
+  legendType: 'age',
   filtered: false
 })
 
