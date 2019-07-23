@@ -99,7 +99,6 @@ export default {
         this.updateMapPoints()
       }
     })
-    this.checkMapObject()
   },
   methods: {
     points() {
@@ -119,9 +118,6 @@ export default {
         return { type: 'Feature', properties: p, geometry: p.point }
       })
       return this.createGeoJSON(geo)
-    },
-    toggleLayer(e, visible) {
-      console.log(e, visible)
     },
     mapInited(map) {
       // console.log('inited', map)
@@ -276,31 +272,6 @@ export default {
         }
       }).$mount('#vue-popup-content')
     },
-    async showBuilding(who) {
-      if (this.polygonLayer)
-        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
-      // get the building
-      const building = await getBuilding(who.identifier)
-      this.polygons = building
-      this.updatePolygonLayer()
-    },
-    async showSpace(who) {
-      if (this.polygonLayer)
-        this.$refs.map.mapObject.removeLayer(this.polygonLayer)
-      // get the space
-      const space = await getSpace(who.identifier)
-      this.polygons = space
-      this.updatePolygonLayer()
-    },
-    updatePolygonLayer() {
-      if (this.polygons.length > 0) {
-        this.polygonLayer = this.$L.geoJSON(this.polygons, this.buildingOptions)
-        this.$refs.map.mapObject.addLayer(this.polygonLayer)
-        this.$refs.map.mapObject.fitBounds(this.polygonLayer.getBounds())
-      } else {
-        this.fitMap()
-      }
-    },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct
       if (this.map) this.map.resize()
@@ -328,27 +299,12 @@ export default {
       this.map.fitBounds([[minX, minY], [maxX, maxY]], {
         padding: { top: 25, bottom: 25, left: 25, right: 25 }
       })
-    },
-    checkMapObject() {
-      this.checkMap = setInterval(() => {
-        if (this.$refs.map) {
-          clearInterval(this.checkMap)
-          this.fitMap()
-        }
-      }, 100)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.no-map {
-  display: grid;
-  font-size: 2rem;
-  height: 100%;
-  place-content: center;
-  text-align: center;
-}
 .map {
   flex-basis: 50%;
 }
