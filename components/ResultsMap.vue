@@ -359,13 +359,23 @@ export default {
         paint: {
           // make circles larger as the user zooms from z12 to z22
           'circle-radius': {
-            base: 1.75,
-            stops: [[12, 2], [22, 12]]
+            base: 1.5,
+            stops: [[12, 1.75], [22, 12]]
           },
           // color circles by legend type, using a match expression
           // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
           'circle-color': colors
         }
+      })
+
+      this.map.on('mouseenter', 'individuals', e => {
+        if (e.features.length > 0) {
+          this.map.getCanvas().style.cursor = 'pointer'
+        }
+      })
+
+      this.map.on('mouseleave', 'individuals', e => {
+        this.map.getCanvas().style.cursor = ''
       })
 
       this.map.on('click', e => {
