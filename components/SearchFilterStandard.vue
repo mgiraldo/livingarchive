@@ -1,10 +1,10 @@
 <template>
   <section>
     <search-filter-title
-      :click-handler="toggle"
       :controls="'facet_' + facet.name + '_toggle'"
       :open="open"
       :text="facet.name"
+      @click="toggle"
     />
     <div :id="'facet_' + facet.name + '_toggle'">
       <search-filter-list
@@ -32,7 +32,6 @@ export default {
   data() {
     return { open: false }
   },
-  computed: {},
   methods: {
     toggle() {
       this.open = !this.open

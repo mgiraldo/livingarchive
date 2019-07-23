@@ -1,7 +1,7 @@
 <template>
   <div class="map-overlay layer-switcher">
-    <results-map-overlay-title text="Layers" />
-    <ul class="list">
+    <results-map-overlay-title text="Layers" :open="open" @click="toggle" />
+    <ul v-show="open" class="list">
       <li class="checkbox">
         <input
           id="ch-individuals"
@@ -63,6 +63,15 @@ import ResultsMapOverlayTitle from '~/components/ResultsMapOverlayTitle'
 export default {
   components: {
     ResultsMapOverlayTitle
+  },
+  data() {
+    return { open: false }
+  },
+  methods: {
+    toggle() {
+      this.open = !this.open
+      console.log('open')
+    }
   }
 }
 </script>

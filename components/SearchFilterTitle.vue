@@ -1,5 +1,5 @@
 <template>
-  <h1 :aria-controls="controls" @click="clickHandler">
+  <h1 :aria-controls="controls" @click="$emit('click')">
     <disclosure-icon :open="open" class="icon" label="Toggle facet" />
     {{ text }}
   </h1>
@@ -13,7 +13,6 @@ export default {
     DisclosureIcon
   },
   props: {
-    clickHandler: { type: Function, required: true },
     controls: { type: String, required: true },
     open: { type: Boolean, required: true },
     text: { type: String, required: true }

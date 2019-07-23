@@ -1,7 +1,16 @@
 <template>
   <div class="map-overlay legend">
-    <results-map-overlay-title :text="type" />
-    <transition-group name="legend-list" class="legend-list" tag="ul">
+    <results-map-overlay-title
+      :text="'Legend: ' + type"
+      :open="open"
+      @click="toggle"
+    />
+    <transition-group
+      v-show="open"
+      name="legend-list"
+      class="legend-list"
+      tag="ul"
+    >
       <li
         v-for="(color, name, index) in legend"
         :key="index + name"
@@ -10,7 +19,7 @@
         <filter-color-item :name="name" :color="color" />
       </li>
     </transition-group>
-    <button class="filter-button" @click="toggleLegend">
+    <button v-show="open" class="filter-button" @click="toggleLegend">
       color by {{ type === 'sex' ? 'age' : 'sex' }}
     </button>
   </div>
@@ -27,6 +36,9 @@ export default {
     FilterColorItem,
     ResultsMapOverlayTitle
   },
+  data() {
+    return { open: false }
+  },
   computed: {
     type() {
       return this.$store.state.legendType
@@ -40,6 +52,9 @@ export default {
     }
   },
   methods: {
+    toggle() {
+      this.open = !this.open
+    },
     toggleLegend() {
       this.$store.commit('toggledLegend')
       this.$emit('toggled')
