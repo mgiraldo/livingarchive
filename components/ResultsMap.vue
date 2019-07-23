@@ -1,9 +1,5 @@
 <template>
   <section ref="pane" class="map">
-    <div v-if="!showMap" class="no-map">
-      There are too many results to display.<br />Apply filters to reduce the
-      amount of results.
-    </div>
     <no-ssr>
       <div ref="map" class="map-wrapper">
         <mapbox
@@ -64,9 +60,6 @@ export default {
     }
   },
   computed: {
-    showMap() {
-      return true //this.$store.state.displayedIdentifiers.size <= this.displayLimit
-    },
     buildingsGeoJSON() {
       return this.createGeoJSON(this.$store.state.buildings)
     },
@@ -224,16 +217,6 @@ export default {
         ]
         this.showPopup(individual)
       })
-    },
-    overlayAdded(e) {
-      const overlay = e.name
-      if (overlay === 'Buildings') this.buildingsShown = true
-      if (overlay === 'Spaces') this.spacesShown = true
-    },
-    overlayRemoved(e) {
-      const overlay = e.name
-      if (overlay === 'Buildings') this.buildingsShown = false
-      if (overlay === 'Spaces') this.spacesShown = false
     },
     createGeoJSON(geoArray) {
       let geoJSON = {

@@ -17,9 +17,7 @@
             v-for="individual in displayedIndividuals"
             :key="individual.identifier"
             :individual="individual"
-            :show-click="showClick"
-            :building-click="buildingClick"
-            :space-click="spaceClick"
+            @show="showClick"
           ></li>
         </ul>
       </section>
@@ -91,13 +89,8 @@ export default {
   },
   methods: {
     showClick(who) {
+      console.log(who)
       this.$refs.mapPane.highlightIndividual(who)
-    },
-    buildingClick(who) {
-      this.$refs.mapPane.showBuilding(who)
-    },
-    spaceClick(who) {
-      this.$refs.mapPane.showSpace(who)
     },
     checkResizer() {
       this.checkPane = setInterval(() => {

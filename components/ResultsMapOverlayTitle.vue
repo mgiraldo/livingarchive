@@ -12,7 +12,6 @@ export default {
     DisclosureIcon
   },
   props: {
-    clickHandler: { type: Function, required: true },
     text: { type: String, required: true },
     open: { type: Boolean, default: true }
   }

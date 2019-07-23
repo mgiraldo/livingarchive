@@ -6,16 +6,8 @@
   >
     <individual-info :individual="individual" />
     <div class="actions-wrapper">
-      <button class="link-button" @click="showClick(individual)">
+      <button class="link-button" @click="$emit('show', individual)">
         Highlight on map
-      </button>
-      <span class="separator">|</span>
-      <button class="link-button" @click="buildingClick(individual)">
-        Building
-      </button>
-      <span class="separator">←</span>
-      <button class="link-button" @click="spaceClick(individual)">
-        Space
       </button>
     </div>
   </li>
@@ -29,11 +21,7 @@ export default {
     IndividualInfo
   },
   props: {
-    individual: { type: Object, required: true },
-    showControls: { type: Boolean, default: true },
-    showClick: { type: Function, default: () => {} },
-    spaceClick: { type: Function, default: () => {} },
-    buildingClick: { type: Function, default: () => {} }
+    individual: { type: Object, required: true }
   },
   data() {
     return {
