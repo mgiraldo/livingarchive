@@ -27,8 +27,17 @@ const performRdfQuery = async query => {
   return results
 }
 
-export const getSkeleton = async identifier => {
+export const getSkeletonShape = async identifier => {
   // first get preservation info
+  let skeleton = await getSkeleton(identifier)
+
+  // now get the geo shape for the skeleton
+  let shape = await getShape(identifier)
+
+  return { skeleton, shape }
+}
+
+export const getSkeleton = async identifier => {
   let query = `
   SELECT ?pred ?obj ?bone WHERE {
     {
@@ -61,10 +70,7 @@ export const getSkeleton = async identifier => {
     }
   })
 
-  // now get the geo shape for the skeleton
-  let shape = await getShape(identifier)
-
-  return { skeleton, shape }
+  return skeleton
 }
 
 export const getShape = async identifier => {

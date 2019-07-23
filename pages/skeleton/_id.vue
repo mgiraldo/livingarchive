@@ -21,7 +21,7 @@
 import SkeletonFront from '~/assets/skeleton-front.svg'
 import BonesFindView from '~/components/BonesFindView'
 
-import { getSkeleton } from '~/utils/rdf'
+import { getSkeletonShape } from '~/utils/rdf'
 import { BONE_FILL_COLOR, BONE_FILL_PARTIAL_COLOR } from '~/utils/constants'
 
 export default {
@@ -33,7 +33,7 @@ export default {
     return /^[a-zA-Z\d.]+$/.test(params.id)
   },
   async asyncData({ params }) {
-    let { skeleton, shape } = await getSkeleton(params.id)
+    let { skeleton, shape } = await getSkeletonShape(params.id)
     return {
       identifier: params.id,
       skeleton,
