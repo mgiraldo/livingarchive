@@ -19,7 +19,9 @@ export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'
 export const BONE_STROKE_COLOR = 'hsla(33, 35%, 44%, 1)'
 export const BUILDING_COLOR = 'hsla(33, 35%, 44%, 0.5)'
+export const BUILDING_TEXT_COLOR = 'rgb(33, 33, 33)'
 export const SPACE_COLOR = 'hsla(19, 35%, 44%, 0.5)'
+export const SPACE_TEXT_COLOR = 'rgba(232, 232, 232, 0.5)'
 
 export const FILTER_PARAMS_TO_NAMES = {
   a: {

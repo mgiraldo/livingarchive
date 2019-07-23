@@ -32,6 +32,8 @@ import {
   TILELAYERS,
   BUILDING_COLOR,
   SPACE_COLOR,
+  BUILDING_TEXT_COLOR,
+  SPACE_TEXT_COLOR,
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
 import { getBuilding, getSpace } from '~/utils/rdf'
@@ -51,38 +53,31 @@ export default {
     return {
       tilelayers: TILELAYERS,
       polygons: [],
-      displayLimit: 600,
-      buildingsShown: true,
-      spacesShown: true,
       map: null,
       popup: null,
-      polygonLayer: null
-    }
-  },
-  computed: {
-    buildingsGeoJSON() {
-      return this.createGeoJSON(this.$store.state.buildings)
-    },
-    buildingOptions() {
-      return {
+      polygonLayer: null,
+      buildingOptions: {
         weight: 0.5,
         zIndex: 10,
         color: BUILDING_COLOR,
         fillColor: BUILDING_COLOR,
         fillOpacity: 1
-      }
-    },
-    spacesGeoJSON() {
-      return this.createGeoJSON(this.$store.state.spaces)
-    },
-    spaceOptions() {
-      return {
+      },
+      spaceOptions: {
         weight: 0.5,
         zIndex: 11,
         color: SPACE_COLOR,
         fillColor: SPACE_COLOR,
         fillOpacity: 1
       }
+    }
+  },
+  computed: {
+    buildingsGeoJSON() {
+      return this.createGeoJSON(this.$store.state.buildings)
+    },
+    spacesGeoJSON() {
+      return this.createGeoJSON(this.$store.state.spaces)
     },
     legendType() {
       return this.$store.state.legendType
@@ -153,10 +148,42 @@ export default {
         paint: { 'fill-color': BUILDING_COLOR }
       })
       this.map.addLayer({
+        id: 'buildings-labels',
+        type: 'symbol',
+        source: 'buildings',
+        layout: {
+          'text-field': ['get', 'id'],
+          'text-variable-anchor': ['center'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'auto',
+          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12]
+        },
+        paint: {
+          'text-color': BUILDING_TEXT_COLOR,
+          'text-halo-color': BUILDING_COLOR
+        }
+      })
+      this.map.addLayer({
         id: 'spaces',
         type: 'fill',
         source: 'spaces',
         paint: { 'fill-color': SPACE_COLOR }
+      })
+      this.map.addLayer({
+        id: 'spaces-labels',
+        type: 'symbol',
+        source: 'spaces',
+        layout: {
+          'text-field': ['get', 'id'],
+          'text-variable-anchor': ['top'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'auto',
+          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12]
+        },
+        paint: {
+          'text-color': SPACE_TEXT_COLOR,
+          'text-halo-color': SPACE_COLOR
+        }
       })
       this.drawPoints()
       this.fitMap()
@@ -197,7 +224,7 @@ export default {
         }
       })
 
-      this.map.on('mouseleave', 'individuals', e => {
+      this.map.on('mouseleave', 'individuals', () => {
         this.map.getCanvas().style.cursor = ''
       })
 
@@ -236,6 +263,7 @@ export default {
     showPopup(who) {
       const mapboxgl = require('mapbox-gl/dist/mapbox-gl')
       if (this.popup) this.popup.remove()
+      this.map.flyTo({ center: who.point.coordinates })
       this.popup = new mapboxgl.Popup()
         .setLngLat(who.point.coordinates)
         .setHTML('<div id="vue-popup-content"></div>')
@@ -281,11 +309,11 @@ export default {
       this.drawPoints()
     },
     onLayerSwitched(e) {
-      console.log(e)
       const layer = e.name
       const visible = e.toggled ? 'visible' : 'none'
       if (!this.map.getLayer(layer)) return
       this.map.setLayoutProperty(layer, 'visibility', visible)
+      this.map.setLayoutProperty(layer + '-labels', 'visibility', visible)
     },
     fitMap() {
       if (!this.map) return
