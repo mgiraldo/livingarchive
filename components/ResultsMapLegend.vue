@@ -1,0 +1,93 @@
+<template>
+  <div class="map-overlay legend">
+    <results-map-overlay-title :text="type" />
+    <transition-group name="legend-list" class="legend-list" tag="ul">
+      <li
+        v-for="(color, name, index) in legend"
+        :key="index + name"
+        class="legend-list-item"
+      >
+        <filter-color-item :name="name" :color="color" />
+      </li>
+    </transition-group>
+    <button class="filter-button" @click="toggleLegend">
+      color by {{ type === 'sex' ? 'age' : 'sex' }}
+    </button>
+  </div>
+</template>
+
+<script>
+import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
+
+import FilterColorItem from '~/components/FilterColorItem'
+import ResultsMapOverlayTitle from '~/components/ResultsMapOverlayTitle'
+
+export default {
+  components: {
+    FilterColorItem,
+    ResultsMapOverlayTitle
+  },
+  computed: {
+    type() {
+      return this.$store.state.legendType
+    },
+    legend() {
+      if (this.$store.state.legendType === 'age') {
+        return FILTER_PARAMS_TO_NAMES.a.colors
+      } else {
+        return FILTER_PARAMS_TO_NAMES.s.colors
+      }
+    }
+  },
+  methods: {
+    toggleLegend() {
+      this.$store.commit('toggledLegend')
+      this.$emit('toggled')
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.legend {
+  bottom: 0;
+  left: 0;
+  list-style-type: none;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 3rem;
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .legend-list-item {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+    transition: all 0.5s;
+  }
+
+  .legend-list-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .legend-list-enter,
+  .legend-list-leave-to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .legend-list-leave-active {
+    position: absolute;
+  }
+
+  .dot {
+    border-radius: 50%;
+    height: 1rem;
+    margin-right: 0.25rem;
+    width: 1rem;
+  }
+}
+</style>

@@ -91,7 +91,7 @@ export default {
   },
   methods: {
     showClick(who) {
-      this.$refs.mapPane.selectMarker(who)
+      this.$refs.mapPane.highlightIndividual(who)
     },
     buildingClick(who) {
       this.$refs.mapPane.showBuilding(who)

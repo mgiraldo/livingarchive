@@ -5,120 +5,6 @@
       amount of results.
     </div>
     <no-ssr>
-      <!-- <l-map
-        v-if="showMap"
-        ref="map"
-        @overlayadd="overlayAdded"
-        @overlayremove="overlayRemoved"
-      >
-        <l-tile-layer
-          v-for="(layer, index) in tilelayers"
-          :key="'layer-' + index"
-          :url="layer.url"
-          :attribution="layer.attribution"
-          :name="layer.name"
-          :options="layer.options"
-        ></l-tile-layer>
-        <l-control-scale
-          position="topright"
-          :imperial="false"
-          :metric="true"
-        ></l-control-scale>
-        <l-control-layers position="topright"></l-control-layers>
-        <l-geo-json
-          layer-type="overlay"
-          name="Spaces"
-          :geojson="spacesGeoJSON"
-          :options-style="spaceOptions"
-        >
-        </l-geo-json>
-        <l-geo-json
-          layer-type="overlay"
-          name="Buildings"
-          :geojson="buildingsGeoJSON"
-          :options-style="buildingOptions"
-        >
-        </l-geo-json>
-        <l-layer-group layer-type="overlay" name="Individuals">
-          <l-marker
-            v-for="(individual, index) in individuals"
-            :key="'ind-' + index"
-            :ref="individual.identifier"
-            :data-identifier="individual.identifier"
-            :lat-lng="individual.point.coordinates"
-          >
-            <l-icon class-name="icon">
-              <map-marker :type="legendType" :individual="individual" />
-            </l-icon>
-            <l-popup max-width="15rem" class="popup">
-              <dl>
-                <dt>Identifier</dt>
-                <dd>
-                  <nuxt-link
-                    :to="`/skeleton/${individual.identifier}`"
-                    target="_blank"
-                    >{{ individual.identifier }}</nuxt-link
-                  >
-                </dd>
-                <dt>Skeleton</dt>
-                <dd class="bones">
-                  <bones-find-view :shape="individual.skeleton" />
-                </dd>
-                <dt>Sex</dt>
-                <dd
-                  class="bordered"
-                  :style="'border-color:' + sexColors[individual.sex]"
-                >
-                  {{ individual.sex }}
-                </dd>
-                <dt>Age</dt>
-                <dd
-                  class="bordered"
-                  :style="'border-color:' + ageColors[individual.age]"
-                >
-                  {{ individual.age }}
-                </dd>
-                <dt>Phase</dt>
-                <dd>
-                  {{ individual.phase }}
-                </dd>
-                <dt>Level</dt>
-                <dd>
-                  {{ individual.level }}
-                </dd>
-              </dl>
-            </l-popup>
-          </l-marker>
-        </l-layer-group>
-        <l-control class-name="legend" position="bottomleft">
-          <div class="legend">
-            <strong>{{ legendType }}</strong>
-            <transition-group name="legend-list" class="legend-list" tag="ul">
-              <li
-                v-for="(color, name, index) in legend"
-                :key="index + name"
-                class="legend-list-item"
-              >
-                <filter-color-item :name="name" :color="color" />
-              </li>
-            </transition-group>
-            <button
-              v-if="legendType === 'sex'"
-              class="filter-button"
-              @click="toggleLegend"
-            >
-              color by age
-            </button>
-            <button
-              v-if="legendType === 'age'"
-              class="filter-button"
-              @click="toggleLegend"
-            >
-              color by sex
-            </button>
-          </div>
-        </l-control>
-      </l-map> -->
       <div ref="map" class="map-wrapper">
         <mapbox
           ref="mapbox"
@@ -136,62 +22,8 @@
           @map-load="mapLoaded"
         >
         </mapbox>
-        <div class="map-overlay layer-switcher">
-          <div class="map-overlay__title">Layers</div>
-          <ul class="layer-switcher__list">
-            <li class="layer-switcher__checkbox">
-              <input
-                id="ch-individuals"
-                type="checkbox"
-                value="individuals"
-                checked="checked"
-                @change="toggleLayer('individuals', $event.target.checked)"
-              />
-              <label for="ch-individuals">
-                Individuals
-              </label>
-            </li>
-            <li class="layer-switcher__checkbox">
-              <input
-                id="ch-spaces"
-                type="checkbox"
-                value="spaces"
-                checked="checked"
-                @change="toggleLayer('spaces', $event.target.checked)"
-              />
-              <label for="ch-spaces">
-                Spaces
-              </label>
-            </li>
-            <li class="layer-switcher__checkbox">
-              <input
-                id="ch-buildings"
-                type="checkbox"
-                value="buildings"
-                checked="checked"
-                @change="toggleLayer('buildings', $event.target.checked)"
-              />
-              <label for="ch-buildings">
-                Buildings
-              </label>
-            </li>
-          </ul>
-        </div>
-        <div ref="legend" class="map-overlay legend">
-          <div class="map-overlay__title">{{ legendType }}</div>
-          <transition-group name="legend-list" class="legend-list" tag="ul">
-            <li
-              v-for="(color, name, index) in legend"
-              :key="index + name"
-              class="legend-list-item"
-            >
-              <filter-color-item :name="name" :color="color" />
-            </li>
-          </transition-group>
-          <button class="filter-button" @click="toggleLegend">
-            color by {{ legendType === 'sex' ? 'age' : 'sex' }}
-          </button>
-        </div>
+        <results-map-layer-switcher @change="onLayerSwitched" />
+        <results-map-legend @toggled="onLegendToggled" />
       </div>
     </no-ssr>
   </section>
@@ -208,16 +40,15 @@ import {
 } from '~/utils/constants'
 import { getBuilding, getSpace } from '~/utils/rdf'
 
-import MapMarker from '~/components/MapMarker'
-import FilterColorItem from '~/components/FilterColorItem'
+import ResultsMapLegend from '~/components/ResultsMapLegend'
+import ResultsMapLayerSwitcher from '~/components/ResultsMapLayerSwitcher'
 import BonesFindView from '~/components/BonesFindView'
 import ResultsMapPopup from '~/components/ResultsMapPopup'
 
 export default {
   components: {
-    MapMarker,
-    FilterColorItem,
-    BonesFindView
+    ResultsMapLegend,
+    ResultsMapLayerSwitcher
   },
   props: {},
   data() {
@@ -225,8 +56,6 @@ export default {
       tilelayers: TILELAYERS,
       polygons: [],
       displayLimit: 600,
-      ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
-      sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
       buildingsShown: true,
       spacesShown: true,
       map: null,
@@ -265,15 +94,15 @@ export default {
     legendType() {
       return this.$store.state.legendType
     },
-    individuals() {
-      return this.$store.getters.displayedIndividuals
-    },
     legend() {
       if (this.$store.state.legendType === 'age') {
-        return this.ageColors
+        return FILTER_PARAMS_TO_NAMES.a.colors
       } else {
-        return this.sexColors
+        return FILTER_PARAMS_TO_NAMES.s.colors
       }
+    },
+    individuals() {
+      return this.$store.getters.displayedIndividuals
     }
   },
   mounted() {
@@ -303,8 +132,8 @@ export default {
       })
       return this.createGeoJSON(geo)
     },
-    toggleLayer(e) {
-      console.log(e)
+    toggleLayer(e, visible) {
+      console.log(e, visible)
     },
     mapInited(map) {
       // console.log('inited', map)
@@ -337,6 +166,7 @@ export default {
         paint: { 'fill-color': SPACE_COLOR }
       })
       this.drawPoints()
+      this.fitMap()
     },
     updateMapPoints() {
       if (this.map)
@@ -394,8 +224,6 @@ export default {
         ]
         this.showPopup(individual)
       })
-
-      this.fitMap()
     },
     overlayAdded(e) {
       const overlay = e.name
@@ -419,7 +247,7 @@ export default {
       }
       return geoJSON
     },
-    selectMarker(who) {
+    highlightIndividual(who) {
       this.showPopup(who)
     },
     showPopup(who) {
@@ -466,9 +294,15 @@ export default {
       this.$refs.pane.style.flexBasis = pct
       if (this.map) this.map.resize()
     },
-    toggleLegend() {
-      this.$store.commit('toggledLegend')
+    onLegendToggled() {
       this.drawPoints()
+    },
+    onLayerSwitched(e) {
+      console.log(e)
+      const layer = e.name
+      const visible = e.toggled ? 'visible' : 'none'
+      if (!this.map.getLayer(layer)) return
+      this.map.setLayoutProperty(layer, 'visibility', visible)
     },
     fitMap() {
       if (!this.map) return
@@ -515,79 +349,16 @@ export default {
 .map-wrapper {
   position: relative;
 }
+</style>
+<style lang="scss">
+/* overriding/customising leaflet css is unscoped */
+/* for overlays that are outside this scope */
 .map-overlay {
-  background-color: transparentize($global-background-color, 0.35);
+  background-color: $global-background-color;
   border-radius: 0.25rem;
   font-size: 0.9rem;
   overflow: auto;
   padding: 0.25rem 0.5rem;
   position: absolute;
-}
-.map-overlay__title {
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-  text-transform: uppercase;
-}
-.layer-switcher {
-  margin-left: 0.5rem;
-  margin-top: 3rem;
-  left: 0;
-  top: 0;
-}
-.layer-switcher__list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-.layer-switcher__checkbox {
-  @include custom-checkbox;
-}
-.legend {
-  bottom: 0;
-  left: 0;
-  list-style-type: none;
-  margin-bottom: 0.5rem;
-  margin-left: 0.5rem;
-  margin-right: 3rem;
-
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .legend-list-item {
-    display: inline-block;
-    margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-    transition: all 0.5s;
-  }
-
-  .legend-list-item:last-child {
-    margin-bottom: 0;
-  }
-
-  .legend-list-enter,
-  .legend-list-leave-to {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  .legend-list-leave-active {
-    position: absolute;
-  }
-
-  .dot {
-    border-radius: 50%;
-    height: 1rem;
-    margin-right: 0.25rem;
-    width: 1rem;
-  }
-}
-</style>
-<style lang="scss">
-/* overriding/customising leaflet css is unscoped */
-.icon {
-  border-radius: 50%;
-  box-shadow: 0 0 0.1rem $global-background-color;
 }
 </style>
