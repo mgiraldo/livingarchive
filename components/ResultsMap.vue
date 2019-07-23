@@ -119,27 +119,85 @@
           </div>
         </l-control>
       </l-map> -->
-      <mapbox
-        ref="mapbox"
-        access-token=""
-        :map-options="{
-          center: [-74.5, 40],
-          zoom: 13,
-          style:
-            'https://api.maptiler.com/maps/basic/style.json?key=ncZrA0dJhP6XC26EwXcY'
-        }"
-        @map-init="mapInited"
-        @map-load="mapLoaded"
-      >
-      </mapbox>
+      <div ref="map" class="map-wrapper">
+        <mapbox
+          ref="mapbox"
+          access-token=""
+          :map-options="{
+            style: tilelayers[1].url,
+            center: [32.826886, 37.668639],
+            zoom: 16
+          }"
+          :scale-control="{
+            show: true,
+            position: 'top-left'
+          }"
+          @map-init="mapInited"
+          @map-load="mapLoaded"
+        >
+        </mapbox>
+        <div class="map-overlay layer-switcher">
+          <div class="map-overlay__title">Layers</div>
+          <ul class="layer-switcher__list">
+            <li class="layer-switcher__checkbox">
+              <input
+                id="ch-individuals"
+                type="checkbox"
+                value="individuals"
+                checked="checked"
+                @change="toggleLayer('individuals', $event.target.checked)"
+              />
+              <label for="ch-individuals">
+                Individuals
+              </label>
+            </li>
+            <li class="layer-switcher__checkbox">
+              <input
+                id="ch-spaces"
+                type="checkbox"
+                value="spaces"
+                checked="checked"
+                @change="toggleLayer('spaces', $event.target.checked)"
+              />
+              <label for="ch-spaces">
+                Spaces
+              </label>
+            </li>
+            <li class="layer-switcher__checkbox">
+              <input
+                id="ch-buildings"
+                type="checkbox"
+                value="buildings"
+                checked="checked"
+                @change="toggleLayer('buildings', $event.target.checked)"
+              />
+              <label for="ch-buildings">
+                Buildings
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div ref="legend" class="map-overlay legend">
+          <div class="map-overlay__title">{{ legendType }}</div>
+          <transition-group name="legend-list" class="legend-list" tag="ul">
+            <li
+              v-for="(color, name, index) in legend"
+              :key="index + name"
+              class="legend-list-item"
+            >
+              <filter-color-item :name="name" :color="color" />
+            </li>
+          </transition-group>
+          <button class="filter-button" @click="toggleLegend">
+            color by {{ legendType === 'sex' ? 'age' : 'sex' }}
+          </button>
+        </div>
+      </div>
     </no-ssr>
   </section>
 </template>
 
 <script>
-import { MapboxLayer } from '@deck.gl/mapbox'
-import { GeoJsonLayer, ScatterplotLayer } from '@deck.gl/layers'
-
 import {
   TILELAYERS,
   BUILDING_COLOR,
@@ -168,7 +226,7 @@ export default {
       sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
       buildingsShown: true,
       spacesShown: true,
-      deck: null,
+      map: null,
       polygonLayer: null
     }
   },
@@ -217,88 +275,94 @@ export default {
   mounted() {
     this.$store.subscribe(mutation => {
       if (mutation.type === 'fetchedIndividuals') {
-        this.fitMap()
+        this.updateMapPoints()
       }
     })
     this.checkMapObject()
   },
   methods: {
+    points() {
+      const points = Object.values(this.individuals).map(i => {
+        return {
+          age: i.age,
+          point: i.point,
+          sex: i.sex,
+          identifier: i.identifier
+        }
+      })
+      return points
+    },
+    pointsGeoJSON() {
+      const geo = this.points().map(p => {
+        return { type: 'Feature', properties: p, geometry: p.point }
+      })
+      return this.createGeoJSON(geo)
+    },
+    toggleLayer(e) {
+      console.log(e)
+    },
     mapInited(map) {
-      console.log('inited', map)
+      // console.log('inited', map)
+      this.map = map
     },
     mapLoaded(map) {
-      console.log('loaded', map)
-      const myDeckLayer = new MapboxLayer({
-        id: 'my-scatterplot',
-        type: ScatterplotLayer,
-        data: [{ position: [-74.5, 40], size: 100 }],
-        getPosition: d => d.position,
-        getRadius: d => d.size,
-        getColor: [255, 0, 0]
+      this.map = map
+      this.map.addSource('individuals', {
+        type: 'geojson',
+        data: this.pointsGeoJSON()
       })
-      map.addLayer(myDeckLayer)
-      if (this.$refs.map) this.$refs.map.mapObject.invalidateSize()
+      this.map.addSource('buildings', {
+        type: 'geojson',
+        data: this.buildingsGeoJSON
+      })
+      this.map.addSource('spaces', {
+        type: 'geojson',
+        data: this.spacesGeoJSON
+      })
+      this.map.addLayer({
+        id: 'buildings',
+        type: 'fill',
+        source: 'buildings',
+        paint: { 'fill-color': BUILDING_COLOR }
+      })
+      this.map.addLayer({
+        id: 'spaces',
+        type: 'fill',
+        source: 'spaces',
+        paint: { 'fill-color': SPACE_COLOR }
+      })
+      this.drawPoints()
     },
-    initDeck() {
-      // this.deck = new Deck({
-      //   canvas: 'deck-canvas',
-      //   width: '100%',
-      //   height: '100%',
-      //   initialViewState: INITIAL_VIEW_STATE,
-      //   controller: true,
-      //   // onViewStateChange: ({ viewState }) => {
-      //   //   this.$refs.map.mapObject.setView({
-      //   //     center: [viewState.longitude, viewState.latitude],
-      //   //     zoom: viewState.zoom
-      //   //   })
-      //   // },
-      //   layers: [
-      //     new GeoJsonLayer({
-      //       data: this.buildingsGeoJSON,
-      //       opacity: 0.8,
-      //       stroked: false,
-      //       filled: true,
-      //       extruded: true,
-      //       wireframe: true,
-      //       fp64: true,
-      //       getFillColor: f => [65, 182, 196],
-      //       getLineColor: f => [255, 255, 255],
-      //       pickable: true,
-      //       onHover: info => {
-      //         //         const { x, y, object } = info
-      //         //         if (object) {
-      //         //           tooltip.style.top = `${y}px`
-      //         //           tooltip.style.left = `${x}px`
-      //         //           tooltip.innerHTML = `
-      //         //   <div><b>Average Property Value &nbsp;</b></div>
-      //         //   <div><div>${object.properties.valuePerSqm} / m<sup>2</sup></div></div>
-      //         //   <div><b>Growth</b></div>
-      //         //   <div>${Math.round(object.properties.growth * 100)}%</div>
-      //         // `
-      //         //         } else {
-      //         //           tooltip.innerHTML = ''
-      //         //         }
-      //       }
-      //     })
-      //     //   new GeoJsonLayer({
-      //     //     id: 'airports',
-      //     //     data: AIR_PORTS,
-      //     //     // Styles
-      //     //     filled: true,
-      //     //     pointRadiusMinPixels: 2,
-      //     //     opacity: 1,
-      //     //     pointRadiusScale: 2000,
-      //     //     getRadius: f => 11 - f.properties.scalerank,
-      //     //     getFillColor: [200, 0, 80, 180],
-      //     //     // Interactive props
-      //     //     pickable: true,
-      //     //     autoHighlight: true,
-      //     //     onClick: info =>
-      //     //       // eslint-disable-next-line
-      //     // info.object && alert(`${info.object.properties.name} (${info.object.properties.abbrev})`)
-      //     //   }),
-      //   ]
-      // })
+    updateMapPoints() {
+      if (this.map)
+        this.map.getSource('individuals').setData(this.pointsGeoJSON())
+      this.fitMap()
+    },
+    drawPoints() {
+      this.map.removeLayer('individuals')
+
+      const colors = ['match', ['get', this.$store.state.legendType]]
+      Object.keys(this.legend).forEach(key => {
+        colors.push(key, this.legend[key])
+      })
+      colors.push('#aaa') // null color
+
+      this.map.addLayer({
+        id: 'individuals',
+        type: 'circle',
+        source: 'individuals',
+        paint: {
+          // make circles larger as the user zooms from z12 to z22
+          'circle-radius': {
+            base: 1.75,
+            stops: [[12, 2], [22, 12]]
+          },
+          // color circles by legend type, using a match expression
+          // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
+          'circle-color': colors
+        }
+      })
+      this.fitMap()
     },
     overlayAdded(e) {
       const overlay = e.name
@@ -310,13 +374,13 @@ export default {
       if (overlay === 'Buildings') this.buildingsShown = false
       if (overlay === 'Spaces') this.spacesShown = false
     },
-    createGeoJSON(wkt) {
+    createGeoJSON(geoArray) {
       let geoJSON = {
         type: 'FeatureCollection',
         features: []
       }
-      if (wkt.length > 0) {
-        wkt.forEach(feature => {
+      if (geoArray.length > 0) {
+        geoArray.forEach(feature => {
           geoJSON.features.push(feature)
         })
       }
@@ -352,29 +416,30 @@ export default {
     },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct
-      if (this.$refs.map) this.$refs.map.mapObject.invalidateSize()
+      if (this.map) this.map.resize()
     },
     toggleLegend() {
       this.$store.commit('toggledLegend')
+      this.drawPoints()
     },
     fitMap() {
-      let bounds = this.$L.latLngBounds()
-      if (this.$refs.map && this.$store.state.points.length > 0) {
-        bounds.extend(this.$L.latLngBounds(this.$store.state.points))
-      }
-      if (this.buildingsGeoJSON && this.buildingsShown) {
-        bounds.extend(this.$L.geoJSON(this.buildingsGeoJSON).getBounds())
-      }
-      if (this.spacesGeoJSON && this.spacesShown) {
-        bounds.extend(this.$L.geoJSON(this.spacesGeoJSON).getBounds())
-      }
-      if (this.$refs.map && bounds) this.$refs.map.mapObject.fitBounds(bounds)
+      if (!this.map) return
+      const points = this.$store.state.points
+      const xValues = points.map(point => point[0])
+      const yValues = points.map(point => point[1])
+      // console.log('points', points)
+      let minX = Math.min(...xValues)
+      let minY = Math.min(...yValues)
+      let maxX = Math.max(...xValues)
+      let maxY = Math.max(...yValues)
+      this.map.fitBounds([[minX, minY], [maxX, maxY]], {
+        padding: { top: 25, bottom: 25, left: 25, right: 25 }
+      })
     },
     checkMapObject() {
       this.checkMap = setInterval(() => {
         if (this.$refs.map) {
           clearInterval(this.checkMap)
-          this.initDeck()
           this.fitMap()
         }
       }, 100)
@@ -394,17 +459,48 @@ export default {
 .map {
   flex-basis: 50%;
 }
-#map {
+.map-wrapper,
+.mapboxgl-map {
   height: 100%;
   width: 100%;
 }
-.legend {
+.map-wrapper {
+  position: relative;
+}
+.map-overlay {
   background-color: transparentize($global-background-color, 0.35);
   border-radius: 0.25rem;
-  list-style-type: none;
-  margin-right: 1rem;
+  font-size: 0.9rem;
+  overflow: auto;
   padding: 0.25rem 0.5rem;
+  position: absolute;
+}
+.map-overlay__title {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
   text-transform: uppercase;
+}
+.layer-switcher {
+  margin-left: 0.5rem;
+  margin-top: 3rem;
+  left: 0;
+  top: 0;
+}
+.layer-switcher__list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.layer-switcher__checkbox {
+  @include custom-checkbox;
+}
+.legend {
+  bottom: 0;
+  left: 0;
+  list-style-type: none;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 3rem;
 
   ul {
     list-style-type: none;

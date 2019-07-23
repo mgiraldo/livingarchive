@@ -88,7 +88,7 @@ export const FILTER_PARAMS_TO_NAMES = {
     colors: null
   }
 }
-export const EMPTY_LONLAT = 'Point (37.668639 32.826886)' // the catalhoyuk building (order is LAT LON instead of LON LAT because that's what's working ¯\_(ツ)_/¯)
+export const EMPTY_LONLAT = 'Point (32.826886 37.668639)'
 
 export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
@@ -118,6 +118,16 @@ export const TILELAYERS = [
       minZoom: 0,
       maxNativeZoom: 22,
       maxZoom: 26
+    }
+  },
+  {
+    url:
+      'https://api.maptiler.com/maps/basic/style.json?key=' +
+      process.env.MAPTILER_KEY,
+    options: {
+      name: 'Maptiler',
+      attribution:
+        '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
     }
   }
 ]

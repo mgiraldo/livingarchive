@@ -59,7 +59,6 @@ a {
   border-width: 0.1rem;
   cursor: pointer;
   font-size: 1rem;
-  margin: 0 1rem 1rem 1rem;
   padding: 0.25rem 0.5rem;
   transition: all 0.2s;
 

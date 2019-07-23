@@ -104,6 +104,9 @@ export default {
   padding: 0.5rem;
   -webkit-overflow-scrolling: touch;
 }
+.filter-button {
+  margin: 0.5rem 0.5rem 1rem;
+}
 .filter {
   margin-bottom: 1rem;
 }

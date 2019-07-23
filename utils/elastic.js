@@ -172,9 +172,9 @@ export const getAllIndividuals = async ({ filters }) => {
       let parsed = wellknown.parse(individual.wkt_point)
       let projected = reprojectGeoJson(parsed)
       // TODO: this is sketchy but reprojection is freaking out *only* in wkt_point (not polygons)
-      let [x, y] = projected.coordinates
-      projected.coordinates[0] = y
-      projected.coordinates[1] = x
+      // let [x, y] = projected.coordinates
+      // projected.coordinates[0] = y
+      // projected.coordinates[1] = x
       // END TODO
       if (projected && projected.type === 'Point') {
         point = projected
