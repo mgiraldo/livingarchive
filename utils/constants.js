@@ -122,7 +122,7 @@ export const TILELAYERS = [
   },
   {
     url:
-      'https://api.maptiler.com/maps/basic/style.json?key=' +
+      'https://api.maptiler.com/maps/darkmatter/style.json?key=' +
       process.env.MAPTILER_KEY,
     options: {
       name: 'Maptiler',

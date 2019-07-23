@@ -36,10 +36,6 @@ module.exports = {
     '~/plugins/vue-d3',
     '~/plugins/vue-fragment',
     {
-      src: '~/plugins/vue-layers',
-      ssr: false
-    },
-    {
       src: '~/plugins/vue-mapboxgl',
       ssr: false
     }
@@ -52,9 +48,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
-    '@nuxtjs/style-resources',
-    'nuxt-leaflet',
-    '~/modules/vue-layers'
+    '@nuxtjs/style-resources'
   ],
 
   /*

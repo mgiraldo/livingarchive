@@ -65,7 +65,14 @@ export default {
       return this.$store.getters.displayedCount
     },
     displayedIndividuals() {
-      return this.$store.getters.displayedIndividuals
+      const keys = Object.keys(this.$store.getters.displayedIndividuals)
+      const count = keys.length
+      if (count <= 100) return this.$store.getters.displayedIndividuals
+      let smallSet = {}
+      for (let i = 0; i < 100; i++) {
+        smallSet[keys[i]] = this.$store.getters.displayedIndividuals[keys[i]]
+      }
+      return smallSet
     }
   },
   fetch: async function({ store, params }) {

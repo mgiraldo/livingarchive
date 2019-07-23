@@ -23,12 +23,10 @@
 
 <script>
 import IndividualInfo from '~/components/IndividualInfo'
-import DisclosureIcon from '~/components/DisclosureIcon'
 
 export default {
   components: {
-    IndividualInfo,
-    DisclosureIcon
+    IndividualInfo
   },
   props: {
     individual: { type: Object, required: true },

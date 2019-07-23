@@ -198,6 +198,8 @@
 </template>
 
 <script>
+import Vue from 'vue'
+
 import {
   TILELAYERS,
   BUILDING_COLOR,
@@ -209,6 +211,7 @@ import { getBuilding, getSpace } from '~/utils/rdf'
 import MapMarker from '~/components/MapMarker'
 import FilterColorItem from '~/components/FilterColorItem'
 import BonesFindView from '~/components/BonesFindView'
+import ResultsMapPopup from '~/components/ResultsMapPopup'
 
 export default {
   components: {
@@ -227,12 +230,13 @@ export default {
       buildingsShown: true,
       spacesShown: true,
       map: null,
+      popup: null,
       polygonLayer: null
     }
   },
   computed: {
     showMap() {
-      return this.$store.state.displayedIdentifiers.size <= this.displayLimit
+      return true //this.$store.state.displayedIdentifiers.size <= this.displayLimit
     },
     buildingsGeoJSON() {
       return this.createGeoJSON(this.$store.state.buildings)
@@ -266,9 +270,9 @@ export default {
     },
     legend() {
       if (this.$store.state.legendType === 'age') {
-        return FILTER_PARAMS_TO_NAMES.a.colors
+        return this.ageColors
       } else {
-        return FILTER_PARAMS_TO_NAMES.s.colors
+        return this.sexColors
       }
     }
   },
@@ -287,6 +291,7 @@ export default {
           age: i.age,
           point: i.point,
           sex: i.sex,
+          individual: i.individual,
           identifier: i.identifier
         }
       })
@@ -362,6 +367,24 @@ export default {
           'circle-color': colors
         }
       })
+
+      this.map.on('click', e => {
+        let features = this.map.queryRenderedFeatures(e.point, {
+          layers: ['individuals']
+        })
+
+        if (!features.length) return
+
+        // place it on the first one you find
+        let feature = features[0]
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        let individual = this.$store.state.individuals[
+          feature.properties.individual
+        ]
+        this.showPopup(individual)
+      })
+
       this.fitMap()
     },
     overlayAdded(e) {
@@ -387,7 +410,22 @@ export default {
       return geoJSON
     },
     selectMarker(who) {
-      this.$refs[who.identifier][0].mapObject.openPopup()
+      this.showPopup(who)
+    },
+    showPopup(who) {
+      const mapboxgl = require('mapbox-gl/dist/mapbox-gl')
+      if (this.popup) this.popup.remove()
+      this.popup = new mapboxgl.Popup()
+        .setLngLat(who.point.coordinates)
+        .setHTML('<div id="vue-popup-content"></div>')
+        .addTo(this.map)
+      let Popup = Vue.extend(ResultsMapPopup)
+      new Popup({
+        router: this.$router, // CRITICAL or else crash on undefined
+        propsData: {
+          individual: who
+        }
+      }).$mount('#vue-popup-content')
     },
     async showBuilding(who) {
       if (this.polygonLayer)
@@ -427,11 +465,11 @@ export default {
       const points = this.$store.state.points
       const xValues = points.map(point => point[0])
       const yValues = points.map(point => point[1])
-      // console.log('points', points)
       let minX = Math.min(...xValues)
       let minY = Math.min(...yValues)
       let maxX = Math.max(...xValues)
       let maxY = Math.max(...yValues)
+      // console.log('bounds', minX, minY, maxX, maxY)
       this.map.fitBounds([[minX, minY], [maxX, maxY]], {
         padding: { top: 25, bottom: 25, left: 25, right: 25 }
       })
@@ -535,43 +573,11 @@ export default {
     width: 1rem;
   }
 }
-.popup {
-  .bordered {
-    border-left: 0.75rem solid transparent;
-    padding-left: 0.25rem;
-  }
-  dt {
-    color: $global-secondary-text-color;
-  }
-  dd {
-    margin-bottom: 0.5rem;
-  }
-  .bones {
-    height: 15rem;
-    width: 15rem;
-  }
-  .discussion {
-    max-height: 5rem;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-}
 </style>
 <style lang="scss">
 /* overriding/customising leaflet css is unscoped */
 .icon {
   border-radius: 50%;
   box-shadow: 0 0 0.1rem $global-background-color;
-}
-.leaflet-popup-content-wrapper {
-  background-color: $global-background-color;
-  color: $global-text-color;
-
-  a {
-    color: $global-link-color;
-  }
-}
-.leaflet-popup-tip {
-  background-color: $global-background-color;
 }
 </style>
