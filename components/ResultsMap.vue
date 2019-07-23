@@ -36,11 +36,10 @@ import {
   SPACE_TEXT_COLOR,
   FILTER_PARAMS_TO_NAMES
 } from '~/utils/constants'
-import { getBuilding, getSpace } from '~/utils/rdf'
+import { getShape } from '~/utils/rdf'
 
 import ResultsMapLegend from '~/components/ResultsMapLegend'
 import ResultsMapLayerSwitcher from '~/components/ResultsMapLayerSwitcher'
-import BonesFindView from '~/components/BonesFindView'
 import ResultsMapPopup from '~/components/ResultsMapPopup'
 
 export default {
@@ -256,21 +255,30 @@ export default {
     highlightIndividual(who) {
       this.showPopup(who)
     },
-    showPopup(who) {
+    async showPopup(who) {
       const mapboxgl = require('mapbox-gl/dist/mapbox-gl')
+
       if (this.popup) this.popup.remove()
+
       this.map.flyTo({ center: who.point.coordinates })
+
       this.popup = new mapboxgl.Popup()
         .setLngLat(who.point.coordinates)
-        .setHTML('<div id="vue-popup-content"></div>')
+        .setHTML('<div id="vue-popup-content">Loading...</div>')
         .addTo(this.map)
+
+      // get bones
+      let shape = await getShape(who.identifier)
+
       let Popup = Vue.extend(ResultsMapPopup)
-      new Popup({
+      let popupInstance = new Popup({
         router: this.$router, // CRITICAL or else crash on undefined
         propsData: {
-          individual: who
+          individual: who,
+          shape
         }
-      }).$mount('#vue-popup-content')
+      })
+      popupInstance.$mount('#vue-popup-content')
     },
     resizePane(pct) {
       this.$refs.pane.style.flexBasis = pct

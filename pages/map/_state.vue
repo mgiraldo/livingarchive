@@ -89,7 +89,6 @@ export default {
   },
   methods: {
     showClick(who) {
-      console.log(who)
       this.$refs.mapPane.highlightIndividual(who)
     },
     checkResizer() {

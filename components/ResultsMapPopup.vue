@@ -7,6 +7,7 @@
           individual.identifier
         }}</nuxt-link>
       </dd>
+      <bones-find-view v-if="shape.length !== 0" :shape="shape" />
       <dt>Sex</dt>
       <dd class="bordered" :style="'border-color:' + sexColors[individual.sex]">
         {{ individual.sex }}
@@ -30,9 +31,13 @@
 <script>
 import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
+import BonesFindView from '~/components/BonesFindView'
+
 export default {
+  components: { BonesFindView },
   props: {
-    individual: { type: Object, required: true }
+    individual: { type: Object, required: true },
+    shape: { type: Array, default: () => [] }
   },
   data() {
     return {

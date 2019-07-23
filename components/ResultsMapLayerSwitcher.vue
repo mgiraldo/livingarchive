@@ -70,7 +70,6 @@ export default {
   methods: {
     toggle() {
       this.open = !this.open
-      console.log('open')
     }
   }
 }

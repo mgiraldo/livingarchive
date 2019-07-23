@@ -62,7 +62,13 @@ export const getSkeleton = async identifier => {
   })
 
   // now get the geo shape for the skeleton
-  query = `
+  let shape = await getShape(identifier)
+
+  return { skeleton, shape }
+}
+
+export const getShape = async identifier => {
+  let query = `
     SELECT DISTINCT ?coordinates
     WHERE {
         ?individual a catalhoyuk:Individual .
@@ -75,11 +81,11 @@ export const getSkeleton = async identifier => {
 
   const geoData = await performRdfQuery(query)
 
-  let geoShape = geoData.data.results.bindings.map(
+  let shape = geoData.data.results.bindings.map(
     binding => binding.coordinates.value
   )
 
-  return { skeleton: skeleton, shape: new Set(geoShape) }
+  return shape
 }
 
 export const getBuilding = async identifier => {

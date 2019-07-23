@@ -36,8 +36,8 @@ export default {
     let { skeleton, shape } = await getSkeleton(params.id)
     return {
       identifier: params.id,
-      skeleton: skeleton,
-      shape: shape
+      skeleton,
+      shape
     }
   },
   mounted() {
