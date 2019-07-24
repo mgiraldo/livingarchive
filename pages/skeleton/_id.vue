@@ -4,7 +4,8 @@
     <section class="list">
       <ul>
         <li v-for="(preserved, bone, index) in skeleton" :key="index">
-          {{ bone }} ({{ preserved }})
+          <span class="bone">{{ bone }}</span>
+          <span class="preservation">{{ preserved }}</span>
         </li>
       </ul>
     </section>
@@ -81,11 +82,16 @@ export default {
   grid-row: 2 / 5;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: flex;
+}
+.bone {
+  flex-basis: 65%;
 }
 .skeleton-container {
   grid-column: 2 / 3;
