@@ -10,11 +10,7 @@ import wellknown from 'wellknown'
 import bbox from '@turf/bbox'
 import * as d3 from 'd3-geo'
 
-import {
-  BONE_FILL_COLOR,
-  BONE_FILL_PARTIAL_COLOR,
-  BONE_STROKE_COLOR
-} from '~/utils/constants'
+import { BONE_FILL_COLOR, BONE_STROKE_COLOR } from '~/utils/constants'
 
 export default {
   props: {
