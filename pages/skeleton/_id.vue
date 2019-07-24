@@ -88,7 +88,9 @@ ul {
   padding: 0;
 }
 li {
+  border-bottom: 0.1rem solid $global-border-color;
   display: flex;
+  margin-bottom: 0.5rem;
 }
 .bone {
   flex-basis: 65%;
