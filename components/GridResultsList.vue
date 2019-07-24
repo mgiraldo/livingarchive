@@ -9,8 +9,8 @@
     </p>
     <div ref="grid" class="results-list">
       <grid-view-item
-        v-for="individual in individuals"
-        :key="individual.identifier"
+        v-for="(individual, index) in individuals"
+        :key="index + '_' + individual.identifier"
         :individual="individual"
         :expanded="selectedIndividual === individual"
         :row="selectedIndividual === individual ? row : null"
