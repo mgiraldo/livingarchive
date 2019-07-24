@@ -14,7 +14,7 @@
       </p>
     </div>
     <div class="screenshot-container">
-      <nuxt-link to="/map" class="button"
+      <nuxt-link to="/map"
         ><img
           src="/screenshot.png"
           class="screenshot"
@@ -41,6 +41,12 @@ export default {
   grid-template-rows: 1fr 5rem 1fr auto auto;
   grid-gap: 1rem;
   width: 60vw;
+
+  @media screen and (max-width: 820px) {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+  }
 }
 
 .title {
@@ -49,6 +55,11 @@ export default {
   font-weight: normal;
   grid-column: 1/7;
   grid-row: 4/5;
+
+  @media screen and (max-width: 820px) {
+    align-self: start;
+    font-size: 4rem;
+  }
 }
 
 .extra-content {
@@ -92,6 +103,7 @@ export default {
   grid-column: 4/6;
   grid-row: 2/3;
   justify-content: center;
+  padding: 1rem 0;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
