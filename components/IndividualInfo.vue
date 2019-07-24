@@ -102,14 +102,13 @@ section {
   margin-bottom: 0.5rem;
 }
 .basic-info {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 15rem);
   list-style-type: none;
   margin-bottom: 0.5rem;
   padding: 0;
 }
 .basic-info-item {
-  flex-basis: 48%;
   margin-bottom: 0.5rem;
   margin-right: 0.5rem;
 }

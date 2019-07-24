@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <search-controls />
-    <section ref="resultsPane" class="results">
+    <section ref="resultsPane" class="results" @scroll="handleScroll">
       <h1>{{ individualCount }} individuals</h1>
       <results-explained />
       <p>
@@ -11,13 +11,21 @@
       </p>
       <div ref="grid" class="results-list">
         <grid-view-item
-          v-for="individual in displayedIndividuals"
+          v-for="individual in individuals"
           :key="individual.identifier"
           :individual="individual"
-          :show-click="gridItemClick"
           :expanded="selectedIndividual === individual"
           :row="selectedIndividual === individual ? row : null"
+          @click="gridItemClick"
         ></grid-view-item>
+        <div
+          v-if="selectedGridItem"
+          ref="expansion"
+          :class="`expansion ` + (expanded ? 'open' : '')"
+          :style="row ? `grid-row-start:` + row : ''"
+        >
+          <individual-info :individual="selectedGridItem.individual" />
+        </div>
       </div>
     </section>
   </div>
@@ -26,33 +34,39 @@
 <script>
 import { parseParams } from '~/utils/params'
 import { updateRouter } from '~/utils/router'
+import { PAGE_SIZE } from '~/utils/constants'
 
 import SearchControls from '~/components/SearchControls'
 import GridViewItem from '~/components/GridViewItem'
 import ResultsExplained from '~/components/ResultsExplained'
+import IndividualInfo from '~/components/IndividualInfo'
 
 export default {
   head() {
-    return { title: 'map' }
+    return { title: 'grid' }
   },
-  key: '_map',
+  key: '_grid',
   components: {
     SearchControls,
     GridViewItem,
-    ResultsExplained
+    ResultsExplained,
+    IndividualInfo
   },
   data() {
     return {
       selectedGridItem: null,
-      rowNumber: 0
+      page: 0,
+      pageSize: PAGE_SIZE * 5,
+      rowNumber: 0,
+      individuals: []
     }
   },
   computed: {
     individualCount() {
       return this.$store.getters.displayedCount
     },
-    displayedIndividuals() {
-      return this.$store.getters.displayedIndividualsWithBones
+    totalPages() {
+      return Math.ceil(this.$store.getters.displayedCount / this.pageSize)
     },
     selectedIndividual() {
       return this.selectedGridItem ? this.selectedGridItem.individual : null
@@ -70,6 +84,9 @@ export default {
     }
     await store.dispatch('fetchIndividuals')
   },
+  beforeMount() {
+    this.getNextPage()
+  },
   mounted() {
     this.setRow()
     this.$store.commit('toggleViewMode', 'grid')
@@ -79,6 +96,27 @@ export default {
     window.removeEventListener('resize', this.setRow)
   },
   methods: {
+    handleScroll(e) {
+      let bottomOfWindow =
+        e.target.scrollTop + window.innerHeight === e.target.scrollHeight
+
+      if (bottomOfWindow) {
+        this.getNextPage()
+      }
+    },
+    getNextPage() {
+      if (this.page + 1 > this.totalPages) return
+      const individualArray = Object.values(
+        this.$store.getters.displayedIndividuals
+      )
+      const start = this.page * this.pageSize
+      for (let i = start; i < start + this.pageSize; i++) {
+        let individual = individualArray[i]
+        if (!individual) break
+        this.individuals.push(individual)
+      }
+      this.page++
+    },
     toggleMap() {
       this.$store.commit('toggleViewMode', 'map')
       updateRouter({ router: this.$router, store: this.$store })
@@ -106,6 +144,7 @@ export default {
       this.selectedGridItem = who
     },
     gridItemClick(who) {
+      console.log(who)
       this.showHideExpansion(who)
       this.setRow()
     }
@@ -145,5 +184,16 @@ export default {
   grid-gap: 1rem;
   margin: 1rem 0 0 0;
   padding: 0 0 5rem 0;
+}
+.expansion {
+  color: $global-text-color;
+  display: flex;
+  flex-direction: column;
+  grid-column-start: 1;
+  grid-column-end: -1;
+  grid-row-start: 1;
+  padding: 1rem 0.5rem;
+}
+.expansion.open {
 }
 </style>

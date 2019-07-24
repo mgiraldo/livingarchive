@@ -14,6 +14,7 @@ PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 export const RDF_TIMEOUT = 10000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
+export const PAGE_SIZE = 20 // for infinte scroll
 
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'

@@ -1,41 +1,37 @@
 <template>
-  <fragment>
-    <div
-      ref="item"
-      :class="`grid-item ` + (expanded ? 'expanded' : '')"
-      @click="click"
-    >
-      <bones-find-view :shape="individual.skeleton" />
-    </div>
-    <div
-      v-if="expanded"
-      ref="expansion"
-      :class="`expansion ` + (expanded ? 'open' : '')"
-      :style="row ? `grid-row-start:` + row : ''"
-    >
-      <individual-info :individual="individual" />
-    </div>
-  </fragment>
+  <div
+    :class="`grid-item ` + (expanded ? 'expanded' : '')"
+    @click="$emit('click', individual)"
+  >
+    <bones-find-view :shape="individual.skeleton ? individual.skeleton : []" />
+  </div>
 </template>
 
 <script>
-import IndividualInfo from '~/components/IndividualInfo'
+import { getShape } from '~/utils/rdf'
+
 import BonesFindView from '~/components/BonesFindView'
 
 export default {
   components: {
-    BonesFindView,
-    IndividualInfo
+    BonesFindView
   },
   props: {
     individual: { type: Object, required: true },
-    showClick: { type: Function, required: true },
-    expanded: { type: Boolean, required: true },
+    expanded: { type: Boolean, default: false },
     row: { type: Number, default: null }
   },
+  data() {
+    return { shape: null }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.getShape()
+    })
+  },
   methods: {
-    click() {
-      this.showClick(this)
+    async getShape() {
+      this.shape = await getShape(this.individual.identifier)
     }
   }
 }
@@ -60,16 +56,5 @@ export default {
   bottom: -1rem;
   left: 50%;
   margin-left: -1rem;
-}
-.expansion {
-  color: $global-text-color;
-  display: flex;
-  flex-direction: column;
-  grid-column-start: 1;
-  grid-column-end: -1;
-  grid-row-start: 1;
-  padding: 1rem 0.5rem;
-}
-.expansion.open {
 }
 </style>

@@ -6,11 +6,11 @@
       <section ref="resultsPane" class="results" @scroll="handleScroll">
         <result-count />
         <results-explained />
-        <!-- <p>
+        <p>
           <button class="link-button" @click="toggleGrid">
             View grid
           </button>
-        </p> -->
+        </p>
         <transition-group name="results-list" tag="ul" class="results-list">
           <li
             is="result-item"
@@ -30,6 +30,7 @@
 <script>
 import { parseParams } from '~/utils/params'
 import { updateRouter } from '~/utils/router'
+import { PAGE_SIZE } from '~/utils/constants'
 
 import SearchControls from '~/components/SearchControls'
 import SkeletonPane from '~/components/SkeletonPane'
@@ -55,7 +56,7 @@ export default {
     return {
       resizing: false,
       page: 0,
-      pageSize: 20,
+      pageSize: PAGE_SIZE,
       splitPaneWidth: 0,
       splitPaneX: 0,
       individuals: []
@@ -83,6 +84,7 @@ export default {
     this.getNextPage()
   },
   mounted() {
+    this.$store.commit('toggleViewMode', 'map')
     this.checkResizer()
   },
   methods: {

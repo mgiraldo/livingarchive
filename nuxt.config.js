@@ -34,7 +34,6 @@ module.exports = {
    */
   plugins: [
     '~/plugins/vue-d3',
-    '~/plugins/vue-fragment',
     {
       src: '~/plugins/vue-mapboxgl',
       ssr: false
