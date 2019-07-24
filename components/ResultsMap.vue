@@ -89,6 +89,9 @@ export default {
         return FILTER_PARAMS_TO_NAMES.s.colors
       }
     },
+    individualCount() {
+      return Object.keys(this.$store.getters.displayedIndividuals).length
+    },
     individuals() {
       return this.$store.getters.displayedIndividuals
     }
@@ -286,7 +289,7 @@ export default {
       popupInstance.$mount('#vue-popup-content')
     },
     resizePane(pct) {
-      this.$refs.pane.style.flexBasis = pct
+      if (pct) this.$refs.pane.style.flexBasis = pct
       if (this.map) this.map.resize()
     },
     onLegendToggled() {
@@ -301,6 +304,7 @@ export default {
     },
     fitMap() {
       if (!this.map) return
+      this.map.resize()
       const points = this.$store.state.points
       const xValues = points.map(point => point[0])
       const yValues = points.map(point => point[1])
