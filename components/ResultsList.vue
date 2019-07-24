@@ -1,5 +1,5 @@
 <template>
-  <section ref="resultsPane" class="results" @scroll="handleScroll">
+  <section ref="pane" class="results" @scroll="handleScroll">
     <result-count />
     <results-explained />
     <p>
@@ -37,7 +37,7 @@ export default {
     this.getNextPage()
   },
   updated() {
-    this.$refs.resultsPane.scrollTop
+    this.$refs.pane.scrollTop
   },
   methods: {
     totalPages() {

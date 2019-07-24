@@ -3,7 +3,11 @@
     <search-controls />
     <skeleton-pane />
     <div ref="splitPane" class="splitview">
-      <results-list :key="$route.fullPath" @click="showClick" />
+      <results-list
+        :key="$route.fullPath"
+        ref="resultsPane"
+        @click="showClick"
+      />
       <div class="resizer" @mousedown="resizeDown">⋮</div>
       <results-map ref="mapPane" />
     </div>
@@ -75,7 +79,7 @@ export default {
         let newX = e.clientX
         let pct = ((newX - this.splitPaneX) / this.splitPaneWidth) * 100
         pct = pct > 0 ? pct : 0
-        left.style.flexBasis = pct + '%'
+        left.$refs.pane.style.flexBasis = pct + '%'
         this.$refs.mapPane.resizePane(100 - pct + '%')
       }
       e.preventDefault()
