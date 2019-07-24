@@ -5,20 +5,19 @@ import { FILTER_PARAMS_TO_NAMES } from '../utils/constants'
 import { getAllIndividuals } from '../utils/elastic'
 
 export default async (req, res, next) => {
-  console.log('path', req.path)
   console.log('originalUrl', req.originalUrl)
-  console.log('query', req.query)
-  console.log('body', req.body)
 
-  let csv = req.path.startsWith('/csv')
-  let json = req.path.startsWith('/json')
-  let geojson = req.path.startsWith('/geojson')
+  let path = req.originalUrl.replace('/export', '')
+
+  let csv = path.startsWith('/csv')
+  let json = path.startsWith('/json')
+  let geojson = path.startsWith('/geojson')
 
   if (!csv && !json && !geojson) {
     res.end('Invalid')
   }
 
-  let queryString = req.path
+  let queryString = path
     .replace('/csv', '')
     .replace('/json', '')
     .replace('/geojson', '')
