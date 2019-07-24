@@ -20,8 +20,11 @@ export default {
   props: {
     shape: { type: Array, required: true }
   },
-  data() {
-    return {}
+  mounted() {
+    this.plotBonesD3()
+  },
+  created() {
+    this.plotBonesD3()
   },
   updated() {
     this.plotBonesD3()

@@ -7,7 +7,11 @@
           individual.identifier
         }}</nuxt-link>
       </dd>
-      <bones-find-view v-if="shape.length !== 0" :shape="shape" class="bones" />
+      <bones-find-view
+        v-if="shape.length !== 0"
+        :shape="shape"
+        class="bones-view"
+      />
       <dt>Sex</dt>
       <dd class="bordered" :style="'border-color:' + sexColors[individual.sex]">
         {{ individual.sex }}
@@ -62,7 +66,7 @@ export default {
   dd {
     margin-bottom: 0.5rem;
   }
-  .bones {
+  .bones-view {
     height: 15rem;
     width: 15rem;
   }

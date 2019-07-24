@@ -189,6 +189,7 @@ export default {
     },
     updateMapPoints() {
       if (!this.map) return
+      if (this.popup) this.popup.remove()
       this.map.getSource('individuals').setData(this.pointsGeoJSON())
       this.fitMap()
     },
