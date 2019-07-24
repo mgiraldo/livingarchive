@@ -75,7 +75,7 @@ export default {
     this.$store.commit('toggleViewMode', 'grid')
     window.addEventListener('resize', this.setRow)
   },
-  beforeDestroy: function() {
+  beforeDestroy() {
     window.removeEventListener('resize', this.setRow)
   },
   methods: {

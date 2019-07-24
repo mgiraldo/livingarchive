@@ -3,7 +3,7 @@
     <search-controls />
     <skeleton-pane />
     <div ref="splitPane" class="splitview">
-      <section ref="resultsPane" class="results">
+      <section ref="resultsPane" class="results" @scroll="handleScroll">
         <result-count />
         <results-explained />
         <!-- <p>
@@ -11,15 +11,15 @@
             View grid
           </button>
         </p> -->
-        <ul class="results-list">
+        <transition-group name="results-list" tag="ul" class="results-list">
           <li
             is="result-item"
-            v-for="individual in displayedIndividuals"
+            v-for="individual in individuals"
             :key="individual.identifier"
             :individual="individual"
             @show="showClick"
           ></li>
-        </ul>
+        </transition-group>
       </section>
       <div class="resizer" @mousedown="resizeDown">⋮</div>
       <results-map ref="mapPane" />
@@ -54,23 +54,19 @@ export default {
   data() {
     return {
       resizing: false,
+      page: 0,
+      pageSize: 20,
       splitPaneWidth: 0,
-      splitPaneX: 0
+      splitPaneX: 0,
+      individuals: []
     }
   },
   computed: {
     individualCount() {
       return this.$store.getters.displayedCount
     },
-    displayedIndividuals() {
-      const keys = Object.keys(this.$store.getters.displayedIndividuals)
-      const count = keys.length
-      if (count <= 100) return this.$store.getters.displayedIndividuals
-      let smallSet = {}
-      for (let i = 0; i < 100; i++) {
-        smallSet[keys[i]] = this.$store.getters.displayedIndividuals[keys[i]]
-      }
-      return smallSet
+    totalPages() {
+      return Math.ceil(this.$store.getters.displayedCount / this.pageSize)
     }
   },
   fetch: async function({ store, params }) {
@@ -83,11 +79,34 @@ export default {
     }
     await store.dispatch('fetchIndividuals')
   },
-  created() {},
+  beforeMount() {
+    this.getNextPage()
+  },
   mounted() {
     this.checkResizer()
   },
   methods: {
+    handleScroll(e) {
+      let bottomOfWindow =
+        e.target.scrollTop + window.innerHeight === e.target.scrollHeight
+
+      if (bottomOfWindow) {
+        this.getNextPage()
+      }
+    },
+    getNextPage() {
+      if (this.page + 1 > this.totalPages) return
+      const individualArray = Object.values(
+        this.$store.getters.displayedIndividuals
+      )
+      const start = this.page * this.pageSize
+      for (let i = start; i < start + this.pageSize; i++) {
+        let individual = individualArray[i]
+        if (!individual) break
+        this.individuals.push(individual)
+      }
+      this.page++
+    },
     showClick(who) {
       this.$refs.mapPane.highlightIndividual(who)
     },
