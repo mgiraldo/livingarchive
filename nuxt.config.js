@@ -70,7 +70,7 @@ module.exports = {
   /*
    ** Server middleware for export
    */
-  serverMiddleware: [{ path: '/api', handler: '~/api/export.js' }],
+  serverMiddleware: [{ path: '/export', handler: '~/export/index.js' }],
 
   styleResources: {
     scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss']

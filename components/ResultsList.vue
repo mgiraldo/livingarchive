@@ -4,7 +4,7 @@
     <results-explained />
     <p>
       <button class="link-button" @click="toggleGrid">
-        View grid (experimental)
+        View grid
       </button>
     </p>
     <transition-group name="results-list" tag="ul" class="results-list">

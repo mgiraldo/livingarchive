@@ -1,3 +1,5 @@
+const csvjson = require('csvjson')
+
 import { parseParams } from '../utils/params'
 import { FILTER_PARAMS_TO_NAMES } from '../utils/constants'
 import { getAllIndividuals } from '../utils/elastic'
@@ -5,16 +7,28 @@ import { getAllIndividuals } from '../utils/elastic'
 export default async (req, res, next) => {
   console.log(req.path)
 
-  let path = req.path.replace('/', '')
+  let csv = req.path.startsWith('/csv')
+  let json = req.path.startsWith('/json')
+  let geojson = req.path.startsWith('/geojson')
+
+  if (!csv && !json && !geojson) {
+    res.end('Invalid')
+  }
+
+  let queryString = req.path
+    .replace('/csv', '')
+    .replace('/json', '')
+    .replace('/geojson', '')
+
+  if (queryString.startsWith('/')) queryString = queryString.substring(1)
 
   let params
 
-  if (path.length) params = parseParams({ state: path })
+  if (queryString.length)
+    params = parseParams({ state: decodeURI(queryString) })
 
   const state = createState(params)
   const filters = createFilters(state)
-
-  console.log(filters)
 
   const { individuals } = await getBaseIndividuals({
     filters
@@ -29,7 +43,25 @@ export default async (req, res, next) => {
     return i
   })
 
-  res.send(results)
+  if (json) {
+    res.attachment('data.json')
+    res.end(JSON.stringify(results))
+  }
+  if (geojson) {
+    let resultsGeo = createGeoJSON(results)
+    res.attachment('data.geojson')
+    res.end(JSON.stringify(resultsGeo))
+  }
+  if (csv) {
+    res.attachment('data.csv')
+    res.end(
+      csvjson.toCSV(results, {
+        headers: 'key',
+        delimiter: ',',
+        wrap: false
+      })
+    )
+  }
 }
 
 const createState = params => {
@@ -62,4 +94,29 @@ const getBaseIndividuals = async ({ filters }) => {
     filters
   })
   return { individuals, points, aggs, count }
+}
+
+const createGeoJSON = results => {
+  let geoJSON = {
+    type: 'FeatureCollection',
+    features: []
+  }
+  if (results.length > 0) {
+    results.forEach(item => {
+      let latitude = item.latitude
+      let longitude = item.longitude
+      delete item.latitude
+      delete item.longitude
+      let feature = {
+        type: 'Feature',
+        properties: item,
+        geometry: {
+          type: 'Point',
+          coordinates: [longitude, latitude]
+        }
+      }
+      geoJSON.features.push(feature)
+    })
+  }
+  return geoJSON
 }

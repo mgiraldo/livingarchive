@@ -29,6 +29,23 @@
         >×</span
       >
     </label>
+    <div class="export">
+      Export results as:
+      <nuxt-link :to="'/export/csv/' + exportURL" target="_blank" no-prefetch
+        >CSV</nuxt-link
+      >
+      |
+      <nuxt-link :to="'/export/json/' + exportURL" target="_blank" no-prefetch
+        >JSON</nuxt-link
+      >
+      |
+      <nuxt-link
+        :to="'/export/geojson/' + exportURL"
+        target="_blank"
+        no-prefetch
+        >GeoJSON</nuxt-link
+      >
+    </div>
   </div>
 </template>
 
@@ -39,6 +56,9 @@ import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 export default {
   components: {},
   computed: {
+    exportURL() {
+      return this.$route.params.state ? this.$route.params.state : ''
+    },
     count() {
       return this.$store.getters.displayedCount
     },
