@@ -333,7 +333,7 @@ export default {
   border-radius: 0.25rem;
   font-size: 0.9rem;
   overflow: auto;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem;
   position: absolute;
 }
 </style>

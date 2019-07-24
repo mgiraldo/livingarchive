@@ -65,16 +65,19 @@ export default {
 
 <style lang="scss" scoped>
 .legend {
+  align-items: flex-start;
   bottom: 0;
+  display: flex;
+  flex-direction: column-reverse;
   left: 0;
   list-style-type: none;
   margin-bottom: 0.5rem;
   margin-left: 0.5rem;
   margin-right: 3rem;
 
-  ul {
+  .legend-list {
     list-style-type: none;
-    margin: 0;
+    margin: 0.5rem 0;
     padding: 0;
   }
 
@@ -96,13 +99,6 @@ export default {
   }
   .legend-list-leave-active {
     position: absolute;
-  }
-
-  .dot {
-    border-radius: 50%;
-    height: 1rem;
-    margin-right: 0.25rem;
-    width: 1rem;
   }
 }
 </style>
