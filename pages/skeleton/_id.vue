@@ -27,7 +27,7 @@ import { BONE_FILL_COLOR, BONE_FILL_PARTIAL_COLOR } from '~/utils/constants'
 export default {
   components: { SkeletonFront, BonesFindView },
   head() {
-    return { title: 'skeleton' }
+    return { title: `Skeleton - ${this.identifier} - Living Archive` }
   },
   validate({ params }) {
     return /^[a-zA-Z\d.]+$/.test(params.id)

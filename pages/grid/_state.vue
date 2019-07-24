@@ -14,7 +14,7 @@ import SearchControls from '~/components/SearchControls'
 export default {
   scrollToTop: true,
   head() {
-    return { title: 'grid' }
+    return { title: 'Grid - Living Archive' }
   },
   key: '_grid',
   components: {

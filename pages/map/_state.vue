@@ -25,7 +25,7 @@ import ResultsMap from '~/components/ResultsMap'
 export default {
   scrollToTop: true,
   head() {
-    return { title: 'map' }
+    return { title: 'Map - Living Archive' }
   },
   key: '_map',
   components: {

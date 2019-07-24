@@ -1,43 +1,102 @@
 <template>
-  <section>
-    <div>
-      <h1 class="title">app in {{ name }}</h1>
-      <h2 class="subtitle">Living Archive</h2>
-      <nuxt-link to="/map">Map</nuxt-link>
+  <section class="container">
+    <h1 class="title">Living Archive</h1>
+    <h2 class="subtitle">
+      An experimental interface to the
+      <nuxt-link to="http://catalhoyuk.com/">
+        Çatalhöyük Research Project
+      </nuxt-link>
+      data.
+    </h2>
+    <p class="description">
+      This application was developed to explore the possibilities of visualizing
+      linked data and geospatial data.
+    </p>
+    <div class="screenshot-container">
+      <nuxt-link to="/map" class="button"
+        ><img
+          src="/screenshot.png"
+          class="screenshot"
+          alt="A screenshot of the Living Archive application"
+      /></nuxt-link>
     </div>
+    <nuxt-link to="/map" class="button">Enter</nuxt-link>
   </section>
 </template>
 
 <script>
 export default {
-  async asyncData({ req }) {
-    return {
-      name: req ? 'server' : 'client'
-    }
+  head() {
+    return { title: 'Living Archive' }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.container {
+  display: grid;
+  margin: 2rem auto auto;
+  grid-template-columns: 1fr 1fr 1fr 6rem 6rem 0.5fr;
+  grid-template-rows: 1fr 5rem 1fr 1fr 0.5fr 1fr;
+  grid-gap: 1rem;
+  width: 60vw;
+}
+
 .title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+  align-self: end;
+  font-size: 6rem;
+  font-weight: normal;
+  grid-column: 1/7;
+  grid-row: 4/5;
 }
 
 .subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+  font-weight: normal;
+  grid-column: 3/6;
+  grid-row: 5/6;
 }
 
-.links {
-  padding-top: 15px;
+.screenshot-container {
+  grid-column: 1/5;
+  grid-row: 1/4;
+
+  .screenshot {
+    border-bottom: 0.5rem solid $global-link-color;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    transition: all 0.2s;
+
+    &:hover {
+      border-bottom-color: $filter-button-color;
+    }
+  }
+}
+
+.description {
+  font-size: 1rem;
+  grid-column: 3/5;
+  grid-row: 6/7;
+}
+
+.button {
+  align-items: center;
+  background-color: $global-link-color;
+  border-radius: 0.25rem;
+  color: $global-background-color;
+  display: flex;
+  font-size: 2rem;
+  grid-column: 4/6;
+  grid-row: 2/3;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $filter-button-color;
+    color: $global-text-color;
+  }
 }
 </style>
