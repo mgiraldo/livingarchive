@@ -1,7 +1,7 @@
 <template>
   <div class="viewer">
+    <h1 class="title">{{ identifier }}</h1>
     <section class="list">
-      <h1 class="label">Individual: {{ identifier }}</h1>
       <ul>
         <li v-for="(preserved, bone, index) in skeleton" :key="index">
           {{ bone }} ({{ preserved }})
@@ -62,30 +62,41 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .viewer {
   display: grid;
+  grid-template-columns: 20rem 1fr 30rem;
+  grid-template-rows: 4rem 1fr 20rem 1fr;
   height: 100vh;
-  grid-template-columns: 1fr 1fr 20rem 10rem;
-  grid-template-rows: 1fr 20rem 1fr;
+  margin: auto;
   padding: 1rem;
+  width: 80vw;
+}
+.title {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
 }
 .list {
+  grid-column: 3 / 4;
+  grid-row: 2 / 5;
   overflow-y: scroll;
-  grid-column: 1 / 2;
-  grid-row: 1 / 4;
   -webkit-overflow-scrolling: touch;
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
 }
 .skeleton-container {
   grid-column: 2 / 3;
-  grid-row: 1 / 4;
+  grid-row: 2 / 5;
 }
 #skeleton {
   height: 100%;
   width: 100%;
 }
 .bones-find-container {
-  grid-column: 3 / 4;
-  grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  grid-row: 3 / 4;
 }
 </style>
