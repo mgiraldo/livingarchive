@@ -1,9 +1,12 @@
 <template>
   <div
+    ref="item"
     :class="`grid-item ` + (expanded ? 'expanded' : '')"
-    @click="$emit('click', individual)"
+    @click="clickHandler"
   >
-    <bones-find-view :shape="individual.skeleton ? individual.skeleton : []" />
+    <bones-find-view
+      :shape="individual.skeleton ? individual.skeleton : shape ? shape : []"
+    />
   </div>
 </template>
 
@@ -30,6 +33,9 @@ export default {
     })
   },
   methods: {
+    clickHandler() {
+      this.$emit('click', this)
+    },
     async getShape() {
       this.shape = await getShape(this.individual.identifier)
     }

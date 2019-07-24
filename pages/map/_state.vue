@@ -8,7 +8,7 @@
         <results-explained />
         <p>
           <button class="link-button" @click="toggleGrid">
-            View grid
+            View grid (experimental)
           </button>
         </p>
         <transition-group name="results-list" tag="ul" class="results-list">
@@ -40,6 +40,7 @@ import ResultsMap from '~/components/ResultsMap'
 import ResultCount from '~/components/ResultCount'
 
 export default {
+  scrollToTop: true,
   head() {
     return { title: 'map' }
   },

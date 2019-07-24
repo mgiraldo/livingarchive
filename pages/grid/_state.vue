@@ -42,6 +42,7 @@ import ResultsExplained from '~/components/ResultsExplained'
 import IndividualInfo from '~/components/IndividualInfo'
 
 export default {
+  scrollToTop: true,
   head() {
     return { title: 'grid' }
   },

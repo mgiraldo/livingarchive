@@ -24,7 +24,7 @@ const performESQuery = async query => {
     }
   })
 
-  console.log(JSON.stringify(query))
+  // console.log(JSON.stringify(query))
 
   const results = await instance.get(
     process.env.ELASTIC_URL + '/individuals/_search?' + filterPath,

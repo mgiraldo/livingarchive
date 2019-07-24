@@ -55,6 +55,7 @@ export default {
       map: null,
       popup: null,
       polygonLayer: null,
+      unsubscribe: null,
       buildingOptions: {
         weight: 0.5,
         zIndex: 10,
@@ -93,11 +94,14 @@ export default {
     }
   },
   mounted() {
-    this.$store.subscribe(mutation => {
+    this.unsubscribe = this.$store.subscribe(mutation => {
       if (mutation.type === 'fetchedIndividuals') {
         this.updateMapPoints()
       }
     })
+  },
+  beforeDestroy() {
+    this.unsubscribe()
   },
   methods: {
     points() {
@@ -184,8 +188,8 @@ export default {
       this.fitMap()
     },
     updateMapPoints() {
-      if (this.map)
-        this.map.getSource('individuals').setData(this.pointsGeoJSON())
+      if (!this.map) return
+      this.map.getSource('individuals').setData(this.pointsGeoJSON())
       this.fitMap()
     },
     drawPoints() {

@@ -19,7 +19,7 @@ const performRdfQuery = async query => {
     }
   })
 
-  console.log(query)
+  // console.log(query)
 
   const results = await instance.get(
     process.env.RDF_URL + '?query=' + encodeURIComponent(RDF_PREFIXES + query)

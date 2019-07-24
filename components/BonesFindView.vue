@@ -1,5 +1,8 @@
 <template>
-  <div ref="bones" class="bones"></div>
+  <div class="wrapper">
+    <div v-show="!shape || shape.length === 0" class="bones">No bone shape</div>
+    <div v-show="shape && shape.length > 0" ref="bones" class="bones"></div>
+  </div>
 </template>
 
 <script>
@@ -20,7 +23,7 @@ export default {
   data() {
     return {}
   },
-  mounted() {
+  updated() {
     this.plotBonesD3()
   },
   methods: {
@@ -76,9 +79,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.bones {
+.wrapper {
   background: lighten($color: $global-background-color, $amount: 10%);
   border-radius: 5%;
+  height: 100%;
+  width: 100%;
+}
+.bones {
   height: 100%;
   padding: 10%;
   width: 100%;
