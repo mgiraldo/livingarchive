@@ -144,12 +144,7 @@ export const actions = {
     )
       return // no need to load the data
 
-    const filters = {}
-    for (let param in FILTER_PARAMS_TO_NAMES) {
-      const agg = FILTER_PARAMS_TO_NAMES[param].agg
-      const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
-      filters[agg] = state['checked' + storeName]
-    }
+    const filters = createFilters(state)
 
     const { individuals, points, aggs, count } = await getBaseIndividuals({
       filters
@@ -176,12 +171,7 @@ export const actions = {
     commit('firstLoadComplete', newState)
   },
   async fetchIndividuals({ commit, state }) {
-    const filters = {}
-    for (let param in FILTER_PARAMS_TO_NAMES) {
-      const agg = FILTER_PARAMS_TO_NAMES[param].agg
-      const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
-      filters[agg] = state['checked' + storeName]
-    }
+    const filters = createFilters(state)
 
     const { identifiers, aggs, count } = await getFilteredIndividuals({
       filters: filters
@@ -211,6 +201,16 @@ export const actions = {
 
     commit('fetchedIndividuals', newState)
   }
+}
+
+const createFilters = state => {
+  const filters = {}
+  for (let param in FILTER_PARAMS_TO_NAMES) {
+    const agg = FILTER_PARAMS_TO_NAMES[param].agg
+    const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
+    filters[agg] = state['checked' + storeName]
+  }
+  return filters
 }
 
 const getBaseIndividuals = async ({ filters }) => {

@@ -1,6 +1,6 @@
 import proj4 from 'proj4'
 
-import { PROJ4_DEFS } from '~/utils/constants'
+import { PROJ4_DEFS } from './constants'
 
 export const reprojectGeoJson = geoJson => {
   let newGeoJson = JSON.parse(JSON.stringify(geoJson))

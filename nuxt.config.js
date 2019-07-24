@@ -67,6 +67,11 @@ module.exports = {
     // See https://github.com/nuxt-community/axios-module#options
   },
 
+  /*
+   ** Server middleware for export
+   */
+  serverMiddleware: [{ path: '/api', handler: '~/api/export.js' }],
+
   styleResources: {
     scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss']
   },

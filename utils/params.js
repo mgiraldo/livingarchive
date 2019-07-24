@@ -1,4 +1,4 @@
-import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
+import { FILTER_PARAMS_TO_NAMES } from './constants'
 
 export const parseParams = params => {
   let state = params.state.split('|')
