@@ -46,16 +46,13 @@ export default async (req, res, next) => {
   })
 
   if (json) {
-    res.attachment('data.json')
     res.end(JSON.stringify(results))
   }
   if (geojson) {
     let resultsGeo = createGeoJSON(results)
-    res.attachment('data.geojson')
     res.end(JSON.stringify(resultsGeo))
   }
   if (csv) {
-    res.attachment('data.csv')
     res.end(
       csvjson.toCSV(results, {
         headers: 'key',
