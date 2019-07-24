@@ -5,7 +5,10 @@ import { FILTER_PARAMS_TO_NAMES } from '../utils/constants'
 import { getAllIndividuals } from '../utils/elastic'
 
 export default async (req, res, next) => {
-  console.log(req)
+  console.log('path', req.path)
+  console.log('originalUrl', req.originalUrl)
+  console.log('query', req.query)
+  console.log('body', req.body)
 
   let csv = req.path.startsWith('/csv')
   let json = req.path.startsWith('/json')
