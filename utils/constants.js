@@ -11,7 +11,7 @@ PREFIX xsd:    <http://www.w3.org/2001/XMLSchema#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 `
 
-export const RDF_TIMEOUT = 10000
+export const RDF_TIMEOUT = 20000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 export const PAGE_SIZE = 20 // for infinte scroll
