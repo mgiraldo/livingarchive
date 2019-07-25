@@ -5,13 +5,13 @@
       ref="skeletonPane"
       @collapse="handleCollapse($refs.skeletonPane, $event)"
     />
-    <results-list
+    <results-list-pane
       :key="$route.fullPath"
-      ref="resultsPane"
+      ref="resultsListPane"
       @click="showIndividual"
-      @collapse="handleCollapse($refs.resultsPane, $event)"
+      @collapse="handleCollapse($refs.resultsListPane, $event)"
     />
-    <results-map
+    <results-map-pane
       ref="mapPane"
       @collapse="handleCollapse($refs.mapPane, $event)"
     />
@@ -23,8 +23,8 @@ import { parseParams } from '~/utils/params'
 
 import SearchControls from '~/components/SearchControls'
 import SkeletonPane from '~/components/SkeletonPane'
-import ResultsList from '~/components/ResultsList'
-import ResultsMap from '~/components/ResultsMap'
+import ResultsListPane from '~/components/ResultsListPane'
+import ResultsMapPane from '~/components/ResultsMapPane'
 
 export default {
   scrollToTop: true,
@@ -35,8 +35,8 @@ export default {
   components: {
     SearchControls,
     SkeletonPane,
-    ResultsList,
-    ResultsMap
+    ResultsListPane,
+    ResultsMapPane
   },
   data() {
     return {

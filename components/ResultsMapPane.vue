@@ -363,7 +363,7 @@ export default {
 <style lang="scss">
 /* overriding/customising mapbox css is unscoped */
 .mapboxgl-ctrl-top-right {
-  top: 1.25rem;
+  top: 1.25rem !important;
 }
 /* for overlays that are outside this scope */
 .map-overlay {

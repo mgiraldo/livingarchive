@@ -5,6 +5,7 @@
     @scroll="handleScroll"
   >
     <square-button
+      ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
@@ -75,6 +76,10 @@ export default {
       if (bottomOfWindow) {
         this.getNextPage()
       }
+      this.positionButton()
+    },
+    positionButton() {
+      this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
     },
     collapseClick() {
       this.collapsed = !this.collapsed

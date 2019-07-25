@@ -2,8 +2,10 @@
   <div
     ref="pane"
     :class="'skeleton collapsible ' + (collapsed ? 'collapsed' : '')"
+    @scroll="positionButton"
   >
     <square-button
+      ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
@@ -36,6 +38,9 @@ export default {
     }
   },
   methods: {
+    positionButton() {
+      this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
+    },
     collapseClick() {
       this.collapsed = !this.collapsed
       this.$refs.pane.ontransitionend = () => {

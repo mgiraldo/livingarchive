@@ -27,7 +27,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  transition: all 0.2s;
+  transition: background-color 0.2s;
   width: 1.5rem;
   z-index: 1;
 
