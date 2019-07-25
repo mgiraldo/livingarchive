@@ -144,6 +144,7 @@ export const getAllIndividuals = async ({ filters }) => {
     'phase',
     'identifier',
     'description',
+    'discussion',
     'sex',
     'wkt_point',
     'age',
