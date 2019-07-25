@@ -98,7 +98,7 @@ export default {
 
 <style lang="scss" scoped>
 .results {
-  background-color: $global-background-color;
+  background-color: lighten($global-background-color, 3%);
   overflow-y: auto;
   padding: 0.5rem;
   -webkit-overflow-scrolling: touch;

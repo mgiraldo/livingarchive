@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <search-controls />
-    <skeleton-pane ref="skeletonPane" @collapse="handleCollapse" />
     <results-list-pane
       :key="$route.fullPath"
       ref="resultsListPane"
       @click="showIndividual"
       @collapse="handleCollapse"
     />
+    <skeleton-pane ref="skeletonPane" @collapse="handleCollapse" />
     <results-map-pane ref="mapPane" @collapse="handleCollapse" />
   </div>
 </template>

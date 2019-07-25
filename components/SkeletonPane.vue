@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .skeleton {
-  background-color: lighten($global-background-color, 3%);
+  background-color: $global-background-color;
   padding: 0.5rem;
   -webkit-overflow-scrolling: touch;
 }
