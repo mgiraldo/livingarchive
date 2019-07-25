@@ -14,6 +14,15 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:site', content: '@mgiraldo' },
+      { name: 'twitter:creator', content: '@mgiraldo' },
+      { name: 'twitter:title', content: 'Living Archive' },
+      { name: 'twitter:description', content: pkg.description },
+      {
+        name: 'twitter:image',
+        content: process.env.BASE_URL + '/screenshot.png'
+      },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]

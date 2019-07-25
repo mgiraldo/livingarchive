@@ -1,9 +1,13 @@
 {
-  "name": "app",
+  "name": "living-archive",
   "version": "1.0.0",
-  "description": "Living Archive",
+  "description": "An experimental interface to the Çatalhöyük Research Project",
   "author": "Mauricio Giraldo Arteaga",
-  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mgiraldo/livingarchive.git"
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
     "dev-debug": "node --inspect node_modules/.bin/nuxt",
