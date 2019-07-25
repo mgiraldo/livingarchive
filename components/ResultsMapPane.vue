@@ -347,6 +347,8 @@ export default {
 
 <style lang="scss" scoped>
 .map {
+  background-color: darken($global-background-color, 3%);
+
   &.collapsed {
     padding: 0.5rem;
   }

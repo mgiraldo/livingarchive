@@ -94,7 +94,6 @@ a {
   transition: all 0.2s ease-out;
 
   &.collapsed {
-    background-color: $global-background-color;
     display: flex;
     flex-basis: 1.5rem;
     flex-direction: column;

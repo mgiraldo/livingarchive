@@ -72,6 +72,7 @@ export default {
 
 <style lang="scss" scoped>
 .container {
+  background-color: darken($global-background-color, 6%);
   display: flex;
   height: 100vh;
 }
