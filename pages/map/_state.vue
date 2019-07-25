@@ -1,20 +1,14 @@
 <template>
   <div class="container">
     <search-controls />
-    <skeleton-pane
-      ref="skeletonPane"
-      @collapse="handleCollapse($refs.skeletonPane, $event)"
-    />
+    <skeleton-pane ref="skeletonPane" @collapse="handleCollapse" />
     <results-list-pane
       :key="$route.fullPath"
       ref="resultsListPane"
       @click="showIndividual"
-      @collapse="handleCollapse($refs.resultsListPane, $event)"
+      @collapse="handleCollapse"
     />
-    <results-map-pane
-      ref="mapPane"
-      @collapse="handleCollapse($refs.mapPane, $event)"
-    />
+    <results-map-pane ref="mapPane" @collapse="handleCollapse" />
   </div>
 </template>
 
@@ -59,8 +53,7 @@ export default {
     this.$store.commit('toggleViewMode', 'map')
   },
   methods: {
-    handleCollapse(pane, collapsed) {
-      console.log('collapse!')
+    handleCollapse() {
       if (this.$refs.mapPane) this.$refs.mapPane.resize()
     },
     showIndividual(who) {

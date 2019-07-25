@@ -38,11 +38,13 @@ export default {
     }
   },
   methods: {
-    positionButton() {
+    positionButton(pos) {
       this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
+      if (pos) this.$refs.button.$el.style.top = pos
     },
     collapseClick() {
       this.collapsed = !this.collapsed
+      if (this.collapsed) this.positionButton(0)
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
