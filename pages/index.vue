@@ -78,7 +78,6 @@ export default {
 
   .screenshot {
     border-bottom: 0.5rem solid $global-link-color;
-    height: 100%;
     max-width: 100%;
     object-fit: cover;
     transition: all 0.2s;
