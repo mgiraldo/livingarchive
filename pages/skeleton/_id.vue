@@ -45,7 +45,8 @@ export default {
     let prefix = '#skeleton-front-'
     let skeletonElement = document.querySelector('#skeleton')
     skeletonElement.querySelectorAll('path').forEach(elem => {
-      elem.style.fill = 'white'
+      elem.style.fill = 'gray'
+      elem.style.opacity = 0.1
     })
     for (let boneName in this.skeleton) {
       let boneElem = document.querySelector(prefix + boneName)
@@ -56,6 +57,7 @@ export default {
           } else {
             elem.style.fill = BONE_FILL_PARTIAL_COLOR
           }
+          elem.style.opacity = 0.9
         })
       }
     }
@@ -80,7 +82,7 @@ export default {
 .list {
   grid-column: 3 / 4;
   grid-row: 2 / 5;
-  overflow-y: scroll;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 ul {
