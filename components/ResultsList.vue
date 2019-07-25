@@ -1,21 +1,32 @@
 <template>
-  <section ref="pane" class="results" @scroll="handleScroll">
+  <section
+    ref="pane"
+    :class="'results collapsible ' + (collapsed ? 'collapsed' : '')"
+    @scroll="handleScroll"
+  >
+    <square-button
+      :label="collapsed ? 'Open' : 'Close'"
+      :icon="collapsed ? '+' : '×'"
+      @click="collapseClick"
+    />
     <result-count />
-    <results-explained />
-    <p>
-      <button class="link-button" @click="toggleGrid">
-        View grid
-      </button>
-    </p>
-    <transition-group name="results-list" tag="ul" class="results-list">
-      <li
-        is="result-item"
-        v-for="(individual, index) in individuals"
-        :key="index + '_' + individual.identifier"
-        :individual="individual"
-        @show="$emit('click', individual)"
-      ></li>
-    </transition-group>
+    <div v-show="!collapsed">
+      <results-explained />
+      <p>
+        <button class="link-button" @click="toggleGrid">
+          View grid
+        </button>
+      </p>
+      <transition-group name="results-list" tag="ul" class="results-list">
+        <li
+          is="result-item"
+          v-for="(individual, index) in individuals"
+          :key="index + '_' + individual.identifier"
+          :individual="individual"
+          @show="$emit('click', individual)"
+        ></li>
+      </transition-group>
+    </div>
   </section>
 </template>
 
@@ -26,11 +37,12 @@ import { PAGE_SIZE } from '~/utils/constants'
 import ResultItem from '~/components/ResultItem'
 import ResultsExplained from '~/components/ResultsExplained'
 import ResultCount from '~/components/ResultCount'
+import SquareButton from '~/components/SquareButton'
 
 export default {
-  components: { ResultItem, ResultsExplained, ResultCount },
+  components: { ResultItem, ResultsExplained, ResultCount, SquareButton },
   data() {
-    return { page: 0, pageSize: PAGE_SIZE, individuals: [] }
+    return { page: 0, pageSize: PAGE_SIZE, individuals: [], collapsed: false }
   },
   computed: {},
   mounted() {
@@ -64,6 +76,12 @@ export default {
         this.getNextPage()
       }
     },
+    collapseClick() {
+      this.collapsed = !this.collapsed
+      this.$refs.pane.ontransitionend = () => {
+        this.$emit('collapse', this.collapsed)
+      }
+    },
     toggleGrid() {
       this.$store.commit('toggleViewMode', 'grid')
       updateRouter({ router: this.$router, store: this.$store })
@@ -74,8 +92,6 @@ export default {
 
 <style lang="scss" scoped>
 .results {
-  flex-basis: 50%;
-  overflow-x: hidden;
   overflow-y: auto;
   padding: 0.5rem;
   -webkit-overflow-scrolling: touch;

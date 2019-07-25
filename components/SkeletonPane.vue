@@ -1,23 +1,46 @@
 <template>
-  <div class="skeleton">
+  <div
+    ref="pane"
+    :class="'skeleton collapsible ' + (collapsed ? 'collapsed' : '')"
+  >
+    <square-button
+      :label="collapsed ? 'Open' : 'Close'"
+      :icon="collapsed ? '+' : '×'"
+      @click="collapseClick"
+    />
     <h1>Bone prevalence</h1>
     <skeleton-aggregations-viewer
+      v-show="!collapsed"
       :key="$route.fullPath"
       :aggregations="aggregations"
+      class="skeleton-viewer"
     />
   </div>
 </template>
 
 <script>
 import SkeletonAggregationsViewer from '~/components/SkeletonAggregationsViewer'
+import SquareButton from '~/components/SquareButton'
 
 export default {
   components: {
-    SkeletonAggregationsViewer
+    SkeletonAggregationsViewer,
+    SquareButton
+  },
+  data() {
+    return { collapsed: false }
   },
   computed: {
     aggregations() {
       return this.$store.state.aggs['bones.bone']
+    }
+  },
+  methods: {
+    collapseClick() {
+      this.collapsed = !this.collapsed
+      this.$refs.pane.ontransitionend = () => {
+        this.$emit('collapse', this.collapsed)
+      }
     }
   }
 }
@@ -26,9 +49,7 @@ export default {
 <style lang="scss" scoped>
 .skeleton {
   background-color: lighten($color: $global-background-color, $amount: 3%);
-  flex-basis: 20rem;
-  flex-shrink: 0;
-  overflow: hidden;
   padding: 0.5rem;
+  -webkit-overflow-scrolling: touch;
 }
 </style>

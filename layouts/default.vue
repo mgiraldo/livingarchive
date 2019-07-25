@@ -86,4 +86,26 @@ a {
     text-decoration: none;
   }
 }
+/* COLLAPSIBLE PANES */
+.collapsible {
+  flex-basis: 100%;
+  overflow-x: hidden;
+  position: relative;
+  transition: all 0.2s ease-out;
+
+  &.collapsed {
+    background-color: $global-background-color;
+    display: flex;
+    flex-basis: 1.5rem;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    h1 {
+      font-size: 1rem;
+      line-height: 0.8;
+      margin-top: 2rem;
+      writing-mode: vertical-lr;
+    }
+  }
+}
 </style>

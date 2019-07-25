@@ -1,7 +1,16 @@
 <template>
-  <section ref="pane" class="map">
+  <section
+    ref="pane"
+    :class="'map collapsible ' + (collapsed ? 'collapsed' : '')"
+  >
+    <square-button
+      :label="collapsed ? 'Open' : 'Close'"
+      :icon="collapsed ? '+' : '×'"
+      @click="collapseClick"
+    />
+    <h1 v-show="collapsed">Map</h1>
     <no-ssr>
-      <div ref="map" class="map-wrapper">
+      <div v-show="!collapsed" ref="map" class="map-wrapper">
         <mapbox
           ref="mapbox"
           access-token=""
@@ -41,15 +50,18 @@ import { getShape } from '~/utils/rdf'
 import ResultsMapLegend from '~/components/ResultsMapLegend'
 import ResultsMapLayerSwitcher from '~/components/ResultsMapLayerSwitcher'
 import ResultsMapPopup from '~/components/ResultsMapPopup'
+import SquareButton from '~/components/SquareButton'
 
 export default {
   components: {
     ResultsMapLegend,
+    SquareButton,
     ResultsMapLayerSwitcher
   },
   props: {},
   data() {
     return {
+      collapsed: false,
       tilelayers: TILELAYERS,
       polygons: [],
       map: null,
@@ -131,6 +143,19 @@ export default {
     },
     mapLoaded(map) {
       this.map = map
+      this.map.on('mousedown', () => this.resize())
+      this.map.on('touchstart', () => this.resize())
+      this.addLayers()
+      this.drawPoints()
+      this.fitMap()
+    },
+    updateMapPoints() {
+      if (!this.map) return
+      if (this.popup) this.popup.remove()
+      this.map.getSource('individuals').setData(this.pointsGeoJSON())
+      this.fitMap()
+    },
+    addLayers() {
       this.map.addSource('individuals', {
         type: 'geojson',
         data: this.pointsGeoJSON()
@@ -187,14 +212,6 @@ export default {
           'text-halo-color': SPACE_COLOR
         }
       })
-      this.drawPoints()
-      this.fitMap()
-    },
-    updateMapPoints() {
-      if (!this.map) return
-      if (this.popup) this.popup.remove()
-      this.map.getSource('individuals').setData(this.pointsGeoJSON())
-      this.fitMap()
     },
     drawPoints() {
       this.map.removeLayer('individuals')
@@ -288,10 +305,6 @@ export default {
       })
       popupInstance.$mount('#vue-popup-content')
     },
-    resizePane(pct) {
-      if (pct) this.$refs.pane.style.flexBasis = pct
-      if (this.map) this.map.resize()
-    },
     onLegendToggled() {
       this.drawPoints()
     },
@@ -302,9 +315,20 @@ export default {
       this.map.setLayoutProperty(layer, 'visibility', visible)
       this.map.setLayoutProperty(layer + '-labels', 'visibility', visible)
     },
-    fitMap() {
+    collapseClick() {
+      this.collapsed = !this.collapsed
+      this.resize()
+      this.fitMap()
+      this.$refs.pane.ontransitionend = () => {
+        this.$emit('collapse', this.collapsed)
+      }
+    },
+    resize() {
       if (!this.map) return
       this.map.resize()
+    },
+    fitMap() {
+      if (!this.map) return
       const points = this.$store.state.points
       const xValues = points.map(point => point[0])
       const yValues = points.map(point => point[1])
@@ -323,7 +347,9 @@ export default {
 
 <style lang="scss" scoped>
 .map {
-  flex-basis: 50%;
+  &.collapsed {
+    padding: 0.5rem;
+  }
 }
 .map-wrapper,
 .mapboxgl-map {
@@ -335,7 +361,10 @@ export default {
 }
 </style>
 <style lang="scss">
-/* overriding/customising leaflet css is unscoped */
+/* overriding/customising mapbox css is unscoped */
+.mapboxgl-ctrl-top-right {
+  top: 1.25rem;
+}
 /* for overlays that are outside this scope */
 .map-overlay {
   background-color: $global-background-color;
