@@ -58,6 +58,7 @@ a {
   border-radius: 0.25rem;
   border-width: 0.1rem;
   cursor: pointer;
+  flex-shrink: 0;
   font-size: 1rem;
   padding: 0.25rem 0.5rem;
   transition: all 0.2s;
