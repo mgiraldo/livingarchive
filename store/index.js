@@ -137,12 +137,7 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }, { route }) {
-    if (
-      route.name !== 'ol' &&
-      route.name !== 'map-state' &&
-      route.name !== 'grid-state'
-    )
-      return // no need to load the data
+    if (route.name !== 'map-state' && route.name !== 'grid-state') return // no need to load the data
 
     const filters = createFilters(state)
 
