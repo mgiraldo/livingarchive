@@ -4,9 +4,9 @@
     <div class="extra-content">
       <h2 class="subtitle">
         An experimental interface to the
-        <nuxt-link to="http://catalhoyuk.com/">
+        <a href="http://catalhoyuk.com/">
           Çatalhöyük Research Project
-        </nuxt-link>
+        </a>
       </h2>
       <p class="description">
         This application was developed to explore the possibilities of
