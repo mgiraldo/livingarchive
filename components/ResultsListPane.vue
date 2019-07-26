@@ -1,32 +1,34 @@
 <template>
   <section
     ref="pane"
-    :class="'results collapsible ' + (collapsed ? 'collapsed' : '')"
+    :class="'collapsible ' + (collapsed ? 'collapsed' : '')"
     @scroll="handleScroll"
   >
-    <result-count />
     <square-button
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <div v-show="!collapsed">
-      <results-explained />
-      <p>
-        <button class="link-button" @click="toggleGrid">
-          View grid
-        </button>
-      </p>
-      <transition-group name="results-list" tag="ul" class="results-list">
-        <li
-          is="result-item"
-          v-for="(individual, index) in individuals"
-          :key="index + '_' + individual.identifier"
-          :individual="individual"
-          @show="$emit('click', individual)"
-        ></li>
-      </transition-group>
+    <div class="scroller results">
+      <result-count />
+      <div v-show="!collapsed">
+        <results-explained />
+        <p>
+          <button class="link-button" @click="toggleGrid">
+            View grid
+          </button>
+        </p>
+        <transition-group name="results-list" tag="ul" class="results-list">
+          <li
+            is="result-item"
+            v-for="(individual, index) in individuals"
+            :key="index + '_' + individual.identifier"
+            :individual="individual"
+            @show="$emit('click', individual)"
+          ></li>
+        </transition-group>
+      </div>
     </div>
   </section>
 </template>
@@ -76,15 +78,9 @@ export default {
       if (bottomOfWindow) {
         this.getNextPage()
       }
-      this.positionButton()
-    },
-    positionButton() {
-      if (this.collapsed) this.$refs.pane.scrollTop = 0
-      this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
     },
     collapseClick() {
       this.collapsed = !this.collapsed
-      this.positionButton()
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
@@ -100,9 +96,7 @@ export default {
 <style lang="scss" scoped>
 .results {
   background-color: lighten($global-background-color, 3%);
-  overflow-y: auto;
   padding: 0.5rem;
-  -webkit-overflow-scrolling: touch;
 }
 .results-list {
   list-style-type: none;

@@ -1,22 +1,20 @@
 <template>
-  <div
-    ref="pane"
-    :class="'skeleton collapsible ' + (collapsed ? 'collapsed' : '')"
-    @scroll="positionButton"
-  >
-    <h1>Bone prevalence</h1>
+  <div ref="pane" :class="'collapsible ' + (collapsed ? 'collapsed' : '')">
     <square-button
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <skeleton-aggregations-viewer
-      v-show="!collapsed"
-      :key="$route.fullPath"
-      :aggregations="aggregations"
-      class="skeleton-viewer"
-    />
+    <div class="scroller skeleton">
+      <h1>Bone prevalence</h1>
+      <skeleton-aggregations-viewer
+        v-show="!collapsed"
+        :key="$route.fullPath"
+        :aggregations="aggregations"
+        class="skeleton-viewer"
+      />
+    </div>
   </div>
 </template>
 
@@ -38,13 +36,8 @@ export default {
     }
   },
   methods: {
-    positionButton() {
-      if (this.collapsed) this.$refs.pane.scrollTop = 0
-      this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
-    },
     collapseClick() {
       this.collapsed = !this.collapsed
-      this.positionButton()
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
@@ -57,6 +50,5 @@ export default {
 .skeleton {
   background-color: $global-background-color;
   padding: 0.5rem;
-  -webkit-overflow-scrolling: touch;
 }
 </style>

@@ -28,10 +28,7 @@ export default {
   place-content: center;
   font-size: 1rem;
   height: 1.5rem;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
   width: 1.5rem;
   z-index: 1;
 

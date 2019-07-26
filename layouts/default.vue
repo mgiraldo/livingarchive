@@ -91,6 +91,22 @@ a {
   position: relative;
   transition: all 0.2s ease-out;
 
+  .scroller {
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .square-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
   &.collapsed {
     display: flex;
     flex-basis: 1.5rem;
