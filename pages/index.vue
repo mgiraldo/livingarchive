@@ -1,28 +1,46 @@
 <template>
-  <section class="container">
-    <h1 class="title">Living Archive</h1>
-    <div class="extra-content">
-      <h2 class="subtitle">
-        An experimental interface to the
-        <a href="http://catalhoyuk.com/">
-          Çatalhöyük Research Project
-        </a>
-      </h2>
-      <p class="description">
-        This application was developed to explore the possibilities of
-        visualizing linked data and geospatial data.
-      </p>
-    </div>
-    <div class="screenshot-container">
-      <nuxt-link to="/map"
-        ><img
-          src="/screenshot.png"
-          class="screenshot"
-          alt="A screenshot of the Living Archive application"
-      /></nuxt-link>
-    </div>
-    <nuxt-link to="/map" class="button">Enter</nuxt-link>
-  </section>
+  <div>
+    <header>
+      <section class="intro">
+        <h1 class="title">Living Archive</h1>
+
+        <h2 class="subtitle">
+          An experimental interface to the<br />
+          <a href="http://catalhoyuk.com/">
+            Çatalhöyük Research Project
+          </a>
+        </h2>
+        <p class="description">
+          Application developed to explore the possibilities of visualizing
+          linked data and geospatial data.
+        </p>
+
+        <div class="screenshot-container">
+          <nuxt-link to="/map"
+            ><img
+              src="/screenshot.png"
+              class="screenshot"
+              alt="A screenshot of the Living Archive application"
+          /></nuxt-link>
+        </div>
+        <nuxt-link to="/map" class="button">Enter</nuxt-link>
+      </section>
+    </header>
+    <section class="credits">
+      <h1>Credits</h1>
+      <dl>
+        <dt>Stanford Archaeology Center</dt>
+        <dd>Dominik Lukas</dd>
+        <dt>Digital Research Architect</dt>
+        <dd>Nicole Coleman</dd>
+        <dt>Designer & Developer</dt>
+        <dd>
+          Mauricio Giraldo Arteaga
+          <a href="https://twitter.com/mgiraldo">@mgiraldo</a>
+        </dd>
+      </dl>
+    </section>
+  </div>
 </template>
 
 <script>
@@ -33,13 +51,25 @@ export default {
 }
 </script>
 
+<style lang="scss">
+body {
+  background-color: lighten($global-background-color, 10%);
+}
+</style>
 <style lang="scss" scoped>
-.container {
+header {
+  background-color: $global-background-color;
+  margin: auto;
+  min-height: 100vh;
+  padding: 2rem 0 10rem;
+}
+
+.intro {
   display: grid;
-  margin: 2rem auto auto;
-  grid-template-columns: 1fr 1fr 1fr 6rem 6rem;
-  grid-template-rows: 1fr 5rem 1fr auto auto;
+  grid-template-columns: 1fr 0.5fr 1fr 6rem 6rem;
+  grid-template-rows: 1fr 5rem 1fr auto auto auto;
   grid-gap: 1rem;
+  margin: 0 auto;
   width: 60vw;
 
   @media screen and (max-width: 820px) {
@@ -53,7 +83,7 @@ export default {
   align-self: end;
   font-size: 6rem;
   font-weight: normal;
-  grid-column: 1/7;
+  grid-column: 1/6;
   grid-row: 4/5;
 
   @media screen and (max-width: 820px) {
@@ -62,14 +92,24 @@ export default {
   }
 }
 
-.extra-content {
-  grid-column: 3/6;
-  grid-row: 5/6;
-}
-
 .subtitle {
   font-weight: normal;
-  margin-bottom: 1rem;
+  grid-column: 3/6;
+  grid-row: 5/6;
+
+  @media screen and (min-width: 1300px) {
+    grid-column: 2/5;
+  }
+}
+
+.description {
+  font-size: 1rem;
+  grid-column: 3/5;
+  grid-row: 6/7;
+
+  @media screen and (min-width: 1300px) {
+    grid-column: 2/4;
+  }
 }
 
 .screenshot-container {
@@ -86,10 +126,6 @@ export default {
       border-bottom-color: $filter-button-color;
     }
   }
-}
-
-.description {
-  font-size: 1rem;
 }
 
 .button {
@@ -111,6 +147,56 @@ export default {
   &:hover {
     background-color: $filter-button-color;
     color: $global-text-color;
+  }
+}
+
+.credits {
+  padding: 3rem 0 10rem;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: normal;
+    margin-bottom: 2rem;
+  }
+
+  dl,
+  h1 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 60vw;
+
+    @media screen and (max-width: 820px) {
+      width: 80vw;
+    }
+  }
+
+  dt,
+  dd {
+    display: inline-block;
+    margin-bottom: 2rem;
+
+    @media screen and (max-width: 820px) {
+      display: block;
+    }
+  }
+
+  dt {
+    margin-left: 20%;
+    width: 30%;
+
+    @media screen and (max-width: 820px) {
+      margin: auto;
+      width: auto;
+    }
+  }
+
+  dd {
+    font-weight: bold;
+    width: 40%;
+
+    @media screen and (max-width: 820px) {
+      width: auto;
+    }
   }
 }
 </style>

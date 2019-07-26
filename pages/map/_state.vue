@@ -64,6 +64,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body {
+  overflow: hidden;
+}
 .container {
   background-color: darken($global-background-color, 6%);
   display: flex;

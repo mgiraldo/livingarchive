@@ -37,6 +37,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body {
+  overflow: hidden;
+}
 .container {
   display: flex;
   height: 100vh;

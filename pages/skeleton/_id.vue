@@ -66,6 +66,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+body {
+  overflow: hidden;
+}
 .viewer {
   display: grid;
   grid-template-columns: 20rem 1fr 30rem;
