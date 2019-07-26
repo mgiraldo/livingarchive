@@ -109,7 +109,7 @@ a {
     border-bottom: 1px solid $global-border-color;
 
     &.collapsed {
-      overflow-y: hidden;
+      overflow-y: hidden !important;
 
       h1 {
         line-height: 0.4;
