@@ -71,7 +71,7 @@ export default {
     },
     handleScroll(e) {
       let bottomOfWindow =
-        e.target.scrollTop + window.innerHeight === e.target.scrollHeight
+        e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight
 
       if (bottomOfWindow) {
         this.getNextPage()

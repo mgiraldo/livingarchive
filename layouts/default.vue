@@ -106,6 +106,8 @@ a {
   }
 
   @media all and (orientation: portrait) {
+    border-bottom: 1px solid $global-border-color;
+
     &.collapsed {
       overflow-y: hidden;
 
