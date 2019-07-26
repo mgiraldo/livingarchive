@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <search-controls />
+    <search-controls-pane />
     <grid-results-list :key="$route.fullPath" />
   </div>
 </template>
@@ -9,7 +9,7 @@
 import { parseParams } from '~/utils/params'
 
 import GridResultsList from '~/components/GridResultsList'
-import SearchControls from '~/components/SearchControls'
+import SearchControlsPane from '~/components/SearchControlsPane'
 
 export default {
   scrollToTop: true,
@@ -19,7 +19,7 @@ export default {
   key: '_grid',
   components: {
     GridResultsList,
-    SearchControls
+    SearchControlsPane
   },
   fetch: async function({ store, params }) {
     // console.log('fetch')
@@ -43,5 +43,9 @@ body {
 .container {
   display: flex;
   height: 100vh;
+
+  @media all and (orientation: portrait) {
+    flex-direction: column;
+  }
 }
 </style>

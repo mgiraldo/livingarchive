@@ -104,11 +104,16 @@ export default {
       updateRouter({ router: this.$router, store: this.$store })
     },
     handleScroll() {
+      this.positionButton()
+    },
+    positionButton() {
+      if (this.collapsed) this.$refs.pane.scrollTo(0, 0)
       this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
     },
     collapseClick(e) {
       e.preventDefault()
       this.collapsed = !this.collapsed
+      this.positionButton()
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
@@ -121,9 +126,7 @@ export default {
 .controls-wrapper {
   background-color: lighten($color: $global-background-color, $amount: 5%);
   display: flex;
-  flex-basis: 20rem;
   flex-direction: column;
-  flex-shrink: 0;
   font-size: 0.9rem;
   overflow-wrap: anywhere;
   padding: 0.5rem;

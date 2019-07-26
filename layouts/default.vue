@@ -104,5 +104,17 @@ a {
       writing-mode: vertical-lr;
     }
   }
+
+  @media all and (orientation: portrait) {
+    &.collapsed {
+      overflow-y: hidden;
+
+      h1 {
+        line-height: 0.4;
+        margin-top: 0;
+        writing-mode: unset;
+      }
+    }
+  }
 }
 </style>

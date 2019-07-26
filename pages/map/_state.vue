@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <search-controls />
+    <search-controls-pane @collapse="handleCollapse" />
     <results-list-pane
       :key="$route.fullPath"
       @click="showIndividual"
@@ -14,7 +14,7 @@
 <script>
 import { parseParams } from '~/utils/params'
 
-import SearchControls from '~/components/SearchControls'
+import SearchControlsPane from '~/components/SearchControlsPane'
 import SkeletonPane from '~/components/SkeletonPane'
 import ResultsListPane from '~/components/ResultsListPane'
 import ResultsMapPane from '~/components/ResultsMapPane'
@@ -26,7 +26,7 @@ export default {
   },
   key: '_map',
   components: {
-    SearchControls,
+    SearchControlsPane,
     SkeletonPane,
     ResultsListPane,
     ResultsMapPane
@@ -70,5 +70,9 @@ body {
   background-color: darken($global-background-color, 6%);
   display: flex;
   height: 100vh;
+
+  @media all and (orientation: portrait) {
+    flex-direction: column;
+  }
 }
 </style>
