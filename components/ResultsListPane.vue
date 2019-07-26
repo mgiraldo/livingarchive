@@ -6,7 +6,7 @@
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <div class="scroller results" @scroll="handleScroll">
+    <div ref="scroller" class="scroller results" @scroll="handleScroll">
       <result-count />
       <div v-show="!collapsed">
         <results-explained />
@@ -48,7 +48,7 @@ export default {
     this.getNextPage()
   },
   updated() {
-    this.$refs.pane.scrollTop = 0
+    this.$refs.scroller.scrollTop = 0
   },
   methods: {
     totalPages() {
