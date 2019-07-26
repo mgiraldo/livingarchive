@@ -48,7 +48,7 @@ export default {
     this.getNextPage()
   },
   updated() {
-    this.$refs.pane.scrollTop
+    this.$refs.pane.scrollTop = 0
   },
   methods: {
     totalPages() {
