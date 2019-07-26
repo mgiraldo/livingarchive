@@ -1,16 +1,12 @@
 <template>
-  <section
-    ref="pane"
-    :class="'collapsible ' + (collapsed ? 'collapsed' : '')"
-    @scroll="handleScroll"
-  >
+  <section ref="pane" :class="'collapsible ' + (collapsed ? 'collapsed' : '')">
     <square-button
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <div class="scroller results">
+    <div class="scroller results" @scroll="handleScroll">
       <result-count />
       <div v-show="!collapsed">
         <results-explained />

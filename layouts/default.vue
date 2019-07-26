@@ -117,6 +117,7 @@ a {
       font-size: 1rem;
       line-height: 0.8;
       margin-top: 2rem;
+      white-space: nowrap;
       writing-mode: vertical-lr;
     }
   }
