@@ -4,13 +4,13 @@
     :class="'results collapsible ' + (collapsed ? 'collapsed' : '')"
     @scroll="handleScroll"
   >
+    <result-count />
     <square-button
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <result-count />
     <div v-show="!collapsed">
       <results-explained />
       <p>

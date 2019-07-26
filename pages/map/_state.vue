@@ -3,11 +3,10 @@
     <search-controls />
     <results-list-pane
       :key="$route.fullPath"
-      ref="resultsListPane"
       @click="showIndividual"
       @collapse="handleCollapse"
     />
-    <skeleton-pane ref="skeletonPane" @collapse="handleCollapse" />
+    <skeleton-pane @collapse="handleCollapse" />
     <results-map-pane ref="mapPane" @collapse="handleCollapse" />
   </div>
 </template>
@@ -71,9 +70,5 @@ body {
   background-color: darken($global-background-color, 6%);
   display: flex;
   height: 100vh;
-}
-.splitview {
-  display: flex;
-  flex-grow: 1;
 }
 </style>

@@ -3,12 +3,12 @@
     ref="pane"
     :class="'map collapsible ' + (collapsed ? 'collapsed' : '')"
   >
+    <h1 v-show="collapsed">Map</h1>
     <square-button
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <h1 v-show="collapsed">Map</h1>
     <no-ssr>
       <div v-show="!collapsed" ref="map" class="map-wrapper">
         <mapbox

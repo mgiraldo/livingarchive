@@ -4,13 +4,13 @@
     :class="'skeleton collapsible ' + (collapsed ? 'collapsed' : '')"
     @scroll="positionButton"
   >
+    <h1>Bone prevalence</h1>
     <square-button
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
-    <h1>Bone prevalence</h1>
     <skeleton-aggregations-viewer
       v-show="!collapsed"
       :key="$route.fullPath"

@@ -1,40 +1,53 @@
 <template>
-  <form class="controls">
-    <transition name="button-slide-fade">
-      <button
-        v-show="filtered()"
-        class="filter-button"
-        type="button"
-        @click="clearFilters"
-      >
-        Clear filters
-      </button>
-    </transition>
-    <search-filter-standard
-      class="filter"
-      :aggregations="aggs('b')"
-      :facet="bones"
+  <form
+    ref="pane"
+    :class="'controls-wrapper collapsible ' + (collapsed ? 'collapsed' : '')"
+    @scroll="handleScroll"
+  >
+    <h1 v-show="collapsed">Search filters</h1>
+    <square-button
+      ref="button"
+      :label="collapsed ? 'Open' : 'Close'"
+      :icon="collapsed ? '+' : '×'"
+      @click="collapseClick"
     />
-    <search-filter-standard
-      class="filter"
-      :aggregations="sortedAggs('s')"
-      :facet="sexes"
-    />
-    <search-filter-standard
-      class="filter"
-      :aggregations="sortedAggs('a')"
-      :facet="ages"
-    />
-    <search-filter-range
-      class="filter"
-      :aggregations="aggs('l')"
-      :facet="levels"
-    />
-    <search-filter-standard
-      class="filter"
-      :aggregations="aggs('p')"
-      :facet="phases"
-    />
+    <div v-show="!collapsed" class="controls">
+      <transition name="button-slide-fade">
+        <button
+          v-show="filtered()"
+          class="filter-button"
+          type="button"
+          @click="clearFilters"
+        >
+          Clear filters
+        </button>
+      </transition>
+      <search-filter-standard
+        class="filter"
+        :aggregations="aggs('b')"
+        :facet="bones"
+      />
+      <search-filter-standard
+        class="filter"
+        :aggregations="sortedAggs('s')"
+        :facet="sexes"
+      />
+      <search-filter-standard
+        class="filter"
+        :aggregations="sortedAggs('a')"
+        :facet="ages"
+      />
+      <search-filter-range
+        class="filter"
+        :aggregations="aggs('l')"
+        :facet="levels"
+      />
+      <search-filter-standard
+        class="filter"
+        :aggregations="aggs('p')"
+        :facet="phases"
+      />
+    </div>
   </form>
 </template>
 
@@ -44,14 +57,17 @@ import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 
 import SearchFilterStandard from '~/components/SearchFilterStandard'
 import SearchFilterRange from '~/components/SearchFilterRange'
+import SquareButton from '~/components/SquareButton'
 
 export default {
   components: {
+    SquareButton,
     SearchFilterStandard,
     SearchFilterRange
   },
   data() {
     return {
+      collapsed: false,
       ages: FILTER_PARAMS_TO_NAMES.a,
       sexes: FILTER_PARAMS_TO_NAMES.s,
       levels: FILTER_PARAMS_TO_NAMES.l,
@@ -86,13 +102,23 @@ export default {
     clearFilters() {
       this.$store.commit('clearFilters')
       updateRouter({ router: this.$router, store: this.$store })
+    },
+    handleScroll() {
+      this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
+    },
+    collapseClick(e) {
+      e.preventDefault()
+      this.collapsed = !this.collapsed
+      this.$refs.pane.ontransitionend = () => {
+        this.$emit('collapse', this.collapsed)
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.controls {
+.controls-wrapper {
   background-color: lighten($color: $global-background-color, $amount: 5%);
   display: flex;
   flex-basis: 20rem;
@@ -100,9 +126,13 @@ export default {
   flex-shrink: 0;
   font-size: 0.9rem;
   overflow-wrap: anywhere;
-  overflow-y: scroll;
   padding: 0.5rem;
+  position: relative;
   -webkit-overflow-scrolling: touch;
+
+  &.collapsed {
+    padding: 0.5rem;
+  }
 }
 .filter-button {
   margin: 0.5rem 0.5rem 1rem;

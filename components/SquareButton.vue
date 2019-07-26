@@ -1,5 +1,9 @@
 <template>
-  <button class="button" :aria-label="label" @click="$emit('click')">
+  <button
+    class="square-button"
+    :aria-label="label"
+    @click="$emit('click', $event)"
+  >
     {{ icon }}
   </button>
 </template>
@@ -14,7 +18,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.button {
+.square-button {
   border: none;
   border-radius: 0;
   background-color: $filter-button-color;
