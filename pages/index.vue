@@ -116,6 +116,10 @@ header {
   grid-column: 1/5;
   grid-row: 1/4;
 
+  @media screen and (max-width: 820px) {
+    margin-bottom: 1rem;
+  }
+
   .screenshot {
     border-bottom: 0.5rem solid $global-link-color;
     max-width: 100%;
