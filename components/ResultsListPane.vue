@@ -31,7 +31,7 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
-import { PAGE_SIZE } from '~/utils/constants'
+import { PAGE_SIZE, INFINITE_SCROLL_BUFFER } from '~/utils/constants'
 
 import ResultItem from '~/components/ResultItem'
 import ResultsExplained from '~/components/ResultsExplained'
@@ -46,9 +46,6 @@ export default {
   computed: {},
   mounted() {
     this.getNextPage()
-  },
-  updated() {
-    this.$refs.scroller.scrollTop = 0
   },
   methods: {
     totalPages() {
@@ -69,7 +66,8 @@ export default {
     },
     handleScroll(e) {
       let bottomOfWindow =
-        e.target.scrollTop + e.target.clientHeight === e.target.scrollHeight
+        e.target.scrollTop + e.target.clientHeight >=
+        e.target.scrollHeight - INFINITE_SCROLL_BUFFER
 
       if (bottomOfWindow) {
         this.getNextPage()

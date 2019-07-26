@@ -15,6 +15,7 @@ export const RDF_TIMEOUT = 20000
 
 export const MAX_TEXT_LENGTH = 80 // for truncation behind More...
 export const PAGE_SIZE = 20 // for infinte scroll
+export const INFINITE_SCROLL_BUFFER = 200 // pixels
 
 export const BONE_FILL_COLOR = 'hsla(42, 81%, 75%, 0.95)'
 export const BONE_FILL_PARTIAL_COLOR = 'hsla(42, 81%, 90%, 0.95)'

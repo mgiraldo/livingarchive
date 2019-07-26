@@ -30,7 +30,7 @@
 
 <script>
 import { updateRouter } from '~/utils/router'
-import { PAGE_SIZE } from '~/utils/constants'
+import { PAGE_SIZE, INFINITE_SCROLL_BUFFER } from '~/utils/constants'
 
 import GridViewItem from '~/components/GridViewItem'
 import ResultCount from '~/components/ResultCount'
@@ -75,7 +75,8 @@ export default {
   methods: {
     handleScroll(e) {
       let bottomOfWindow =
-        e.target.scrollTop + window.innerHeight === e.target.scrollHeight
+        e.target.scrollTop + e.target.clientHeight >=
+        e.target.scrollHeight - INFINITE_SCROLL_BUFFER
 
       if (bottomOfWindow) {
         this.getNextPage()
@@ -131,6 +132,7 @@ export default {
 <style lang="scss" scoped>
 .results {
   display: flex;
+  flex-basis: 400%;
   flex-direction: column;
   flex-grow: 1;
   overflow-y: auto;
