@@ -1,8 +1,6 @@
 <template>
   <div class="explainer">
-    <span class="summary"
-      >Showing {{ count }} results {{ isFiltered ? 'filtered by:' : '' }}</span
-    >
+    <span class="summary">{{ isFiltered ? 'Filtered by:' : '' }}</span>
     <label
       v-for="(filter, index) in filters"
       :key="index"
