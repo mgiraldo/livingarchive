@@ -39,7 +39,7 @@ export default {
   },
   methods: {
     positionButton() {
-      if (this.collapsed) this.$refs.pane.scrollTo(0, 0)
+      if (this.collapsed) this.$refs.pane.scrollTop = 0
       this.$refs.button.$el.style.top = this.$refs.pane.scrollTop + 'px'
     },
     collapseClick() {
