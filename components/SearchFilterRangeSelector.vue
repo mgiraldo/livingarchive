@@ -1,7 +1,7 @@
 <template>
   <div v-show="open">
     <p class="explainer">Click and drag to select</p>
-    <ul @mouseover="cancelHandler">
+    <ul @mouseover="cancelHandler" @touchmove="cancelHandler">
       <li
         v-for="(agg, index) in sortedAggregations"
         :ref="agg.name"
@@ -9,11 +9,11 @@
         class="facet"
         :data-name="agg.name"
         @mouseover="mouseoverHandler"
-        @touchmove="mouseoverHandler"
         @mouseup="mouseupHandler"
-        @touchend="mouseupHandler"
         @mousedown="mousedownHandler"
-        @touchstart="mousedownHandler"
+        @touchmove="touchmoveHandler"
+        @touchend="touchendHandler"
+        @touchstart="touchstartHandler"
       >
         <span class="label not-interactive">{{ agg.name }}</span>
         <search-filter-bar
@@ -124,12 +124,6 @@ export default {
       this.checkFromTo()
       if (this.onChange) this.onChange(this)
     },
-    mouseoverHandler(e) {
-      e.stopPropagation()
-      if (this.selecting) {
-        this.toAgg = e.target.dataset.name
-      }
-    },
     mousedownHandler(e) {
       e.stopPropagation()
       const name = e.target.dataset.name
@@ -138,10 +132,44 @@ export default {
       this.fromAgg = name
       this.toAgg = name
     },
+    mouseoverHandler(e) {
+      e.stopPropagation()
+      if (this.selecting) {
+        this.toAgg = e.target.dataset.name
+      }
+    },
     mouseupHandler(e) {
       e.stopPropagation()
       if (this.selecting) {
         this.toAgg = e.target.dataset.name
+        this.stopSelection()
+      }
+    },
+    touchstartHandler(e) {
+      console.log('start', e)
+      e.stopPropagation()
+      e.preventDefault()
+      const name = e.target.dataset.name
+      this.clearSelection()
+      this.selecting = true
+      this.fromAgg = name
+      this.toAgg = name
+    },
+    touchmoveHandler(e) {
+      e.stopPropagation()
+      e.preventDefault()
+      if (this.selecting) {
+        let touch = e.touches[0]
+        if (touch.clientX) {
+          let target = document.elementFromPoint(touch.clientX, touch.clientY)
+          this.toAgg = target.dataset.name
+        }
+      }
+    },
+    touchendHandler(e) {
+      e.stopPropagation()
+      e.preventDefault()
+      if (this.selecting) {
         this.stopSelection()
       }
     },
