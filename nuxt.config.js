@@ -82,7 +82,11 @@ module.exports = {
   serverMiddleware: [{ path: '/export', handler: '~/export/index.js' }],
 
   styleResources: {
-    scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss']
+    scss: [
+      '~/assets/css/variables.scss',
+      '~/assets/css/mixins.scss',
+      '~/assets/css/main.scss'
+    ]
   },
 
   /*
