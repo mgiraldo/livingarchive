@@ -9,8 +9,11 @@
         class="facet"
         :data-name="agg.name"
         @mouseover="mouseoverHandler"
+        @touchmove="mouseoverHandler"
         @mouseup="mouseupHandler"
+        @touchend="mouseupHandler"
         @mousedown="mousedownHandler"
+        @touchstart="mousedownHandler"
       >
         <span class="label not-interactive">{{ agg.name }}</span>
         <search-filter-bar
