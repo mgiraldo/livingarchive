@@ -1,5 +1,5 @@
 <template>
-  <div class="viewer">
+  <div class="container">
     <h1 class="title">{{ identifier }}</h1>
     <section class="list">
       <ul>
@@ -69,7 +69,7 @@ export default {
 body {
   overflow: hidden;
 }
-.viewer {
+.container {
   display: grid;
   grid-template-columns: 20rem 1fr 30rem;
   grid-template-rows: 4rem 1fr 20rem 1fr;

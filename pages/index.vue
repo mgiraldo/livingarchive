@@ -52,6 +52,7 @@ export default {
 </script>
 
 <style lang="scss">
+/* overriding default.vue scss */
 body {
   background-color: lighten($global-background-color, 10%);
 }
@@ -122,12 +123,14 @@ header {
 
   .screenshot {
     border-bottom: 0.5rem solid $global-link-color;
+    filter: grayscale(1);
     max-width: 100%;
     object-fit: cover;
+    opacity: 0.7;
     transition: all 0.2s;
 
     &:hover {
-      border-bottom-color: $filter-button-color;
+      filter: grayscale(0);
     }
   }
 }
@@ -147,6 +150,7 @@ header {
   text-decoration: none;
   text-transform: uppercase;
   transition: all 0.2s;
+  z-index: 1;
 
   &:hover {
     background-color: $filter-button-color;
