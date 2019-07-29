@@ -35,10 +35,16 @@
         <dd>Nicole Coleman</dd>
         <dt>Designer & Developer</dt>
         <dd>
-          Mauricio Giraldo Arteaga
+          Mauricio Giraldo Arteaga -
           <a href="https://twitter.com/mgiraldo">@mgiraldo</a>
         </dd>
       </dl>
+      <p class="github">
+        Code
+        <a href="https://github.com/mgiraldo/livingarchive/"
+          >available on Github</a
+        >
+      </p>
     </section>
   </div>
 </template>
@@ -167,8 +173,19 @@ header {
     margin-bottom: 2rem;
   }
 
-  dl,
-  h1 {
+  .github {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    width: 60vw;
+
+    @media screen and (max-width: 820px) {
+      width: 80vw;
+    }
+  }
+
+  h1,
+  dl {
     margin-left: auto;
     margin-right: auto;
     width: 60vw;
@@ -176,6 +193,10 @@ header {
     @media screen and (max-width: 820px) {
       width: 80vw;
     }
+  }
+
+  dl {
+    margin-bottom: 2rem;
   }
 
   dt,
