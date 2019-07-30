@@ -28,7 +28,7 @@
       >
     </label>
     <div class="export">
-      Export results as:
+      Export results:<br />
       <nuxt-link :to="'/export/csv/' + exportURL" target="_blank" no-prefetch
         >CSV</nuxt-link
       >
@@ -43,6 +43,8 @@
         no-prefetch
         >GeoJSON</nuxt-link
       >
+      |
+      <a :href="geojsonioURL" target="_blank">Open in GeoJSON.io</a>
     </div>
   </div>
 </template>
@@ -54,6 +56,12 @@ import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 export default {
   components: {},
   computed: {
+    geojsonioURL() {
+      return (
+        'http://geojson.io/#data=data:text/x-url,' +
+        escape(process.env.BASE_URL + '/export/geojson/' + this.exportURL)
+      )
+    },
     exportURL() {
       return this.$route.params.state ? this.$route.params.state : ''
     },

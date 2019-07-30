@@ -10,11 +10,10 @@
       <result-count />
       <div v-show="!collapsed">
         <results-explained />
-        <p>
-          <button class="link-button" @click="toggleGrid">
-            View grid
-          </button>
-        </p>
+        <results-view-toggle
+          text="Display results as grid"
+          @click="toggleGrid"
+        />
         <transition-group name="results-list" tag="ul" class="results-list">
           <li
             is="result-item"
@@ -35,11 +34,18 @@ import { PAGE_SIZE, INFINITE_SCROLL_BUFFER } from '~/utils/constants'
 
 import ResultItem from '~/components/ResultItem'
 import ResultsExplained from '~/components/ResultsExplained'
+import ResultsViewToggle from '~/components/ResultsViewToggle'
 import ResultCount from '~/components/ResultCount'
 import SquareButton from '~/components/SquareButton'
 
 export default {
-  components: { ResultItem, ResultsExplained, ResultCount, SquareButton },
+  components: {
+    ResultItem,
+    ResultsExplained,
+    ResultCount,
+    ResultsViewToggle,
+    SquareButton
+  },
   data() {
     return { page: 0, pageSize: PAGE_SIZE, individuals: [], collapsed: false }
   },
@@ -94,7 +100,7 @@ export default {
 }
 .results-list {
   list-style-type: none;
-  margin: 0.5rem 0 5rem 0;
+  margin: 0 0 5rem 0;
   min-width: 20rem;
   padding: 0;
 }

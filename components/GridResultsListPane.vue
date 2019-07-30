@@ -2,11 +2,7 @@
   <section ref="resultsPane" class="results" @scroll="handleScroll">
     <result-count />
     <results-explained />
-    <p>
-      <button class="link-button" @click="toggleMap">
-        View map
-      </button>
-    </p>
+    <results-view-toggle text="Display results as map" @click="toggleMap" />
     <div ref="grid" class="results-list">
       <grid-view-item
         v-for="(individual, index) in individuals"
@@ -35,6 +31,7 @@ import { PAGE_SIZE, INFINITE_SCROLL_BUFFER } from '~/utils/constants'
 import GridViewItem from '~/components/GridViewItem'
 import ResultCount from '~/components/ResultCount'
 import ResultsExplained from '~/components/ResultsExplained'
+import ResultsViewToggle from '~/components/ResultsViewToggle'
 import IndividualInfo from '~/components/IndividualInfo'
 
 export default {
@@ -42,6 +39,7 @@ export default {
     GridViewItem,
     ResultCount,
     ResultsExplained,
+    ResultsViewToggle,
     IndividualInfo
   },
   data() {
@@ -142,17 +140,12 @@ export default {
   h1 {
     font-size: 2rem;
   }
-
-  h1,
-  p {
-    margin-left: 0.2rem;
-  }
 }
 .results-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, 10rem);
   grid-gap: 1rem;
-  margin: 1rem 0 0 0;
+  margin: 0 0 0 0;
   padding: 0 0 5rem 0;
 }
 .expansion {
