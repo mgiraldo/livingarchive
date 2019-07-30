@@ -6,9 +6,9 @@ import { getAllIndividuals } from '../utils/elastic'
 
 export default async (req, res, next) => {
   // console.log('originalUrl', req.originalUrl)
-  res.header('Access-Control-Allow-Origin', '*')
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
-  res.header('Access-Control-Allow-Headers', 'Content-Type')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
   let path = req.originalUrl.replace('/export', '')
 
