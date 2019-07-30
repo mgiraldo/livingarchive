@@ -5,7 +5,10 @@ import { FILTER_PARAMS_TO_NAMES } from '../utils/constants'
 import { getAllIndividuals } from '../utils/elastic'
 
 export default async (req, res, next) => {
-  console.log('originalUrl', req.originalUrl)
+  // console.log('originalUrl', req.originalUrl)
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
 
   let path = req.originalUrl.replace('/export', '')
 
@@ -26,8 +29,7 @@ export default async (req, res, next) => {
 
   let params
 
-  if (queryString.length)
-    params = parseParams({ state: decodeURI(queryString) })
+  if (queryString.length) params = parseParams({ state: queryString })
 
   const state = createState(params)
   const filters = createFilters(state)

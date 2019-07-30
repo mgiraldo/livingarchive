@@ -59,7 +59,7 @@ export default {
     geojsonioURL() {
       return (
         'http://geojson.io/#data=data:text/x-url,' +
-        escape(process.env.BASE_URL + '/export/geojson/' + this.exportURL)
+        encodeURI(process.env.BASE_URL + '/export/geojson/' + this.exportURL)
       )
     },
     exportURL() {
