@@ -129,6 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .results {
+  background-color: darken($global-background-color, 3%);
   display: flex;
   flex-basis: 400%;
   flex-direction: column;
