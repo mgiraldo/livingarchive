@@ -71,6 +71,7 @@ body {
 }
 .container {
   display: grid;
+  grid-gap: 1rem;
   grid-template-columns: 20rem 1fr 30rem;
   grid-template-rows: 4rem 1fr 20rem 1fr;
   height: 100vh;
