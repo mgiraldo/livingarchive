@@ -25,6 +25,23 @@ export const BUILDING_TEXT_COLOR = 'rgb(33, 33, 33)'
 export const SPACE_COLOR = 'hsla(19, 35%, 44%, 0.5)'
 export const SPACE_TEXT_COLOR = 'rgba(232, 232, 232, 0.5)'
 
+/**
+ * # `FILTER_PARAMS_TO_NAMES` is the basis of the structure of the application
+ * The key corresponds to the URL parameter of the facet (eg: `a` for age)
+ * Each sub-object is built according to the facet it represents in ElasticSearch:
+ *
+ * - `name`: name of the facet, displayed in the search controls pane (usually plural)
+ * - `agg`: aggregation name in ElasticSearch
+ * - `aggType`: the type of aggregation in ElasticSearch. Supported value: 'keyword'
+ * - `queryType`: the type of query to be performed in ElasticSearch. Supported values: 'keyword', 'starts_with', 'range' ('range' value is a “fake” range implemented for Levels that is built from a start and end level)
+ * - `storeName`: name of the Vuex store object the application will put facet data in (will be prefixed with 'checked' in the Vuex store)
+ * - `explainedName`: displayed in `components/ResultsExplained.vue` (below the search result count)
+ * - `colors`: (optional) the name-value color pairs for each of the facet's values
+ * - `rangeList`: (`queryType='range'` only) a sorted index-value object containing the discrete values of the facet (for long lists a separate constants file is recommended, as is used here for Levels)
+ *
+ * These parameters are parsed on each request in `utils/params.js` to build the required state of the application.
+ *
+ */
 export const FILTER_PARAMS_TO_NAMES = {
   a: {
     name: 'Ages',
