@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <search-controls-pane />
-    <grid-results-list :key="$route.fullPath" />
+    <grid-results-list-pane :key="$route.fullPath" />
   </div>
 </template>
 
 <script>
 import { parseParams } from '~/utils/params'
 
-import GridResultsList from '~/components/GridResultsList'
+import GridResultsListPane from '~/components/GridResultsListPane'
 import SearchControlsPane from '~/components/SearchControlsPane'
 
 export default {
@@ -18,7 +18,7 @@ export default {
   },
   key: '_grid',
   components: {
-    GridResultsList,
+    GridResultsListPane,
     SearchControlsPane
   },
   fetch: async function({ store, params }) {

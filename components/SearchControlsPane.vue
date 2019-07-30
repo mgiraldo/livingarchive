@@ -113,6 +113,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.collapsible {
+  max-width: 20rem;
+
+  @media all and (orientation: portrait) {
+    max-width: none;
+  }
+}
 .controls-wrapper {
   background-color: lighten($color: $global-background-color, $amount: 5%);
   display: flex;
