@@ -4,7 +4,7 @@ import { parseParams } from '../utils/params'
 import { FILTER_PARAMS_TO_NAMES } from '../utils/constants'
 import { getAllIndividuals } from '../utils/elastic'
 
-export default async (req, res, next) => {
+export default async (req, res) => {
   // console.log('originalUrl', req.originalUrl)
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With')
