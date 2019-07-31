@@ -1,6 +1,19 @@
 <template>
-  <nuxt />
+  <div>
+    <browser-detect />
+    <nuxt />
+  </div>
 </template>
+
+<script>
+import BrowserDetect from '~/components/BrowserDetect'
+
+export default {
+  components: {
+    BrowserDetect
+  }
+}
+</script>
 
 <style lang="scss">
 html {

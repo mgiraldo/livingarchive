@@ -14,7 +14,7 @@
           Application developed to explore the possibilities of visualizing
           linked data and geospatial data.
         </p>
-
+        <nuxt-link to="/map" class="button">Enter</nuxt-link>
         <div class="screenshot-container">
           <nuxt-link to="/map"
             ><img
@@ -23,7 +23,6 @@
               alt="A screenshot of the Living Archive application"
           /></nuxt-link>
         </div>
-        <nuxt-link to="/map" class="button">Enter</nuxt-link>
       </section>
     </header>
     <section class="credits">
