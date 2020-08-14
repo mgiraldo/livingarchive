@@ -40,9 +40,9 @@
       </dl>
       <p class="github">
         Code
-        <a href="https://github.com/mgiraldo/livingarchive/"
-          >available on Github</a
-        >
+        <a href="https://github.com/mgiraldo/livingarchive/">
+          available on Github
+        </a>
       </p>
     </section>
   </div>
