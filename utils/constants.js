@@ -60,8 +60,8 @@ export const FILTER_PARAMS_TO_NAMES = {
       'Adult (20+)': '#E6FFDE',
       'YA (20-35)': '#b2df8a',
       'MA (35-50)': '#77DA3E',
-      'OA (50+)': '#2A870A'
-    }
+      'OA (50+)': '#2A870A',
+    },
   },
   s: {
     name: 'Sexes',
@@ -76,8 +76,8 @@ export const FILTER_PARAMS_TO_NAMES = {
       female: '#fc8d62',
       'female?': '#FDC5AE',
       male: '#8da0cb',
-      'male?': '#B0C8FF'
-    }
+      'male?': '#B0C8FF',
+    },
   },
   p: {
     name: 'Phases',
@@ -86,7 +86,7 @@ export const FILTER_PARAMS_TO_NAMES = {
     queryType: 'keyword',
     storeName: 'Phases',
     explainedName: 'Phase',
-    colors: null
+    colors: null,
   },
   b: {
     name: 'Skeleton',
@@ -96,7 +96,7 @@ export const FILTER_PARAMS_TO_NAMES = {
     startsWithPrefix: RDF_PLACEHOLDER,
     storeName: 'Skeleton',
     explainedName: 'Bone',
-    colors: null
+    colors: null,
   },
   l: {
     name: 'Levels',
@@ -106,8 +106,8 @@ export const FILTER_PARAMS_TO_NAMES = {
     rangeList: SORTED_LEVELS,
     storeName: 'Levels',
     explainedName: 'Level',
-    colors: null
-  }
+    colors: null,
+  },
 }
 export const EMPTY_LONLAT = 'Point (32.826886 37.668639)'
 
@@ -115,16 +115,16 @@ export const PROJ4_DEFS = [
   ['EPSG:32636', '+proj=utm +zone=36 +datum=WGS84 +units=m +no_defs'],
   [
     'catalhoyuk',
-    '+proj=tmerc +lat_0=1 +lon_0=40 +x_0=219545.552792 +y_0=-3524458.034545 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs'
+    '+proj=tmerc +lat_0=1 +lon_0=40 +x_0=219545.552792 +y_0=-3524458.034545 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs',
   ],
   [
     'catalhoyuk2',
-    '+proj=tmerc +lat_0=0 +lon_0=36 +k=0.837564 +x_0=235345.552792 +y_0=-3496198.034545 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs'
+    '+proj=tmerc +lat_0=0 +lon_0=36 +k=0.837564 +x_0=235345.552792 +y_0=-3496198.034545 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs',
   ],
   [
     'catalhoyuk3',
-    '+proj=tmerc +lat_0=32 +lon_0=37 +x_0=369184.729 +y_0=-635779.0741 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs'
-  ]
+    '+proj=tmerc +lat_0=32 +lon_0=37 +x_0=369184.729 +y_0=-635779.0741 +ellps=GRS80 +towgs84=0,0,0,-0.04396543,-0.04396543,0,0 +units=m +no_defs',
+  ],
 ]
 
 export const TILELAYERS = [
@@ -138,8 +138,8 @@ export const TILELAYERS = [
         '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
       minZoom: 0,
       maxNativeZoom: 22,
-      maxZoom: 26
-    }
+      maxZoom: 26,
+    },
   },
   {
     url:
@@ -148,7 +148,7 @@ export const TILELAYERS = [
     options: {
       name: 'Maptiler',
       attribution:
-        '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
-    }
-  }
+        '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
+    },
+  },
 ]

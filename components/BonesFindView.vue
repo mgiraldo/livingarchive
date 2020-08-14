@@ -14,7 +14,7 @@ import { BONE_FILL_COLOR, BONE_STROKE_COLOR } from '~/utils/constants'
 
 export default {
   props: {
-    shape: { type: Array, required: true }
+    shape: { type: Array, required: true },
   },
   mounted() {
     this.plotBonesD3()
@@ -29,7 +29,7 @@ export default {
     plotBonesD3() {
       // console.log('plotting', this.shape)
       let features = []
-      this.shape.forEach(wkt => {
+      this.shape.forEach((wkt) => {
         const parsed = wellknown.parse(wkt)
         if (parsed && parsed.type !== 'Point') {
           features.push(parsed)
@@ -37,12 +37,12 @@ export default {
       })
       if (features.length === 0) return
       // find bounds
-      let bounds = features.map(f => bbox(f))
+      let bounds = features.map((f) => bbox(f))
       // console.log('bounds', bounds)
-      let minX = Math.min(...bounds.map(bound => bound[0]))
-      let minY = Math.min(...bounds.map(bound => bound[1]))
-      let maxX = Math.max(...bounds.map(bound => bound[2]))
-      let maxY = Math.max(...bounds.map(bound => bound[3]))
+      let minX = Math.min(...bounds.map((bound) => bound[0]))
+      let minY = Math.min(...bounds.map((bound) => bound[1]))
+      let maxX = Math.max(...bounds.map((bound) => bound[2]))
+      let maxY = Math.max(...bounds.map((bound) => bound[3]))
       let svgWidth = maxX - minX
       let svgHeight = maxY - minY
 
@@ -72,8 +72,8 @@ export default {
         .style('fill', this.$d3.color(BONE_FILL_COLOR))
         .style('stroke-width', '0.001')
         .style('stroke', this.$d3.color(BONE_STROKE_COLOR))
-    }
-  }
+    },
+  },
 }
 </script>
 

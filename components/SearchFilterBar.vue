@@ -9,15 +9,15 @@ export default {
   props: {
     total: { type: Number, required: true },
     value: { type: Number, required: true },
-    showText: { type: Boolean, default: true }
+    showText: { type: Boolean, default: true },
   },
   computed: {
     percent() {
       let pct = Math.round((this.value / this.total) * 100)
       pct = pct > 0 ? pct : 1
       return pct < 100 ? pct : 100
-    }
-  }
+    },
+  },
 }
 </script>
 

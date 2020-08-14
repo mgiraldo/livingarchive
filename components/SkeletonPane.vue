@@ -1,6 +1,6 @@
 <template>
   <div ref="pane" :class="'collapsible ' + (collapsed ? 'collapsed' : '')">
-    <square-button
+    <SquareButton
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
@@ -8,7 +8,7 @@
     />
     <div class="scroller skeleton">
       <h1>Bone prevalence</h1>
-      <skeleton-aggregations-viewer
+      <SkeletonAggregationsViewer
         v-show="!collapsed"
         :key="$route.fullPath"
         :aggregations="aggregations"
@@ -25,7 +25,7 @@ import SquareButton from '~/components/SquareButton'
 export default {
   components: {
     SkeletonAggregationsViewer,
-    SquareButton
+    SquareButton,
   },
   data() {
     return { collapsed: false }
@@ -33,7 +33,7 @@ export default {
   computed: {
     aggregations() {
       return this.$store.state.aggs['bones.bone']
-    }
+    },
   },
   methods: {
     collapseClick() {
@@ -41,8 +41,8 @@ export default {
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

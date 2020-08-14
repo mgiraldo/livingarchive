@@ -55,5 +55,5 @@ export const SORTED_LEVELS = {
   54: 'North.Unknown',
   55: 'TPC.Unknown',
   56: '?',
-  57: 'NULL'
+  57: 'NULL',
 }

@@ -6,17 +6,17 @@ import { RDF_PREFIXES, RDF_TIMEOUT } from './constants'
 import { cleanString } from './stringUtils'
 import { reprojectGeoJson } from './geo'
 
-const performRdfQuery = async query => {
+const performRdfQuery = async (query) => {
   const instance = axios.create({
     // this ignores self-signed https
     httpsAgent: new https.Agent({
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     }),
     // end ignore self-signed https
     timeout: RDF_TIMEOUT,
     headers: {
-      Accept: 'application/sparql-results+json'
-    }
+      Accept: 'application/sparql-results+json',
+    },
   })
 
   // console.log(query)
@@ -27,7 +27,7 @@ const performRdfQuery = async query => {
   return results
 }
 
-export const getSkeletonShape = async identifier => {
+export const getSkeletonShape = async (identifier) => {
   // first get preservation info
   let skeleton = await getSkeleton(identifier)
 
@@ -37,7 +37,7 @@ export const getSkeletonShape = async identifier => {
   return { skeleton, shape }
 }
 
-export const getSkeleton = async identifier => {
+export const getSkeleton = async (identifier) => {
   let query = `
   SELECT ?pred ?obj ?bone WHERE {
     {
@@ -58,7 +58,7 @@ export const getSkeleton = async identifier => {
   const data = await performRdfQuery(query)
 
   let skeleton = {}
-  data.data.results.bindings.forEach(item => {
+  data.data.results.bindings.forEach((item) => {
     const preserved = cleanString(item.pred.value)
     const bone = cleanString(item.obj.value, '-' + identifier.replace('Sk', ''))
     if (
@@ -73,7 +73,7 @@ export const getSkeleton = async identifier => {
   return skeleton
 }
 
-export const getShape = async identifier => {
+export const getShape = async (identifier) => {
   let query = `
     SELECT DISTINCT ?coordinates
     WHERE {
@@ -88,13 +88,13 @@ export const getShape = async identifier => {
   const geoData = await performRdfQuery(query)
 
   let shape = geoData.data.results.bindings.map(
-    binding => binding.coordinates.value
+    (binding) => binding.coordinates.value
   )
 
   return shape
 }
 
-export const getBuilding = async identifier => {
+export const getBuilding = async (identifier) => {
   // TODO: sanitize params
 
   let query = `
@@ -115,7 +115,7 @@ export const getBuilding = async identifier => {
   return results
 }
 
-export const getSpace = async identifier => {
+export const getSpace = async (identifier) => {
   // Assumes input: SkSOMENUMBER.SUFFIX
   // and SOMENUMBER is the unit identifier
   let numberPart = identifier.replace('Sk', '')
@@ -169,9 +169,9 @@ export const getAllBuildings = async () => {
  * Produces a GeoJSON from the SparQL WKT data
  * @param {sparql-results+json} bindings The bindings as they came from SparQL
  */
-const parseShapes = bindings => {
+const parseShapes = (bindings) => {
   const results = bindings
-    .map(item => {
+    .map((item) => {
       const wkt = item.wkt.value
       let parsed
       if (wkt) parsed = wellknown.parse(wkt)
@@ -181,9 +181,9 @@ const parseShapes = bindings => {
       return {
         type: 'Feature',
         geometry: projected,
-        properties: { id: cleanString(item.id.value) }
+        properties: { id: cleanString(item.id.value) },
       }
     })
-    .filter(item => item !== undefined)
+    .filter((item) => item !== undefined)
   return results
 }

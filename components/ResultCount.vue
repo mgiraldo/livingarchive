@@ -9,8 +9,8 @@ export default {
   computed: {
     individualCount() {
       return this.$store.getters.individualCount
-    }
-  }
+    },
+  },
 }
 </script>
 

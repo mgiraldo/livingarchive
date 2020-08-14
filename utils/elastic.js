@@ -12,16 +12,17 @@ const querySize = 6000
 const filterPath =
   'filter_path=aggregations.*.buckets,hits.hits._source,hits.total.value'
 
-const performESQuery = async query => {
+const performESQuery = async (query) => {
   const instance = axios.create({
     // this ignores self-signed https
     httpsAgent: new https.Agent({
-      rejectUnauthorized: false
+      rejectUnauthorized: false,
     }),
     // end ignore self-signed https
     headers: {
-      Accept: 'application/json'
-    }
+      Authorization: 'Basic ZWxhc3RpYzpwbGFzdGlj',
+      Accept: 'application/json',
+    },
   })
 
   // console.log(JSON.stringify(query))
@@ -31,8 +32,8 @@ const performESQuery = async query => {
     {
       params: {
         source: query,
-        source_content_type: 'application/json'
-      }
+        source_content_type: 'application/json',
+      },
     }
   )
 
@@ -41,11 +42,11 @@ const performESQuery = async query => {
   return {
     results: results.data.hits.hits,
     count: results.data.hits.total.value,
-    aggs
+    aggs,
   }
 }
 
-const buildQuery = params => {
+const buildQuery = (params) => {
   const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES)
   let query = bodybuilder()
   query = query.size(querySize)
@@ -93,7 +94,7 @@ const buildQuery = params => {
             break
           }
           case 'starts_with': {
-            filter.forEach(term => {
+            filter.forEach((term) => {
               query = query.filter(
                 'match_phrase_prefix',
                 agg.agg,
@@ -107,7 +108,7 @@ const buildQuery = params => {
     }
   }
   // query = query.filter('exists', 'field', 'spatial_list') // obligating spatial for now
-  elasticAggs.forEach(agg => {
+  elasticAggs.forEach((agg) => {
     query = query.agg('terms', agg.agg + '.' + agg.aggType, { size: querySize })
   })
   return query.build()
@@ -123,12 +124,12 @@ export const getFilteredIndividuals = async ({ filters }) => {
 
   let query = buildQuery({
     source: [source],
-    filters
+    filters,
   })
 
   const { results, aggs, count } = await performESQuery(query)
 
-  let identifiers = results.map(hit => cleanString(hit._source[source]))
+  let identifiers = results.map((hit) => cleanString(hit._source[source]))
 
   return { identifiers, aggs, count }
 }
@@ -149,21 +150,21 @@ export const getAllIndividuals = async ({ filters }) => {
     'wkt_point',
     'age',
     'individual',
-    'unit'
+    'unit',
   ]
 
   let query = buildQuery({
     source: sources,
-    filters
+    filters,
   })
 
   const { results, aggs, count } = await performESQuery(query)
 
   let individuals = {}
   let points = []
-  results.forEach(hit => {
+  results.forEach((hit) => {
     let individual = {}
-    sources.forEach(source => {
+    sources.forEach((source) => {
       individual[source] = cleanString(hit._source[source])
     })
     let identifier = individual.individual
@@ -188,12 +189,12 @@ export const getAllIndividuals = async ({ filters }) => {
   return { count, individuals, points, aggs }
 }
 
-const getAggregations = aggs => {
+const getAggregations = (aggs) => {
   let result = {}
   const elasticAggs = Object.values(FILTER_PARAMS_TO_NAMES)
-  elasticAggs.forEach(agg => {
+  elasticAggs.forEach((agg) => {
     result[agg.agg] = {}
-    aggs['agg_terms_' + agg.agg + '.' + agg.aggType].buckets.forEach(item => {
+    aggs['agg_terms_' + agg.agg + '.' + agg.aggType].buckets.forEach((item) => {
       result[agg.agg][cleanString(item.key)] = item.doc_count
     })
   })

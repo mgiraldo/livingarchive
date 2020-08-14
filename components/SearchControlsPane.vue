@@ -1,6 +1,6 @@
 <template>
   <form ref="pane" :class="'collapsible ' + (collapsed ? 'collapsed' : '')">
-    <square-button
+    <SquareButton
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
@@ -19,27 +19,27 @@
             Clear filters
           </button>
         </transition>
-        <search-filter-standard
+        <SearchFilterStandard
           class="filter"
           :aggregations="aggs('b')"
           :facet="bones"
         />
-        <search-filter-standard
+        <SearchFilterStandard
           class="filter"
           :aggregations="sortedAggs('s')"
           :facet="sexes"
         />
-        <search-filter-standard
+        <SearchFilterStandard
           class="filter"
           :aggregations="sortedAggs('a')"
           :facet="ages"
         />
-        <search-filter-range
+        <SearchFilterRange
           class="filter"
           :aggregations="aggs('l')"
           :facet="levels"
         />
-        <search-filter-standard
+        <SearchFilterStandard
           class="filter"
           :aggregations="aggs('p')"
           :facet="phases"
@@ -61,7 +61,7 @@ export default {
   components: {
     SquareButton,
     SearchFilterStandard,
-    SearchFilterRange
+    SearchFilterRange,
   },
   data() {
     return {
@@ -70,7 +70,7 @@ export default {
       sexes: FILTER_PARAMS_TO_NAMES.s,
       levels: FILTER_PARAMS_TO_NAMES.l,
       bones: FILTER_PARAMS_TO_NAMES.b,
-      phases: FILTER_PARAMS_TO_NAMES.p
+      phases: FILTER_PARAMS_TO_NAMES.p,
     }
   },
   computed: {},
@@ -87,9 +87,9 @@ export default {
       let aggs = this.$store.state.aggs[type]
       const colorKeys = Object.keys(FILTER_PARAMS_TO_NAMES[param].colors)
       const present = Object.keys(aggs)
-      const sorted = colorKeys.filter(agg => present.indexOf(agg) !== -1)
+      const sorted = colorKeys.filter((agg) => present.indexOf(agg) !== -1)
       let sortedAggs = {}
-      sorted.forEach(key => {
+      sorted.forEach((key) => {
         sortedAggs[key] = aggs[key]
       })
       return sortedAggs
@@ -107,8 +107,8 @@ export default {
       this.$refs.pane.ontransitionend = () => {
         this.$emit('collapse', this.collapsed)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

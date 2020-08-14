@@ -50,8 +50,8 @@
     >
       View skeleton in new tab
     </nuxt-link>
-    <collapsible-text :text="individual.description" />
-    <collapsible-text :text="individual.discussion" />
+    <CollapsibleText :text="individual.description" />
+    <CollapsibleText :text="individual.discussion" />
   </section>
 </template>
 
@@ -63,13 +63,13 @@ import CollapsibleText from '~/components/CollapsibleText'
 export default {
   components: { CollapsibleText },
   props: {
-    individual: { type: Object, required: true }
+    individual: { type: Object, required: true },
   },
   data() {
     return {
       discussionToggled: false,
       ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
-      sexColors: FILTER_PARAMS_TO_NAMES.s.colors
+      sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
     }
   },
   computed: {
@@ -83,14 +83,14 @@ export default {
       return (
         this.individual.discussion.substring(0, MAX_TEXT_LENGTH).trim() + '…'
       )
-    }
+    },
   },
   methods: {
     toggleDiscussion(e) {
       e.stopPropagation()
       this.discussionToggled = !this.discussionToggled
-    }
-  }
+    },
+  },
 }
 </script>
 

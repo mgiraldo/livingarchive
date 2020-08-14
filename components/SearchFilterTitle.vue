@@ -1,6 +1,6 @@
 <template>
   <h1 :aria-controls="controls" @click="$emit('click')">
-    <disclosure-icon :open="open" class="icon" label="Toggle facet" />
+    <DisclosureIcon :open="open" class="icon" label="Toggle facet" />
     {{ text }}
   </h1>
 </template>
@@ -10,13 +10,13 @@ import DisclosureIcon from '~/components/DisclosureIcon'
 
 export default {
   components: {
-    DisclosureIcon
+    DisclosureIcon,
   },
   props: {
     controls: { type: String, required: true },
     open: { type: Boolean, required: true },
-    text: { type: String, required: true }
-  }
+    text: { type: String, required: true },
+  },
 }
 </script>
 

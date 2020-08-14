@@ -52,7 +52,7 @@
 export default {
   head() {
     return { title: 'Living Archive' }
-  }
+  },
 }
 </script>
 

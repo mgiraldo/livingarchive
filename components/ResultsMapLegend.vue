@@ -1,6 +1,6 @@
 <template>
   <div class="map-overlay legend">
-    <results-map-overlay-title
+    <ResultsMapOverlayTitle
       :text="'Legend: ' + type"
       :open="open"
       @click="toggle"
@@ -16,7 +16,7 @@
         :key="index + name"
         class="legend-list-item"
       >
-        <filter-color-item :name="name" :color="color" />
+        <FilterColorItem :name="name" :color="color" />
       </li>
     </transition-group>
     <button v-show="open" class="filter-button" @click="toggleLegend">
@@ -34,7 +34,7 @@ import ResultsMapOverlayTitle from '~/components/ResultsMapOverlayTitle'
 export default {
   components: {
     FilterColorItem,
-    ResultsMapOverlayTitle
+    ResultsMapOverlayTitle,
   },
   data() {
     return { open: false }
@@ -49,7 +49,7 @@ export default {
       } else {
         return FILTER_PARAMS_TO_NAMES.s.colors
       }
-    }
+    },
   },
   methods: {
     toggle() {
@@ -58,8 +58,8 @@ export default {
     toggleLegend() {
       this.$store.commit('toggledLegend')
       this.$emit('toggled')
-    }
-  }
+    },
+  },
 }
 </script>
 

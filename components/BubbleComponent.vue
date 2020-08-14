@@ -55,7 +55,7 @@ import { parseGraph, findSubTree } from '~/utils/graph'
 
 export default {
   props: { start: { type: String, required: true } },
-  data: function() {
+  data: function () {
     return {
       graph: null,
       rawGraph: null,
@@ -63,13 +63,13 @@ export default {
       selected: this.start,
       settings: {
         width: 900,
-        height: 900
-      }
+        height: 900,
+      },
     }
   },
 
   computed: {
-    root: function() {
+    root: function () {
       // compute new root based on selected node
 
       if (this.csv) {
@@ -78,9 +78,9 @@ export default {
 
         const nodes = this.$d3
           .stratify()
-          .id(d => d.subject)
-          .parentId(d => d.supertype)(subtree)
-          .sort(function(a, b) {
+          .id((d) => d.subject)
+          .parentId((d) => d.supertype)(subtree)
+          .sort(function (a, b) {
             return a.height - b.height || a.id.localeCompare(b.id)
           })
 
@@ -91,15 +91,15 @@ export default {
       return false
     },
 
-    tree: function() {
+    tree: function () {
       return this.$d3
         .cluster()
         .size([this.settings.height, this.settings.width])
     },
 
-    nodes: function() {
+    nodes: function () {
       if (this.root) {
-        return this.root.descendants().map(d => {
+        return this.root.descendants().map((d) => {
           // position is inverted because ¯\_(ツ)_/¯
           let x = d.y
           let y = d.x
@@ -112,7 +112,7 @@ export default {
             circlepos: { cx: x, cy: y },
             textpos: {
               x: x + (!d.children ? -8 : 8),
-              y: y + -20
+              y: y + -20,
             },
             textStyle: {
               textAnchor:
@@ -120,15 +120,15 @@ export default {
                   ? 'middle'
                   : !d.children
                   ? 'end'
-                  : 'start'
-            }
+                  : 'start',
+            },
           }
         })
       }
       return null
     },
 
-    links: function() {
+    links: function () {
       let that = this
 
       if (this.root) {
@@ -136,7 +136,7 @@ export default {
         return this.root
           .descendants()
           .slice(1)
-          .map(function(d) {
+          .map(function (d) {
             return {
               id: d.id,
               d:
@@ -160,24 +160,24 @@ export default {
               // here we could of course calculate colors depending on data but for now all links share the same color from the settings object that we can manipulate using UI controls and v-model
 
               style: {
-                stroke: that.settings.strokeColor
-              }
+                stroke: that.settings.strokeColor,
+              },
             }
           })
       }
       return null
-    }
+    },
   },
-  mounted: async function() {
+  mounted: async function () {
     this.csv = await this.$axios.$get(process.env.BASE_URL + '/graph.csv')
     this.rawGraph = parseGraph(this.csv)
   },
   methods: {
-    select: function(index, node) {
+    select: function (index, node) {
       // console.log('selected', node)
       this.selected = node.id
-    }
-  }
+    },
+  },
 }
 </script>
 

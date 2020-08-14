@@ -1,6 +1,6 @@
 <template>
   <div>
-    <browser-detect />
+    <BrowserDetect />
     <nuxt />
   </div>
 </template>
@@ -10,8 +10,8 @@ import BrowserDetect from '~/components/BrowserDetect'
 
 export default {
   components: {
-    BrowserDetect
-  }
+    BrowserDetect,
+  },
 }
 </script>
 

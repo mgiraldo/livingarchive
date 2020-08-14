@@ -1,6 +1,6 @@
 <template>
   <div class="title" @click="$emit('click')">
-    <disclosure-icon :open="open" class="icon" label="Toggle facet" />
+    <DisclosureIcon :open="open" class="icon" label="Toggle facet" />
     {{ text }}
   </div>
 </template>
@@ -9,12 +9,12 @@
 import DisclosureIcon from '~/components/DisclosureIcon'
 export default {
   components: {
-    DisclosureIcon
+    DisclosureIcon,
   },
   props: {
     text: { type: String, required: true },
-    open: { type: Boolean, default: true }
-  }
+    open: { type: Boolean, default: true },
+  },
 }
 </script>
 

@@ -1,24 +1,24 @@
 <template>
   <section ref="resultsPane" class="results" @scroll="handleScroll">
-    <result-count />
-    <results-explained />
-    <results-view-toggle text="Display results as map" @click="toggleMap" />
+    <ResultCount />
+    <ResultsExplained />
+    <ResultsViewToggle text="Display results as map" @click="toggleMap" />
     <div ref="grid" class="results-list">
-      <grid-view-item
+      <GridViewItem
         v-for="(individual, index) in individuals"
         :key="index + '_' + individual.identifier"
         :individual="individual"
         :expanded="selectedIndividual === individual"
         :row="selectedIndividual === individual ? row : null"
         @click="gridItemClick"
-      ></grid-view-item>
+      ></GridViewItem>
       <div
         v-if="selectedGridItem"
         ref="expansion"
         class="expansion"
         :style="row ? `grid-row-start:` + row : ''"
       >
-        <individual-info :individual="selectedGridItem.individual" />
+        <IndividualInfo :individual="selectedGridItem.individual" />
       </div>
     </div>
   </section>
@@ -40,7 +40,7 @@ export default {
     ResultCount,
     ResultsExplained,
     ResultsViewToggle,
-    IndividualInfo
+    IndividualInfo,
   },
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
       page: 0,
       pageSize: PAGE_SIZE * 5, // because many squares fit in grid
       rowNumber: 0,
-      individuals: []
+      individuals: [],
     }
   },
   computed: {
@@ -60,7 +60,7 @@ export default {
     },
     row() {
       return this.rowNumber
-    }
+    },
   },
   mounted() {
     this.getNextPage()
@@ -122,8 +122,8 @@ export default {
     toggleMap() {
       this.$store.commit('toggleViewMode', 'map')
       updateRouter({ router: this.$router, store: this.$store })
-    }
-  }
+    },
+  },
 }
 </script>
 

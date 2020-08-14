@@ -84,12 +84,12 @@ export default {
         switch (queryType) {
           case 'keyword':
           case 'starts_with':
-            filterArray.forEach(value => {
+            filterArray.forEach((value) => {
               filters.push({
                 storeName,
                 explainedName,
                 queryType,
-                value
+                value,
               })
             })
             break
@@ -107,7 +107,7 @@ export default {
               storeName,
               explainedName,
               queryType,
-              value: 'from ' + from + ' to ' + to
+              value: 'from ' + from + ' to ' + to,
             })
             break
           }
@@ -115,7 +115,7 @@ export default {
       }
 
       return filters
-    }
+    },
   },
   methods: {
     remove(name, filter) {
@@ -125,8 +125,8 @@ export default {
     removeRange(filter) {
       this.$store.commit('resetFilter', { filter, value: [] })
       updateRouter({ router: this.$router, store: this.$store })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -35,10 +35,10 @@ export default async (req, res) => {
   const filters = createFilters(state)
 
   const { individuals } = await getBaseIndividuals({
-    filters
+    filters,
   })
 
-  let results = Object.values(individuals).map(i => {
+  let results = Object.values(individuals).map((i) => {
     if (i.point.coordinates) {
       i.latitude = i.point.coordinates[1]
       i.longitude = i.point.coordinates[0]
@@ -59,28 +59,28 @@ export default async (req, res) => {
       csvjson.toCSV(results, {
         headers: 'key',
         delimiter: ',',
-        wrap: false
+        wrap: false,
       })
     )
   }
 }
 
-const createState = params => {
+const createState = (params) => {
   let state = {}
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const agg = FILTER_PARAMS_TO_NAMES[param].agg
     const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
     const [paramArray] = params
       ? params
-          .filter(filter => filter.hasOwnProperty(agg))
-          .map(item => item[agg])
+          .filter((filter) => Object.prototype.hasOwnProperty.call(filter, agg))
+          .map((item) => item[agg])
       : []
     state['checked' + storeName] = paramArray
   }
   return state
 }
 
-const createFilters = state => {
+const createFilters = (state) => {
   const filters = {}
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const agg = FILTER_PARAMS_TO_NAMES[param].agg
@@ -92,18 +92,18 @@ const createFilters = state => {
 
 const getBaseIndividuals = async ({ filters }) => {
   const { individuals, points, aggs, count } = await getAllIndividuals({
-    filters
+    filters,
   })
   return { individuals, points, aggs, count }
 }
 
-const createGeoJSON = results => {
+const createGeoJSON = (results) => {
   let geoJSON = {
     type: 'FeatureCollection',
-    features: []
+    features: [],
   }
   if (results.length > 0) {
-    results.forEach(item => {
+    results.forEach((item) => {
       let latitude = item.latitude
       let longitude = item.longitude
       delete item.latitude
@@ -113,8 +113,8 @@ const createGeoJSON = results => {
         properties: item,
         geometry: {
           type: 'Point',
-          coordinates: [longitude, latitude]
-        }
+          coordinates: [longitude, latitude],
+        },
       }
       geoJSON.features.push(feature)
     })

@@ -3,7 +3,7 @@
     ref="pane"
     :class="'map collapsible ' + (collapsed ? 'collapsed' : '')"
   >
-    <square-button
+    <SquareButton
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
@@ -17,18 +17,18 @@
           :map-options="{
             style: tilelayers[1].url,
             center: [32.826886, 37.668639],
-            zoom: 16
+            zoom: 16,
           }"
           :scale-control="{
             show: true,
-            position: 'top-left'
+            position: 'top-left',
           }"
           @map-init="mapInited"
           @map-load="mapLoaded"
         >
         </mapbox>
-        <results-map-layer-switcher @change="onLayerSwitched" />
-        <results-map-legend @toggled="onLegendToggled" />
+        <ResultsMapLayerSwitcher @change="onLayerSwitched" />
+        <ResultsMapLegend @toggled="onLegendToggled" />
       </div>
     </no-ssr>
   </section>
@@ -43,7 +43,7 @@ import {
   SPACE_COLOR,
   BUILDING_TEXT_COLOR,
   SPACE_TEXT_COLOR,
-  FILTER_PARAMS_TO_NAMES
+  FILTER_PARAMS_TO_NAMES,
 } from '~/utils/constants'
 import { getShape } from '~/utils/rdf'
 
@@ -56,7 +56,7 @@ export default {
   components: {
     ResultsMapLegend,
     SquareButton,
-    ResultsMapLayerSwitcher
+    ResultsMapLayerSwitcher,
   },
   props: {},
   data() {
@@ -73,15 +73,15 @@ export default {
         zIndex: 10,
         color: BUILDING_COLOR,
         fillColor: BUILDING_COLOR,
-        fillOpacity: 1
+        fillOpacity: 1,
       },
       spaceOptions: {
         weight: 0.5,
         zIndex: 11,
         color: SPACE_COLOR,
         fillColor: SPACE_COLOR,
-        fillOpacity: 1
-      }
+        fillOpacity: 1,
+      },
     }
   },
   computed: {
@@ -106,10 +106,10 @@ export default {
     },
     individuals() {
       return this.$store.getters.displayedIndividuals
-    }
+    },
   },
   mounted() {
-    this.unsubscribe = this.$store.subscribe(mutation => {
+    this.unsubscribe = this.$store.subscribe((mutation) => {
       if (mutation.type === 'fetchedIndividuals') {
         this.updateMapPoints()
       }
@@ -120,19 +120,19 @@ export default {
   },
   methods: {
     points() {
-      const points = Object.values(this.individuals).map(i => {
+      const points = Object.values(this.individuals).map((i) => {
         return {
           age: i.age,
           point: i.point,
           sex: i.sex,
           individual: i.individual,
-          identifier: i.identifier
+          identifier: i.identifier,
         }
       })
       return points
     },
     pointsGeoJSON() {
-      const geo = this.points().map(p => {
+      const geo = this.points().map((p) => {
         return { type: 'Feature', properties: p, geometry: p.point }
       })
       return this.createGeoJSON(geo)
@@ -158,21 +158,21 @@ export default {
     addLayers() {
       this.map.addSource('individuals', {
         type: 'geojson',
-        data: this.pointsGeoJSON()
+        data: this.pointsGeoJSON(),
       })
       this.map.addSource('buildings', {
         type: 'geojson',
-        data: this.buildingsGeoJSON
+        data: this.buildingsGeoJSON,
       })
       this.map.addSource('spaces', {
         type: 'geojson',
-        data: this.spacesGeoJSON
+        data: this.spacesGeoJSON,
       })
       this.map.addLayer({
         id: 'buildings',
         type: 'fill',
         source: 'buildings',
-        paint: { 'fill-color': BUILDING_COLOR }
+        paint: { 'fill-color': BUILDING_COLOR },
       })
       this.map.addLayer({
         id: 'buildings-labels',
@@ -183,18 +183,18 @@ export default {
           'text-variable-anchor': ['center'],
           'text-radial-offset': 0.5,
           'text-justify': 'auto',
-          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12]
+          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12],
         },
         paint: {
           'text-color': BUILDING_TEXT_COLOR,
-          'text-halo-color': BUILDING_COLOR
-        }
+          'text-halo-color': BUILDING_COLOR,
+        },
       })
       this.map.addLayer({
         id: 'spaces',
         type: 'fill',
         source: 'spaces',
-        paint: { 'fill-color': SPACE_COLOR }
+        paint: { 'fill-color': SPACE_COLOR },
       })
       this.map.addLayer({
         id: 'spaces-labels',
@@ -205,19 +205,19 @@ export default {
           'text-variable-anchor': ['top'],
           'text-radial-offset': 0.5,
           'text-justify': 'auto',
-          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12]
+          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 0, 22, 12],
         },
         paint: {
           'text-color': SPACE_TEXT_COLOR,
-          'text-halo-color': SPACE_COLOR
-        }
+          'text-halo-color': SPACE_COLOR,
+        },
       })
     },
     drawPoints() {
-      this.map.removeLayer('individuals')
+      if (this.map.getLayer('individuals')) this.map.removeLayer('individuals')
 
       const colors = ['match', ['get', this.$store.state.legendType]]
-      Object.keys(this.legend).forEach(key => {
+      Object.keys(this.legend).forEach((key) => {
         colors.push(key, this.legend[key])
       })
       colors.push('#aaa') // null color
@@ -230,15 +230,18 @@ export default {
           // make circles larger as the user zooms from z12 to z22
           'circle-radius': {
             base: 1.5,
-            stops: [[12, 1.75], [22, 12]]
+            stops: [
+              [12, 1.75],
+              [22, 12],
+            ],
           },
           // color circles by legend type, using a match expression
           // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
-          'circle-color': colors
-        }
+          'circle-color': colors,
+        },
       })
 
-      this.map.on('mouseenter', 'individuals', e => {
+      this.map.on('mouseenter', 'individuals', (e) => {
         if (e.features.length > 0) {
           this.map.getCanvas().style.cursor = 'pointer'
         }
@@ -248,9 +251,9 @@ export default {
         this.map.getCanvas().style.cursor = ''
       })
 
-      this.map.on('click', e => {
+      this.map.on('click', (e) => {
         let features = this.map.queryRenderedFeatures(e.point, {
-          layers: ['individuals']
+          layers: ['individuals'],
         })
 
         if (!features.length) return
@@ -268,10 +271,10 @@ export default {
     createGeoJSON(geoArray) {
       let geoJSON = {
         type: 'FeatureCollection',
-        features: []
+        features: [],
       }
       if (geoArray.length > 0) {
-        geoArray.forEach(feature => {
+        geoArray.forEach((feature) => {
           geoJSON.features.push(feature)
         })
       }
@@ -300,8 +303,8 @@ export default {
         router: this.$router, // CRITICAL or else crash on undefined
         propsData: {
           individual: who,
-          shape
-        }
+          shape,
+        },
       })
       popupInstance.$mount('#vue-popup-content')
     },
@@ -330,18 +333,24 @@ export default {
     fitMap() {
       if (!this.map) return
       const points = this.$store.state.points
-      const xValues = points.map(point => point[0])
-      const yValues = points.map(point => point[1])
+      const xValues = points.map((point) => point[0])
+      const yValues = points.map((point) => point[1])
       let minX = Math.min(...xValues)
       let minY = Math.min(...yValues)
       let maxX = Math.max(...xValues)
       let maxY = Math.max(...yValues)
       // console.log('bounds', minX, minY, maxX, maxY)
-      this.map.fitBounds([[minX, minY], [maxX, maxY]], {
-        padding: { top: 25, bottom: 25, left: 25, right: 25 }
-      })
-    }
-  }
+      this.map.fitBounds(
+        [
+          [minX, minY],
+          [maxX, maxY],
+        ],
+        {
+          padding: { top: 25, bottom: 25, left: 25, right: 25 },
+        }
+      )
+    },
+  },
 }
 </script>
 

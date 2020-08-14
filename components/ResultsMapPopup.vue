@@ -7,7 +7,7 @@
           individual.identifier
         }}</nuxt-link>
       </dd>
-      <bones-find-view
+      <BonesFindView
         v-if="shape.length !== 0"
         :shape="shape"
         class="bones-view"
@@ -41,14 +41,14 @@ export default {
   components: { BonesFindView },
   props: {
     individual: { type: Object, required: true },
-    shape: { type: Array, default: () => [] }
+    shape: { type: Array, default: () => [] },
   },
   data() {
     return {
       ageColors: FILTER_PARAMS_TO_NAMES.a.colors,
-      sexColors: FILTER_PARAMS_TO_NAMES.s.colors
+      sexColors: FILTER_PARAMS_TO_NAMES.s.colors,
     }
-  }
+  },
 }
 </script>
 

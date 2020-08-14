@@ -1,7 +1,8 @@
 {
   "eslint.validate": [
     "vue",
-    "javascript"
+    "javascript",
+    "html"
   ],
   "editor.formatOnSave": false,
   "vetur.validation.template": false,

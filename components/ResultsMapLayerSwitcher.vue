@@ -1,6 +1,6 @@
 <template>
   <div class="map-overlay layer-switcher">
-    <results-map-overlay-title text="Layers" :open="open" @click="toggle" />
+    <ResultsMapOverlayTitle text="Layers" :open="open" @click="toggle" />
     <ul v-show="open" class="list">
       <li class="checkbox">
         <input
@@ -11,7 +11,7 @@
           @change="
             $emit('change', {
               name: 'individuals',
-              toggled: $event.target.checked
+              toggled: $event.target.checked,
             })
           "
         />
@@ -28,7 +28,7 @@
           @change="
             $emit('change', {
               name: 'spaces',
-              toggled: $event.target.checked
+              toggled: $event.target.checked,
             })
           "
         />
@@ -45,7 +45,7 @@
           @change="
             $emit('change', {
               name: 'buildings',
-              toggled: $event.target.checked
+              toggled: $event.target.checked,
             })
           "
         />
@@ -62,7 +62,7 @@ import ResultsMapOverlayTitle from '~/components/ResultsMapOverlayTitle'
 
 export default {
   components: {
-    ResultsMapOverlayTitle
+    ResultsMapOverlayTitle,
   },
   data() {
     return { open: false }
@@ -70,8 +70,8 @@ export default {
   methods: {
     toggle() {
       this.open = !this.open
-    }
-  }
+    },
+  },
 }
 </script>
 

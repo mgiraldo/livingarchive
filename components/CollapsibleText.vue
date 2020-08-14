@@ -18,7 +18,7 @@ import { MAX_TEXT_LENGTH } from '~/utils/constants'
 
 export default {
   props: {
-    text: { type: String, default: '' }
+    text: { type: String, default: '' },
   },
   data() {
     return { isToggled: false }
@@ -29,14 +29,14 @@ export default {
     },
     truncatedText() {
       return this.text.substring(0, MAX_TEXT_LENGTH).trim() + '…'
-    }
+    },
   },
   methods: {
     toggleText(e) {
       e.stopPropagation()
       this.isToggled = !this.isToggled
-    }
-  }
+    },
+  },
 }
 </script>
 

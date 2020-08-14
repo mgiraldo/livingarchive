@@ -1,6 +1,6 @@
 <template>
   <div>
-    <bubble-component :start="start" />
+    <BubbleComponent :start="start" />
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   },
   head() {
     return { title: 'bubbles' }
-  }
+  },
 }
 </script>
 

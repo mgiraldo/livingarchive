@@ -16,7 +16,7 @@
         @touchstart="touchstartHandler"
       >
         <span class="label not-interactive">{{ agg.name }}</span>
-        <search-filter-bar
+        <SearchFilterBar
           :class="'not-interactive range ' + hasSelectedClasses(agg.name)"
           :total="total"
           :value="agg.value"
@@ -31,7 +31,7 @@ import SearchFilterBar from '~/components/SearchFilterBar'
 
 export default {
   components: {
-    SearchFilterBar
+    SearchFilterBar,
   },
   props: {
     facet: { type: Object, required: true },
@@ -39,13 +39,13 @@ export default {
     open: { type: Boolean, required: true },
     from: { type: String, default: '' },
     to: { type: String, default: '' },
-    onChange: { type: Function, default: null }
+    onChange: { type: Function, default: null },
   },
   data() {
     return {
       selecting: false,
       fromAgg: this.from,
-      toAgg: this.to
+      toAgg: this.to,
     }
   },
   computed: {
@@ -56,7 +56,7 @@ export default {
       const allValues = Object.values(this.facet.rangeList)
       const aggs = Object.keys(this.aggregations)
       let sorted = []
-      allValues.forEach(value => {
+      allValues.forEach((value) => {
         if (aggs.indexOf(value) !== -1) {
           sorted.push({ name: value, value: this.aggregations[value] })
         }
@@ -64,7 +64,7 @@ export default {
       return sorted
     },
     sortedIndexes() {
-      return this.sortedAggregations.map(agg => agg.name)
+      return this.sortedAggregations.map((agg) => agg.name)
     },
     indexFrom() {
       if (this.fromAgg === '') return -1
@@ -86,8 +86,8 @@ export default {
         .filter(
           (agg, index) => index <= this.indexTo && index >= this.indexFrom
         )
-        .map(element => element.name)
-    }
+        .map((element) => element.name)
+    },
   },
   methods: {
     hasSelectedClasses(name) {
@@ -178,8 +178,8 @@ export default {
       if (this.selecting) {
         this.stopSelection()
       }
-    }
-  }
+    },
+  },
 }
 </script>
 

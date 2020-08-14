@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <search-controls-pane />
-    <grid-results-list-pane :key="$route.fullPath" />
+    <SearchControlsPane />
+    <GridResultsListPane :key="$route.fullPath" />
   </div>
 </template>
 
@@ -19,9 +19,9 @@ export default {
   key: '_grid',
   components: {
     GridResultsListPane,
-    SearchControlsPane
+    SearchControlsPane,
   },
-  fetch: async function({ store, params }) {
+  fetch: async function ({ store, params }) {
     // console.log('fetch')
     if (params.state) {
       // console.log('ssr map.fetch', params)
@@ -32,7 +32,7 @@ export default {
   },
   mounted() {
     this.$store.commit('toggleViewMode', 'grid')
-  }
+  },
 }
 </script>
 

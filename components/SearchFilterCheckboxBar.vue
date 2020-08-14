@@ -8,9 +8,9 @@
       @change="$emit('change', $event.target.checked)"
     />
     <label :for="'ch-' + name">
-      <filter-color-item :name="name" :color="color" />
+      <FilterColorItem :name="name" :color="color" />
     </label>
-    <search-filter-bar :total="total" :value="value" />
+    <SearchFilterBar :total="total" :value="value" />
   </li>
 </template>
 
@@ -21,15 +21,15 @@ import SearchFilterBar from '~/components/SearchFilterBar'
 export default {
   components: {
     FilterColorItem,
-    SearchFilterBar
+    SearchFilterBar,
   },
   props: {
     name: { type: String, required: true },
     color: { type: String, default: null },
     value: { type: Number, required: true },
     total: { type: Number, required: true },
-    checked: { type: Boolean, default: false }
-  }
+    checked: { type: Boolean, default: false },
+  },
 }
 </script>
 

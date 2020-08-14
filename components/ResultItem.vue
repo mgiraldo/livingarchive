@@ -4,7 +4,7 @@
     class="list-item"
     :identifier="individual.identifier"
   >
-    <individual-info :individual="individual" />
+    <IndividualInfo :individual="individual" />
     <div class="actions-wrapper">
       <button class="link-button" @click="$emit('show', individual)">
         Highlight on map
@@ -18,21 +18,21 @@ import IndividualInfo from '~/components/IndividualInfo'
 
 export default {
   components: {
-    IndividualInfo
+    IndividualInfo,
   },
   props: {
-    individual: { type: Object, required: true }
+    individual: { type: Object, required: true },
   },
   data() {
     return {
-      controlsToggled: false
+      controlsToggled: false,
     }
   },
   methods: {
     toggleControls() {
       this.controlsToggled = !this.controlsToggled
-    }
-  }
+    },
+  },
 }
 </script>
 

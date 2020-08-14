@@ -1,6 +1,6 @@
 <template>
   <span class="wrapper">
-    <plus :class="'toggle ' + (open ? 'open' : '')" :aria-label="label" />
+    <Plus :class="'toggle ' + (open ? 'open' : '')" :aria-label="label" />
   </span>
 </template>
 
@@ -11,8 +11,8 @@ export default {
   components: { Plus },
   props: {
     open: { type: Boolean, required: true },
-    label: { type: String, default: '' }
-  }
+    label: { type: String, default: '' },
+  },
 }
 </script>
 

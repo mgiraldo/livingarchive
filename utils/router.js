@@ -14,6 +14,6 @@ export const updateRouter = ({ store, router }) => {
   }
   router.push({
     name: store.state.viewMode + '-state',
-    params: { state: state.join('|') }
+    params: { state: state.join('|') },
   })
 }

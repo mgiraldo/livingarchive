@@ -4,7 +4,7 @@
     :class="`grid-item ` + (expanded ? 'expanded' : '')"
     @click="clickHandler"
   >
-    <bones-find-view
+    <BonesFindView
       :shape="individual.skeleton ? individual.skeleton : shape ? shape : []"
     />
   </div>
@@ -17,12 +17,12 @@ import BonesFindView from '~/components/BonesFindView'
 
 export default {
   components: {
-    BonesFindView
+    BonesFindView,
   },
   props: {
     individual: { type: Object, required: true },
     expanded: { type: Boolean, default: false },
-    row: { type: Number, default: null }
+    row: { type: Number, default: null },
   },
   data() {
     return { shape: null }
@@ -38,8 +38,8 @@ export default {
     },
     async getShape() {
       this.shape = await getShape(this.individual.identifier)
-    }
-  }
+    },
+  },
 }
 </script>
 

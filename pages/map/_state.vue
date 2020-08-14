@@ -1,13 +1,13 @@
 <template>
   <div class="container">
-    <search-controls-pane @collapse="handleCollapse" />
-    <results-list-pane
+    <SearchControlsPane @collapse="handleCollapse" />
+    <ResultsListPane
       :key="$route.fullPath"
       @click="showIndividual"
       @collapse="handleCollapse"
     />
-    <skeleton-pane @collapse="handleCollapse" />
-    <results-map-pane ref="mapPane" @collapse="handleCollapse" />
+    <SkeletonPane @collapse="handleCollapse" />
+    <ResultsMapPane ref="mapPane" @collapse="handleCollapse" />
   </div>
 </template>
 
@@ -29,16 +29,16 @@ export default {
     SearchControlsPane,
     SkeletonPane,
     ResultsListPane,
-    ResultsMapPane
+    ResultsMapPane,
   },
   data() {
     return {
       resizing: false,
       splitPaneWidth: 0,
-      splitPaneX: 0
+      splitPaneX: 0,
     }
   },
-  fetch: async function({ store, params }) {
+  fetch: async function ({ store, params }) {
     // console.log('fetch')
     if (params.state) {
       // console.log('ssr map.fetch', params)
@@ -57,8 +57,8 @@ export default {
     },
     showIndividual(who) {
       this.$refs.mapPane.highlightIndividual(who)
-    }
-  }
+    },
+  },
 }
 </script>
 

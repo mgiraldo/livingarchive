@@ -10,10 +10,10 @@
       </ul>
     </section>
     <section class="skeleton-container">
-      <skeleton-front id="skeleton" />
+      <SkeletonFront id="skeleton" />
     </section>
     <section class="bones-find-container">
-      <bones-find-view :shape="shape" />
+      <BonesFindView :shape="shape" />
     </section>
   </div>
 </template>
@@ -38,20 +38,20 @@ export default {
     return {
       identifier: params.id,
       skeleton,
-      shape
+      shape,
     }
   },
   mounted() {
     let prefix = '#skeleton-front-'
     let skeletonElement = document.querySelector('#skeleton')
-    skeletonElement.querySelectorAll('path').forEach(elem => {
+    skeletonElement.querySelectorAll('path').forEach((elem) => {
       elem.style.fill = 'gray'
       elem.style.opacity = 0.1
     })
     for (let boneName in this.skeleton) {
       let boneElem = document.querySelector(prefix + boneName)
       if (boneElem) {
-        boneElem.querySelectorAll('path').forEach(elem => {
+        boneElem.querySelectorAll('path').forEach((elem) => {
           if (this.skeleton[boneName] === 'fullyPreservedA') {
             elem.style.fill = BONE_FILL_COLOR
           } else {
@@ -61,7 +61,7 @@ export default {
         })
       }
     }
-  }
+  },
 }
 </script>
 

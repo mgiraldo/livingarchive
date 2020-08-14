@@ -1,13 +1,13 @@
 <template>
   <section>
-    <search-filter-title
+    <SearchFilterTitle
       :controls="'facet_' + facet.name + '_toggle'"
       :open="open"
       :text="facet.name"
       @click="toggle"
     />
     <div :id="'facet_' + facet.name + '_toggle'">
-      <search-filter-range-selector
+      <SearchFilterRangeSelector
         :key="$route.fullPath"
         :open="open"
         :facet="facet"
@@ -29,11 +29,11 @@ import SearchFilterRangeSelector from '~/components/SearchFilterRangeSelector'
 export default {
   components: {
     SearchFilterTitle,
-    SearchFilterRangeSelector
+    SearchFilterRangeSelector,
   },
   props: {
     facet: { type: Object, required: true },
-    aggregations: { type: Object, required: true }
+    aggregations: { type: Object, required: true },
   },
   data() {
     return { open: false }
@@ -48,7 +48,7 @@ export default {
       const selected = [...this.$store.state['checked' + this.facet.name]]
       if (selected.size === 0) return ''
       return selected[selected.length - 1]
-    }
+    },
   },
   methods: {
     handleChange(e) {
@@ -59,8 +59,8 @@ export default {
     },
     toggle() {
       this.open = !this.open
-    }
-  }
+    },
+  },
 }
 </script>
 

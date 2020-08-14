@@ -1,13 +1,13 @@
 <template>
   <section>
-    <search-filter-title
+    <SearchFilterTitle
       :controls="'facet_' + facet.name + '_toggle'"
       :open="open"
       :text="facet.name"
       @click="toggle"
     />
     <div :id="'facet_' + facet.name + '_toggle'">
-      <search-filter-list
+      <SearchFilterList
         :open="open"
         :facet="facet"
         :aggregations="aggregations"
@@ -23,11 +23,11 @@ import SearchFilterList from '~/components/SearchFilterList'
 export default {
   components: {
     SearchFilterTitle,
-    SearchFilterList
+    SearchFilterList,
   },
   props: {
     facet: { type: Object, required: true },
-    aggregations: { type: Object, required: true }
+    aggregations: { type: Object, required: true },
   },
   data() {
     return { open: false }
@@ -35,8 +35,8 @@ export default {
   methods: {
     toggle() {
       this.open = !this.open
-    }
-  }
+    },
+  },
 }
 </script>
 

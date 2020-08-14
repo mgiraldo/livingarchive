@@ -1,19 +1,16 @@
 <template>
   <section ref="pane" :class="'collapsible ' + (collapsed ? 'collapsed' : '')">
-    <square-button
+    <SquareButton
       ref="button"
       :label="collapsed ? 'Open' : 'Close'"
       :icon="collapsed ? '+' : '×'"
       @click="collapseClick"
     />
     <div ref="scroller" class="scroller results" @scroll="handleScroll">
-      <result-count />
+      <ResultCount />
       <div v-show="!collapsed">
-        <results-explained />
-        <results-view-toggle
-          text="Display results as grid"
-          @click="toggleGrid"
-        />
+        <ResultsExplained />
+        <ResultsViewToggle text="Display results as grid" @click="toggleGrid" />
         <transition-group name="results-list" tag="ul" class="results-list">
           <li
             is="result-item"
@@ -44,7 +41,7 @@ export default {
     ResultsExplained,
     ResultCount,
     ResultsViewToggle,
-    SquareButton
+    SquareButton,
   },
   data() {
     return { page: 0, pageSize: PAGE_SIZE, individuals: [], collapsed: false }
@@ -88,8 +85,8 @@ export default {
     toggleGrid() {
       this.$store.commit('toggleViewMode', 'grid')
       updateRouter({ router: this.$router, store: this.$store })
-    }
-  }
+    },
+  },
 }
 </script>
 

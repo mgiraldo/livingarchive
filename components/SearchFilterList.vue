@@ -21,17 +21,17 @@ import SearchFilterCheckboxBar from '~/components/SearchFilterCheckboxBar'
 
 export default {
   components: {
-    SearchFilterCheckboxBar
+    SearchFilterCheckboxBar,
   },
   props: {
     facet: { type: Object, required: true },
     aggregations: { type: Object, default: null },
-    open: { type: Boolean, required: true }
+    open: { type: Boolean, required: true },
   },
   computed: {
     total() {
       return this.$store.getters.individualCount
-    }
+    },
   },
   methods: {
     toggled(filter, name, value) {
@@ -50,8 +50,8 @@ export default {
     },
     inStore(filter, name) {
       return this.$store.getters.filterIsChecked({ filter, name })
-    }
-  }
+    },
+  },
 }
 </script>
 

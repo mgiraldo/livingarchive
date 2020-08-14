@@ -12,8 +12,8 @@
 export default {
   props: {
     icon: { type: String, default: '×' },
-    label: { type: String, default: 'Collapse' }
-  }
+    label: { type: String, default: 'Collapse' },
+  },
 }
 </script>
 

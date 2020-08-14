@@ -2,7 +2,7 @@ import { FILTER_PARAMS_TO_NAMES } from '~/utils/constants'
 import { getAllIndividuals, getFilteredIndividuals } from '~/utils/elastic'
 import { getAllBuildings, getAllSpaces } from '~/utils/rdf'
 
-const isFiltered = state => {
+const isFiltered = (state) => {
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
     if (state['checked' + storeName].size !== 0) return true
@@ -26,11 +26,11 @@ export const state = () => ({
   checkedPhases: new Set(),
   checkedSkeleton: new Set(),
   legendType: 'age',
-  filtered: false
+  filtered: false,
 })
 
 export const getters = {
-  filterIsChecked: state => ({ filter, name }) => {
+  filterIsChecked: (state) => ({ filter, name }) => {
     // console.log('store has', filter, name)
     return state['checked' + filter] && state['checked' + filter].has(name)
   },
@@ -70,7 +70,7 @@ export const getters = {
 
     individuals.sort((a, b) => b.skeleton.size - a.skeleton.size)
     return individuals
-  }
+  },
 }
 
 export const mutations = {
@@ -122,8 +122,8 @@ export const mutations = {
       const agg = FILTER_PARAMS_TO_NAMES[param].agg
       const storeName = FILTER_PARAMS_TO_NAMES[param].storeName
       const [paramArray] = params
-        .filter(filter => filter.hasOwnProperty(agg))
-        .map(item => item[agg])
+        .filter((filter) => Object.prototype.hasOwnProperty.call(filter, agg))
+        .map((item) => item[agg])
       let checked
       if (paramArray) checked = new Set(paramArray)
       if (checked && state['checked' + storeName] !== checked) {
@@ -132,7 +132,7 @@ export const mutations = {
     }
 
     state.filtered = isFiltered(state)
-  }
+  },
 }
 
 export const actions = {
@@ -142,7 +142,7 @@ export const actions = {
     const filters = createFilters(state)
 
     const { individuals, points, aggs, count } = await getBaseIndividuals({
-      filters
+      filters,
     })
 
     const spaces = await getAllSpaces()
@@ -155,7 +155,7 @@ export const actions = {
       points,
       filtered: false,
       aggs,
-      count
+      count,
     }
 
     for (let param in FILTER_PARAMS_TO_NAMES) {
@@ -169,13 +169,13 @@ export const actions = {
     const filters = createFilters(state)
 
     const { identifiers, aggs, count } = await getFilteredIndividuals({
-      filters: filters
+      filters: filters,
     })
 
     let newState = {
       displayedIdentifiers: new Set(identifiers),
       aggs,
-      count
+      count,
     }
 
     for (let param in FILTER_PARAMS_TO_NAMES) {
@@ -186,7 +186,7 @@ export const actions = {
     // check to see if nothing is there
     if (!state.individuals || Object.keys(state.individuals).length === 0) {
       let { individuals, points, aggs, count } = await getBaseIndividuals({
-        filters
+        filters,
       })
       newState.individuals = individuals
       newState.points = points
@@ -195,10 +195,10 @@ export const actions = {
     }
 
     commit('fetchedIndividuals', newState)
-  }
+  },
 }
 
-const createFilters = state => {
+const createFilters = (state) => {
   const filters = {}
   for (let param in FILTER_PARAMS_TO_NAMES) {
     const agg = FILTER_PARAMS_TO_NAMES[param].agg
@@ -210,7 +210,7 @@ const createFilters = state => {
 
 const getBaseIndividuals = async ({ filters }) => {
   const { individuals, points, aggs, count } = await getAllIndividuals({
-    filters
+    filters,
   })
   return { individuals, points, aggs, count }
 }

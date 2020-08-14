@@ -1,5 +1,5 @@
 <template>
-  <skeleton-front id="skeleton-control" class="skeleton" />
+  <SkeletonFront id="skeleton-control" class="skeleton" />
 </template>
 
 <script>
@@ -10,7 +10,7 @@ import SkeletonFront from '~/assets/skeleton-front.svg'
 export default {
   components: { SkeletonFront },
   props: {
-    aggregations: { type: Object, default: null }
+    aggregations: { type: Object, default: null },
   },
   computed: {
     fixedAggregations() {
@@ -24,7 +24,7 @@ export default {
         }
       }
       return fixedAggregations
-    }
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -39,7 +39,7 @@ export default {
     },
     resetBones() {
       let skeletonElement = document.querySelector('#skeleton-control')
-      skeletonElement.querySelectorAll('path').forEach(elem => {
+      skeletonElement.querySelectorAll('path').forEach((elem) => {
         elem.style.fill = 'white'
         elem.style.opacity = 0.0075
       })
@@ -50,7 +50,7 @@ export default {
       for (let bone in this.fixedAggregations) {
         let boneElem = document.querySelector(prefix + bone)
         if (boneElem) {
-          boneElem.querySelectorAll('path').forEach(elem => {
+          boneElem.querySelectorAll('path').forEach((elem) => {
             const value = this.fixedAggregations[bone]
             if (value) {
               elem.style.fill = BONE_FILL_COLOR
@@ -65,8 +65,8 @@ export default {
       if (!value) return 0
       const pct = value / this.$store.getters.individualCount
       return pct <= 1 ? pct : 1
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -2,7 +2,7 @@ import proj4 from 'proj4'
 
 import { PROJ4_DEFS } from './constants'
 
-export const reprojectGeoJson = geoJson => {
+export const reprojectGeoJson = (geoJson) => {
   let newGeoJson = JSON.parse(JSON.stringify(geoJson))
   if (!newGeoJson) return
   switch (newGeoJson.type) {
@@ -18,7 +18,7 @@ export const reprojectGeoJson = geoJson => {
       return newGeoJson
   }
 }
-export const reprojectPoint = coords => {
+export const reprojectPoint = (coords) => {
   proj4.defs(PROJ4_DEFS)
   return proj4('catalhoyuk3', 'EPSG:4326', coords)
 }
