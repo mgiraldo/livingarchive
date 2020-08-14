@@ -20,7 +20,7 @@ const performESQuery = async (query) => {
     }),
     // end ignore self-signed https
     headers: {
-      Authorization: 'Basic ZWxhc3RpYzpwbGFzdGlj',
+      Authorization: 'Basic ' + process.env.ELASTIC_BASIC_AUTH,
       Accept: 'application/json',
     },
   })

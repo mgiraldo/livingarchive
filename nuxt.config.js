@@ -21,11 +21,11 @@ module.exports = {
       { name: 'twitter:description', content: pkg.description },
       {
         name: 'twitter:image',
-        content: process.env.BASE_URL + '/screenshot.png'
+        content: process.env.BASE_URL + '/screenshot.png',
       },
-      { hid: 'description', name: 'description', content: pkg.description }
+      { hid: 'description', name: 'description', content: pkg.description },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   /*
@@ -45,8 +45,8 @@ module.exports = {
     '~/plugins/vue-d3',
     {
       src: '~/plugins/vue-mapboxgl',
-      ssr: false
-    }
+      ssr: false,
+    },
   ],
 
   /*
@@ -56,7 +56,7 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/dotenv',
-    '@nuxtjs/style-resources'
+    '@nuxtjs/style-resources',
   ],
 
   /*
@@ -66,7 +66,8 @@ module.exports = {
     MAPTILER_KEY: process.env.MAPTILER_KEY,
     BASE_URL: process.env.BASE_URL || 'http://localhost:3000',
     RDF_URL: process.env.RDF_URL,
-    ELASTIC_URL: process.env.ELASTIC_URL
+    ELASTIC_URL: process.env.ELASTIC_URL,
+    ELASTIC_BASIC_AUTH: process.env.ELASTIC_BASIC_AUTH,
   },
 
   /*
@@ -82,7 +83,7 @@ module.exports = {
   serverMiddleware: [{ path: '/export', handler: '~/export/index.js' }],
 
   styleResources: {
-    scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss']
+    scss: ['~/assets/css/variables.scss', '~/assets/css/mixins.scss'],
   },
 
   /*
@@ -92,13 +93,13 @@ module.exports = {
     splitChunks: { layouts: true },
     plugins: [
       new webpack.ProvidePlugin({
-        mapboxgl: 'mapbox-gl'
-      })
+        mapboxgl: 'mapbox-gl',
+      }),
     ],
     extend(config) {
       config.devtool = 'source-map'
 
-      const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
+      const svgRule = config.module.rules.find((rule) => rule.test.test('.svg'))
 
       svgRule.test = /\.(png|jpe?g|gif|webp)$/
 
@@ -113,14 +114,14 @@ module.exports = {
               {
                 prefixIds: {
                   prefix: (node, { path }) => basename(path, '.svg'),
-                  delim: '-'
-                }
+                  delim: '-',
+                },
               },
-              { cleanupIDs: { remove: false, minify: false } }
-            ]
-          }
-        }
+              { cleanupIDs: { remove: false, minify: false } },
+            ],
+          },
+        },
       })
-    }
-  }
+    },
+  },
 }

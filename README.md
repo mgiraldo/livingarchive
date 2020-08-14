@@ -24,3 +24,4 @@ Rename the example `.env-example` file to `.env` and add the necessary secret ke
 - `BASE_URL`: base URL to the application root (defaults to `http://localhost:3000`).
 - `RDF_URL`: base URL for the RDF server.
 - `ELASTIC_URL`: base URL for the ElasticSearch server.
+- `ELASTIC_BASIC_AUTH`: authentication key for Elastic queries.
