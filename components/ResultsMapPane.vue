@@ -316,7 +316,8 @@ export default {
       const visible = e.toggled ? 'visible' : 'none'
       if (!this.map.getLayer(layer)) return
       this.map.setLayoutProperty(layer, 'visibility', visible)
-      this.map.setLayoutProperty(layer + '-labels', 'visibility', visible)
+      if (this.map.getLayer(layer + '-labels'))
+        this.map.setLayoutProperty(layer + '-labels', 'visibility', visible)
     },
     collapseClick() {
       this.collapsed = !this.collapsed
